@@ -1,0 +1,39 @@
+.formTitle {
+    color: #2665C4;
+    font-size: 18px;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.textinput {
+    border-top: 0px;
+    border-right: 0px;
+    border-left: .5px solid #2665C4;
+    border-bottom: .5px solid #2665C4;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.input-container {
+    display: inline-block;
+    margin: 14px;
+}
+
+.label {
+    position: absolute;
+    margin-top: -9px;
+    margin-left: 10px;
+    font-size: 10px;
+}
+
+.submit {
+    margin: 10px;
+    border: .5px solid #2665C4;
+    border-radius: 5px;
+    font: #2665C4;
+}
+
+.buttondiv {
+    clear: both;
+    margin-left: 30px;
+}
