@@ -31,7 +31,7 @@ app.get('*', (req, res) => {
   res.render('index');
 });
 
-//app.use('/', userCont);
+app.use('/', userCont);
 
 //check for existing token. This goes below the login controller
 //because we dont need to check for a token on login

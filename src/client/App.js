@@ -16,15 +16,9 @@ class App extends React.Component {
     this.state = {
       error: null,
       isLoggedIn: false,
-      email: '',
-      password: '',
-      userSettings: [],
-      userNotify: ''
-    };
-    this.onChange = this.onChange.bind(this);
-    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    }
   }
-
+/*
   componentDidMount() {
     if (checkLoginState() === true) {
       this.setState({
@@ -78,9 +72,10 @@ class App extends React.Component {
         })
     }
   }
+  */
 
   render() {
-
+    const userNotify = this.state;
     return (
       <div id="container">
         <div>
@@ -89,13 +84,13 @@ class App extends React.Component {
           ) : (
               <div id="sign-in">
                 <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
-                <Form formTitle="Sign In" onSubmit={this.handleLoginSubmit}>
-                  <Input name="username" label="Email" value={this.state.value} onChange={this.onChange} error={this.state.userNotify.username} /><br />
-                  <Input name="password" label="Password" value={this.state.value} onChange={this.onChange} error={this.state.userNotify.password} />
+                <Form formTitle="Sign In" route="http://localhost:3004/login" >
+                  <Input name="email" label="Email" /><br />
+                  <Input name="password" label="Password" />
                   <div className="buttondiv">
                     <Button id="submit" value="Sign In" />
                   </div>
-                  <p id="userNotify"> {this.state.userNotify}</p>
+
                 </Form>
               </div>
             )}

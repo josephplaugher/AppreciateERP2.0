@@ -5,11 +5,11 @@ const login = user.login;
 const logout = user.logout;
 const newUser = newAccount.newUser;
 const addUser = newAccount.newUser;
-/*
+
 routes.post('/login', login);
+/*
 routes.post('/logout', logout);
 routes.post('/newUser', newUser);
 routes.post('/addUser', addUser);
-
-module.exports = routes;
 */
+module.exports = routes;
