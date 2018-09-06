@@ -20777,8 +20777,8 @@ function (modules) {
           var target = event.target;
           var value = target.type === 'checkbox' ? target.checked : target.value;
           var name = target.name;
-          var lsSource = [name][0];
-          console.log('field: ', name, 'value: ', value); //clear the error on resume typing
+          var lsSource = [name][0]; //console.log('field: ', name, 'value: ', value);
+          //clear the error on resume typing
 
           var clEr = Object.assign({}, _this.state.userNotify);
           clEr[name] = '';
@@ -20873,13 +20873,8 @@ function (modules) {
         _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitData", function () {
           console.log('submitting now...');
 
-          _Ajax__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this.props.route, _this.state.formData).then(function (res) {
-            if (res.data.success) {
-              _this.setState({
-                success: res.data.success,
-                userNotify: res.data.userNotify
-              });
-            }
+          _Ajax__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this.props.action, _this.state.formData).then(function (resp) {
+            _this.props.response(resp.data);
           });
         });
 
@@ -71655,13 +71650,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -71685,73 +71682,34 @@ function (_React$Component) {
     _classCallCheck(this, App);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "response", function (res) {
+      console.log('response callback', res.userData);
+      console.log('test error: ', res.error);
+
+      _this.setState({
+        success: res.userData.success,
+        userNotify: res.userNotify,
+        userData: res.userData,
+        isLoggedIn: true
+      });
+
+      if (res.error) {
+        console.error('submit error: ', res.error);
+      }
+    });
+
     _this.state = {
       error: null,
       isLoggedIn: false
     };
+    _this.response = _this.response.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
-  /*
-    componentDidMount() {
-      if (checkLoginState() === true) {
-        this.setState({
-          userData: JSON.parse(sessionStorage.getItem('AppreciateUser')),
-          isLoggedIn: true
-        });
-      }
-    }
-  
-    onChange(event) {
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
-      this.setState({
-        [name]: value
-      });
-    }
-  
-    handleLoginSubmit(event) {
-      event.preventDefault();
-      var formData = {
-        email: this.state.username,
-        password: this.state.password
-      }
-      if (formData.email === '' || formData.password === '') {
-        this.setState({
-          userNotify: 'Please enter your email address and password. If you dont have an account you can sign up.'
-        })
-      } else {
-        axios({
-          url: 'http://localhost:3004/login',
-          method: 'post',
-          data: formData,
-          config: { headers: { 'Content-Type': 'multipart/form-data' } },
-          responseType: 'json'
-        })
-          .then((res) => {
-            if (res.data.success === true) {
-              this.setState({
-                userData: res.data.userData,
-                isLoggedIn: true
-              });
-              sessionStorage.setItem('AppreciateUser', JSON.stringify(res.data.userData));
-              sessionStorage.setItem('AppreciateJWT', res.data.token);
-            }
-            if (res.data.success === false) {
-              this.setState({
-                userNotify: res.data.userNotify
-              });
-            };
-          })
-      }
-    }
-    */
-
 
   _createClass(App, [{
     key: "render",
     value: function render() {
-      var userNotify = this.state;
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         id: "container"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, this.state.isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_mainmenu_home__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -71765,7 +71723,8 @@ function (_React$Component) {
         alt: "Appreciate Logo"
       })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Form, {
         formTitle: "Sign In",
-        route: "http://localhost:3004/login"
+        action: "http://localhost:3004/login",
+        response: this.response
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Input, {
         name: "email",
         label: "Email"

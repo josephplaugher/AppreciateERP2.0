@@ -42,7 +42,7 @@ checkPassword = (req,res,data) => {
 setToken = (req,res,userData) => {
     var token = jwt.sign({ userEmail: userData.email, companyId: userData.company_id }, config.APIcode);
     delete userData.password;//ensure the pw hash isn't sent along to the client
-    res.status(200).json({ token: token, success: true, userData: userData });
+    res.status(200).json({ error: null, userData: userData });
 }
 
 logout = (req, res) => {
