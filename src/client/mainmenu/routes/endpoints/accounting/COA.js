@@ -1,7 +1,9 @@
 import React from 'react'
 import Ajax from 'Util/Ajax'
 import ReactTable from 'react-table'
+import EB from 'Util/EB'
 import LightBox from 'Util/LightBox'
+//import LightboxHandler from 'Util/LightboxHandler'
 import Form from 'Util/Form'
 import Input from 'Util/Input'
 import Button from 'Util/Button'
@@ -14,23 +16,44 @@ class COA extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      dataView: false,
       coa:[]
     }
   }
   
   componentDidMount() {
-      Ajax.get("http://localhost:3004/coa")
-      .then((res) => {
-        if(res.data.success){
-          console.log(res.data.success);
+      Ajax.get("http://localhost:3004/trans/coa")
+      .then(res => {
+        console.log('coa resule: ',res.data.table);
           this.setState({
-            coa: res.data.success
-            })
-        }
+            coa: res.data.table
+          })
       })
-      .error((er) => {console.error(er)});
   }
   
+  selectItem = (row) => {
+    console.log('select item');
+    //switch from data view to search view
+    this.setState({ dataView: true, userNotify: ''});
+    console.log('click',row);
+
+    //place all the resulting data into state
+    for(var key in row){
+      console.log(key,row[key]);
+      //clear previous selection
+    
+      //fill with new data select
+      this.setState({
+        [key]: row[key]
+      }); 
+    }
+  }
+
+  closeLightBox = () => {
+    console.log('close');
+    this.setState({dataView: false});
+  }
+
     render() {
       const columns = [
         {Header: 'Account Name', accessor: 'acctname'},
@@ -42,6 +65,7 @@ class COA extends React.Component {
         <div id="workingPane">
           <p className="formTitle">Chart of Accounts</p>
             <div id="resultField">
+            <EB comp="ReactTable in COA">
             <ReactTable
               getTdProps={(state, rowInfo, column, instance) => {
                 return {
@@ -52,6 +76,7 @@ class COA extends React.Component {
               data={this.state.coa}
               columns={columns}
             />
+            </EB>
             </div>
             
             <div >  

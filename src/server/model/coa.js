@@ -4,8 +4,8 @@ const userConn = db.userConn;
 coa = (req, res) => {
   userConn.query('SELECT acctname, acctno, description, type FROM sys_coa ORDER BY acctno ASC')
       .then(data => {
-        console.log(data.rows)
-        res.status(200).json({ success: data.rows });}) 
+        console.log("COA query working");
+        res.status(200).json({ table: data.rows });}) 
       .catch(e => console.error(e.stack))
 }
 

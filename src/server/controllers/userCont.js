@@ -6,10 +6,10 @@ const logout = user.logout;
 const newUser = newAccount.newUser;
 const addUser = newAccount.newUser;
 
-routes.post('/login', login);
+routes.post('/users/login', login);
 /*
-routes.post('/logout', logout);
-routes.post('/newUser', newUser);
-routes.post('/addUser', addUser);
+routes.post('/user/logout', logout);
+routes.post('/user/newUser', newUser);
+routes.post('/user/addUser', addUser);
 */
 module.exports = routes;

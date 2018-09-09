@@ -11,11 +11,11 @@ const Banking = ({ match }) => (
     <div id="routes">
       <Link to={`${match.url}/DepositsWithdrawals`} id="deposits" className="nav">
         Deposits and Withdrawals</Link>
-        <Route path="/banking/DepositsWithdrawals" component={DepositsWithdrawals}/>
+        <Route path="/ui/banking/DepositsWithdrawals" component={DepositsWithdrawals}/>
 
       <br /><Link to={`${match.url}/Ledgers`} id="ledgers" className="nav">
         Ledgers and Reconciliations</Link>
-        <Route path="/banking/Ledgers" component={Ledgers}/>  
+        <Route path="/ui/banking/Ledgers" component={Ledgers}/>  
     </div>
   )
 

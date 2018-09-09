@@ -22,14 +22,14 @@ class Home extends React.Component {
     const userData = this.props.userData;
     return (
       <div id="home-container">
-        <div id="logoBox"><img src={require('./../AppreciateLogo.png')} alt="Appreciate Logo"/></div> 
+        <div id="logoBox"><img src={require('./AppreciateLogo_1_H.png')} alt="Appreciate Logo"/></div> 
         <User lname={userData.lname} />
         <Router>
         <div id="nav-pane">
-          <Link to="/accounting" id="accounting" className="nav">Accounting</Link>
-            <Route path="/accounting" component={Accounting}/>
-          <br/><Link to="/banking" id="banking" className="nav">Banking</Link>
-            <Route path="/banking" component={Banking}/>
+          <Link to="/ui/accounting" id="accounting" className="nav">Accounting</Link>
+            <Route path="/ui/accounting" component={Accounting}/>
+          <br/><Link to="/ui/banking" id="banking" className="nav">Banking</Link>
+            <Route path="/ui/banking" component={Banking}/>
         
         </div>
         </Router>  

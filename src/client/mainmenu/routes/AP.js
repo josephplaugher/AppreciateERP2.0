@@ -18,9 +18,9 @@ const AP = ({ match }) => (
       <br/><Link to={`${match.url}/searchSuppliers`} id="searchSuppliers" className="nav">
         Search Suppliers</Link>
 
-    <Route path="/accounting/ap/enterInvoice" component={EnterInvoice}/>
-    <Route path="/accounting/ap/searchInvoices" component={SearchInvoices}/>
-    <Route path="/accounting/ap/searchSuppliers" component={SearchSuppliers}/>
+    <Route path="/ui/accounting/ap/enterInvoice" component={EnterInvoice}/>
+    <Route path="/ui/accounting/ap/searchInvoices" component={SearchInvoices}/>
+    <Route path="/ui/accounting/ap/searchSuppliers" component={SearchSuppliers}/>
 
     </div>
   )

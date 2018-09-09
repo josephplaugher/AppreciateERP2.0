@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './client/App';
+import AppreciateCo from './client/App';
 import './index.css'
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<AppreciateCo/>, document.getElementById('root'));

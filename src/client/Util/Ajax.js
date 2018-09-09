@@ -5,7 +5,7 @@ const get = (url) => {
     const request = axios({method: 'get', url: url,
         responseType:'JSON'
         //headers:{"authorization": "bearer" + sessionStorage.getItem('AppreciateJWT'),"testing":"123"}
-        });
+        })
     request
         .then(result => console.log('ajax firing: '+ result))
         .catch(error => console.log('ajax error: '+ error))

@@ -1,6 +1,8 @@
 const express = require('express');
+const route = express.Router();
 const bodyParser = require('body-parser');
 //const checkJWT = require('./checkJWT');
+const main =  require('./controllers/main.js');
 const userCont = require('./controllers/userCont.js');
 const transCont = require('./controllers/transCont.js');
 const peopleCont = require('./controllers/peopleCont.js');
@@ -27,10 +29,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // Parse application/json
 
-app.get('*', (req, res) => {
-  res.render('index');
-});
-
+app.use('/', main);
 app.use('/', userCont);
 
 //check for existing token. This goes below the login controller

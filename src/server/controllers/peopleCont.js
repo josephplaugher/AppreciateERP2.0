@@ -3,7 +3,7 @@ const customers = require('./../model/customers');
 const allCust = customers.allCust;
 const custById = customers.custById;
 
-routes.get('/customers', allCust);
-routes.get('/customers/:id', custById);
+routes.get('/people/customers', allCust);
+routes.get('/people/customers/:id', custById);
 
 module.exports = routes;

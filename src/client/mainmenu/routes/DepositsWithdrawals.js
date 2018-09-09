@@ -19,9 +19,9 @@ const DepositsWithdrawals = ({ match }) => (
       <br/><Link to={`${match.url}/findBankTrans`} id="findBankTrans" className="nav">
         Find Bank Transactions</Link>  
           
-  <Route path="/banking/DepositsWithdrawals/enterDeposit" component={EnterDeposit}/>
-  <Route path="/banking/DepositsWithdrawals/enterWithdrawal" component={EnterWithdrawal}/>
-  <Route path="/banking/DepositsWithdrawals/findBankTrans" component={FindBankTrans}/>    
+  <Route path="/ui/banking/DepositsWithdrawals/enterDeposit" component={EnterDeposit}/>
+  <Route path="/ui/banking/DepositsWithdrawals/enterWithdrawal" component={EnterWithdrawal}/>
+  <Route path="/ui/banking/DepositsWithdrawals/findBankTrans" component={FindBankTrans}/>    
 </div>
   )
 

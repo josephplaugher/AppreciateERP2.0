@@ -13,13 +13,13 @@ const Accounting = ({ match }) => (
     <div id="routes">
       <Link to={`${match.url}/GlCoa`} id="gl-coa" className="nav">
         General Ledger and Chart of Accounts</Link>
-        <Route path="/accounting/GlCoa" component={GlCoa}/>
+        <Route path="/ui/accounting/GlCoa" component={GlCoa}/>
       <br/><Link to={`${match.url}/ar`} id="ar" className="nav">
         Accounts Receivable</Link>
-        <Route path="/accounting/ar" component={AR}/>
+        <Route path="/ui/accounting/ar" component={AR}/>
       <br/><Link to={`${match.url}/ap`} id="ap" className="nav">
         Accounts Payable</Link>
-        <Route path="/accounting/ap" component={AP}/>
+        <Route path="/ui/accounting/ap" component={AP}/>
     </div>
   )
 
