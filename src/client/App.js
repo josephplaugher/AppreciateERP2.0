@@ -45,7 +45,7 @@ class AppreciateCo extends React.Component {
           </EB>
           ) : (
               <div id="sign-in">
-                <div id="logoBox"><img src={require('/AppreciateLogo.png')} alt="Appreciate Logo" /></div>
+                <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
                 <Form formTitle="Sign In" action="http://localhost:3004/users/login" response={this.response} >
                   <Input name="email" label="Email" /><br />
                   <Input name="password" label="Password" />

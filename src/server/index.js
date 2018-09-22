@@ -17,7 +17,7 @@ app.set('views', './src/views');
 
 let port = process.env.PORT;
 app.listen(port, function(){
-  console.log(process.env.NODE_ENV + ' mode, server started port ' + port);
+  console.log('server started in '+ process.env.NODE_ENV + ' mode on port ' + port);
 });
 
 app.use((req, res, next) => {
@@ -32,23 +32,23 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-
 app.use(bodyParser.json()); // Parse application/json
 
 //use sessions for user login
-/*
+
 app.use(session({
   store: new FileStore(),
   secret: uuid(),
   resave: false,
   saveUninitialized: true
 }))
-*/
 
-app.use('/api', userCont);
+
+app.use('/', userCont);
 
 //check for existing token. This goes below the login controller
 //because we dont need to check for a token on login
 //app.use(checkJWT);
-app.use('/api', transCont);
-app.use('/api', peopleCont);
-app.use('/api', lsCont);
+app.use('/', transCont);
+app.use('/', peopleCont);
+app.use('/', lsCont);
 app.all('/*', (req, res) => {
   res.render('index');
 });
