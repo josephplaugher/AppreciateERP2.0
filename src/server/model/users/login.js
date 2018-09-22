@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken'); 
 const bcrypt = require('bcrypt');
 const db = require('./../../postgres.js');
-const config = require('./../../config');
 const userConn = db.userConn;
 const loginConn = db.loginConn;
 
@@ -30,7 +29,8 @@ checkPassword = (req,res,data) => {
         else if(result == false) {
           res.status(200).json({ success: false, userNotify: 'That email or password is invalid' });
         } else if(result == true){
-          module.exports.setToken(req,res,data.rows[0]);
+          delete data.rows[0].password;//ensure the pw hash isn't sent along to the client
+          res.status(200).json({ userNotify: {}, userData: data.rows[0] });
         }    
     });
   }else{
@@ -39,14 +39,8 @@ checkPassword = (req,res,data) => {
   }
 }
 
-setToken = (req,res,userData) => {
-    var token = jwt.sign({ userEmail: userData.email, companyId: userData.company_id }, config.APIcode);
-    delete userData.password;//ensure the pw hash isn't sent along to the client
-    res.status(200).json({ error: null, userData: userData });
-}
-
 logout = (req, res) => {
 
 }
 
-module.exports =  {login, checkPassword, setToken, logout}
+module.exports =  {login, checkPassword, logout}

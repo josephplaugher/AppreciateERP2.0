@@ -17,9 +17,9 @@ const GlCoa = ({ match }) => (
       <Link to={`${match.url}/je`} id="journalEntry" className="nav">
         Journal Entry</Link><br/>
 
-    <Route path="/ui/accounting/GlCoa/gl" component={GL}/>
-    <Route path="/ui/accounting/GlCoa/coa" component={COA}/>
-    <Route path="/ui/accounting/GlCoa/je" component={JE}/>
+    <Route path="/accounting/GlCoa/gl" component={GL}/>
+    <Route path="/accounting/GlCoa/coa" component={COA}/>
+    <Route path="/accounting/GlCoa/je" component={JE}/>
 
     </div>
   )

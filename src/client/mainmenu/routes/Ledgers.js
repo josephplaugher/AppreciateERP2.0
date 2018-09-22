@@ -15,8 +15,8 @@ const Ledgers = ({ match }) => (
       <br/><Link to={`${match.url}/Reconcile`} id="reconcile" className="nav">
         Reconcile Ledgers</Link> 
           
-  <Route path="/ui/banking/Ledgers/FindBankTrans" component={FindBankTrans}/>
-  <Route path="/ui/banking/Ledgers/Reconcile" component={Reconcile}/>    
+  <Route path="/banking/Ledgers/FindBankTrans" component={FindBankTrans}/>
+  <Route path="/banking/Ledgers/Reconcile" component={Reconcile}/>    
 </div>
   )
 
