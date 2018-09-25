@@ -1,5 +1,5 @@
 const routes = require('express').Router();
-const customers = require('./../model/customers');
+const customers = require('./../model/ar/customers');
 const allCust = customers.allCust;
 const custById = customers.custById;
 

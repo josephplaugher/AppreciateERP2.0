@@ -3,7 +3,7 @@ import {
     Route,
     Link
   } from 'react-router-dom'
-import EnterInvoice from './endpoints/enterSupplierInvoice'
+import EnterInvoice from './endpoints/ap/enterSupplierInvoice'
 import SearchInvoices from './endpoints/ap/SearchAPInvoices'
 import SearchSuppliers from './endpoints/ap/SearchSuppliers'
 

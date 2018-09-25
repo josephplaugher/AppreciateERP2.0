@@ -1,6 +1,6 @@
-const db = require('./../postgres.js');
+const db = require('./../../util/postgres');
 const userConn = db.userConn;
-const Table = require('./JsonToTable');
+const Table = require('../JsonToTable.js');
 
 const reportToTable = Table.reportToTable;
 

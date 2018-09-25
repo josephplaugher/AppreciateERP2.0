@@ -1,4 +1,4 @@
-const db = require('./../postgres.js');
+const db = require('./../util/postgres');
 const userConn = db.userConn;
 
 fill = (req, res) => {

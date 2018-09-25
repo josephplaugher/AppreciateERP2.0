@@ -1,5 +1,5 @@
 
-const db = require('./../../postgres.js');
+const db = require('../../util/postgres.js');
 const userConn = db.userConn;
 
 const findBankTrans = (req,res) => {

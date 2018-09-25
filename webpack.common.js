@@ -29,8 +29,7 @@ module.exports = {
   resolve: {
     alias: {
       Util: path.resolve(__dirname, 'src/client/Util/'),
-      css: path.resolve(__dirname, 'src/client/css/'),
-      server_util: path.resolve(__dirname, 'src/server/util/')
+      css: path.resolve(__dirname, 'src/client/css/')
     }
   },
   plugins: [

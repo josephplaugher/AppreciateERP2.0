@@ -16,6 +16,7 @@ QueryBuilder.prototype.build = function () {
     });
     this.query += this.end;
     let result = this.query;
+    
     return result;
 }
 

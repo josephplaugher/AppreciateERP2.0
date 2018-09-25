@@ -72,7 +72,7 @@ class GL extends React.Component {
           <div className="buttondiv">
             <Button id="search" value="Search" />
           </div>
-        </Form><br />
+        </Form><br/>
         <div id="resultField">
         <EB comp="ReactTable in GL">
             <ReactTable
@@ -88,19 +88,18 @@ class GL extends React.Component {
             </EB>
         </div>
        
-       
+
         <div >  
             {this.state.dataView ? (
               <div id="lightbox-container" className="lightbox-background">
               <LightBox close={this.closeLightBox} >
-                <Form formTitle="Account Details" onSubmit={this.onSubmit} clearOnSubmit="false" >
+                <Form formTitle="Transactions Details" clearOnSubmit="false" >
                 <Input name="transid" label="Trans ID" prePopVal={this.state.transid} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="date" label="Date" prePopVal={this.state.acctno} className="textinput" labelClass="label" errorClass="input-error" />
-                
-                <Input name="acctno" label="Account Number" prePopVal={this.state.acctno} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="acctname" label="Account Name" prePopVal={this.state.acctname} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="description" label="Description" prePopVal={this.state.description} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="type" label="Type" prePopVal={this.state.type} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="itemdate" label="Item Date" prePopVal={this.state.itemdate} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="gldate" label="Ledger Date" prePopVal={this.state.gldate} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="debit" label="Debit" prePopVal={this.state.debit} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="credit" label="Credit" prePopVal={this.state.credit} className="textinput" labelClass="label" errorClass="input-error" /> 
+                <Input name="transtype" label="Transaction Type" prePopVal={this.state.transtype} className="textinput" labelClass="label" errorClass="input-error" />
                 </Form>
               </LightBox>  
               </div>

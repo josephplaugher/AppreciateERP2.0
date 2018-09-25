@@ -1,4 +1,4 @@
-const db = require('./../postgres.js');
+const db = require('./postgres.js');
 const userConn = db.userConn;
 
 function Query(prepare, values) {
@@ -8,8 +8,9 @@ function Query(prepare, values) {
 }
 
 Query.prototype.runQuery = function(res) {
+    console.log('running query');
         userConn.query(this.query)
-        .then(data => res.status(200).json({ success: data.rows, userNotify: {} }))
+        .then(data => res.status(200).json({ table: data.rows, userNotify: {} }))
         .catch(e => console.error(e.stack))
 }
 
