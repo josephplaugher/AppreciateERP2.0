@@ -1,7 +1,6 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const main =  require('./controllers/main.js');
 const userCont = require('./controllers/userCont.js');
 const transCont = require('./controllers/transCont.js');
 const peopleCont = require('./controllers/peopleCont.js');
@@ -32,14 +31,13 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-
 app.use(bodyParser.json()); // Parse application/json
 
 //use sessions for user login
-
 app.use(session({
-  store: new FileStore(),
-  secret: uuid(),
-  resave: false,
-  saveUninitialized: true
-}))
-
+    store: new FileStore(),
+    secret: uuid(),
+    resave: false,
+    saveUninitialized: false,
+    maxAge: 60000
+}));
 
 app.use('/', userCont);
 

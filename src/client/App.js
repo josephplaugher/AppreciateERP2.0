@@ -1,7 +1,6 @@
 import * as ReactForm from 'reactform-appco'
 import React from 'react'
 import EB from 'Util/EB'
-import axios from 'axios'
 import checkLoginState from 'Util/CheckLoginState'
 import Home from './mainmenu/home'
 import 'css/main.css'
@@ -16,20 +15,40 @@ class AppreciateCo extends React.Component {
     super(props);
     this.state = {
       error: null,
-      isLoggedIn: true,
-      userData: {lname: 'Joe'}
+      isLoggedIn: false,
+      userData: {}
     }
+    this.setLoginState();
     this.response = this.response.bind(this);
   }
 
+  setLoginState = () => {
+    let auth = checkLoginState();
+    auth.then((result) => {
+      if (result) {
+        this.setState({ 
+          isLoggedIn: true,
+          userData: JSON.parse(sessionStorage.getItem('AppCoUser')) 
+        });
+      } else {
+        sessionStorage.removeItem('AppCoUser');
+        this.setState({ 
+          isLoggedIn: false,
+          userData: {} });
+      }
+    });
+  }
+
   response = (res) => {
+    if(typeof res.userData !== 'undefined') {
+      sessionStorage.setItem('AppCoUser', JSON.stringify(res.userData));
       this.setState({
-          success: res.userData.success,
           userNotify: res.userNotify,
           userData: res.userData,
           isLoggedIn: true
       });
-    if(res.error) {
+    }
+    if(typeofres.error !== 'undefined') {
       console.error('submit error: ', res.error);
     }
   }

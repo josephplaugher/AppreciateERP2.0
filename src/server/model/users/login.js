@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken'); 
 const bcrypt = require('bcrypt');
 const db = require('./../../util/postgres');
-const userConn = db.userConn;
 const loginConn = db.loginConn;
 
 login = (req, res) => {
@@ -30,6 +29,11 @@ checkPassword = (req,res,data) => {
           res.status(200).json({ success: false, userNotify: 'That email or password is invalid' });
         } else if(result == true){
           delete data.rows[0].password;//ensure the pw hash isn't sent along to the client
+          req.session.userData = {};//set the session values for this user
+          for(prop in data.rows[0]) {
+            req.session.userData[prop] = data.rows[0][prop];
+            //console.log('key: ',prop, 'val: ', data.rows[0][prop]);
+          }
           res.status(200).json({ userNotify: {}, userData: data.rows[0] });
         }    
     });
