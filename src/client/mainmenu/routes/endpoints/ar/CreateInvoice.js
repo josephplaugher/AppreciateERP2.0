@@ -1,37 +1,47 @@
-import FormClass from 'Util/FormClass'
+import * as ReactForm from 'reactform-appco'
 import React from 'react'
-import Form from 'Util/Form'
-import Input from 'Util/Input'
 import InvoiceLines from 'Util/InvoiceLines'
-import Button from 'Util/Button'
+import EB from 'Util/EB'
 import 'css/workingPane.css'
 import 'css/form.css'
 import 'css/userNotify.css'
 import 'css/lsr.css'
 
-class CreateInvoice extends FormClass{
+const Form = ReactForm.Form;
+const Input = ReactForm.Input;
+const Button = ReactForm.Button;
 
+class CreateInvoice extends React.Component{
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataView: false,
+      table: [],
+      userNotify: {}
+    }
+  }
+  
   render() {
 
-    this.route = 'CreateInvoice';
 
     return (
       <div>
       <div id="userNotify">
       </div>
       <div id="workingPane">
-      <Form formTitle="Create Invoice" onSubmit={this.onSubmit}  >
-        <Input name="date" label="Date" value={this.state.date} onChange={this.onChange} error={this.state.userNotify.date} />
-        <Input name="description" label="Description" value={this.state.description} onChange={this.onChange} error={this.state.userNotify.description}/>
-        <Input name="name" label="Customer Name" value={this.state.customer} onChange={this.onChange} error={this.state.userNotify.customer}/>
-        <Input name="customerid" label="Customer ID" value={this.state.customerid} onChange={this.onChange} error={this.state.userNotify.customerid} />
-        <Input name="terms" label="Terms" value={this.state.terms} onChange={this.onChange} error={this.state.userNotify.terms}/> 
-        <Input name="acctname" label="Revenue Account Name" value={this.state.acctname} onChange={this.onChange} lsr={this.state.lsracctname} error={this.state.userNotify.acctname}/>
-        <Input name="acctno" label="Revenue Account Number" value={this.state.acctno} onChange={this.onChange} lsr={this.state.lsracctno} error={this.state.userNotify.acctno}/>
+      <Form formTitle="Create Invoice" action={`http://${process.env.BASE_URL}/trans/newInvoice`} response={this.response}  >
+        <Input name="date" label="Date" />
+        <Input name="description" label="Description" />
+        <Input name="name" label="Customer Name" />
+        <Input name="customerid" label="Customer ID" />
+        <Input name="terms" label="Terms" /> 
+        <Input name="acctname" label="Revenue Account Name" />
+        <Input name="acctno" label="Revenue Account Number" />
         <br /><br />
-        <InvoiceLines />
+        <Input name="item[]" label="Item" /><Input name="price[]" label="Price" /><Input name="quant[]" label="Quantity" />
         <div className="buttondiv">
-        <Button id="submit" value="Submit" />
+        <Button id="submit" value="Create Invoice" />
         <Button id="addLine" value="Add a Line" onClick={this.addLine}/>
         </div>
       </Form>

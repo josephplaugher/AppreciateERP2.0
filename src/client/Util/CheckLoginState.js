@@ -2,7 +2,7 @@ import Ajax from './Ajax'
 
 const checkLoginState = () => {
     return new Promise((resolve, reject) => {
-        Ajax.get("http://localhost:3004/users/checkLoginState")
+        Ajax.get("http://"+ process.env.BASE_URL + "/users/checkLoginState")
             .then(res => {
                 if (typeof res.data.userData === 'undefined') {
                     resolve(false);

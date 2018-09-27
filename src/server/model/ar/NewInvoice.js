@@ -1,6 +1,4 @@
-const db = require('./../../util/postgres');
-const userConn = db.userConn;
-const loginConn = db.loginConn;
+const Query = require('./../../util/Query');
 
 NewInvoice = (req, res) => {
     res.status(200).json({ success: true, userNotify: 'this is your new invoice number...' });

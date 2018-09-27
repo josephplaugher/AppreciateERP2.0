@@ -38,7 +38,7 @@ app.use(session({
     saveUninitialized: false,
     maxAge: 60000
 }));
-
+console.log('baseurl: ', process.env.BASE_URL);
 app.use('/', userCont);
 
 //check for existing token. This goes below the login controller
