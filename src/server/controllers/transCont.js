@@ -9,7 +9,14 @@ const findInvoices = require('./../model/ar/findInvoices');
 
 routes.get('/trans/coa', coa);
 routes.post('/trans/gl', GL);
-routes.post('/trans/newInvoice', newInvoice);
+routes.post('/trans/newInvoice', (req, res) => {
+    const Invoice = new newInvoice(req,res);
+    Invoice.enterNewInvoice();
+});
+routes.post('/trans/invoicetest', (req, res) => {
+    const Invoice = new newInvoice(req,res);
+    Invoice.enterNewInvoice();
+});
 routes.post('/trans/EnterDeposit', enterDeposit);
 routes.post('/trans/findBankTrans', findBankTrans);
 routes.post('/trans/FindInvoices', findInvoices);

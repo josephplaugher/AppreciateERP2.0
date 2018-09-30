@@ -36,9 +36,10 @@ app.use(session({
     secret: uuid(),
     resave: false,
     saveUninitialized: false,
-    maxAge: 60000
+    maxAge: 60000,
+    cookie:{secure: app.get('env') === 'production'}
 }));
-console.log('baseurl: ', process.env.BASE_URL);
+
 app.use('/', userCont);
 
 //check for existing token. This goes below the login controller

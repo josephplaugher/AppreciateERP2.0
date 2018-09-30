@@ -20,17 +20,24 @@ class CreateInvoice extends React.Component{
       table: [],
       userNotify: {}
     }
+    this.response = this.response.bind(this);
   }
+
+  response = (res) => {
+    if(res.success)
+    this.setState({});
+  }
+
   
   render() {
-
 
     return (
       <div>
       <div id="userNotify">
+      {this.state.userNotify.success}
       </div>
       <div id="workingPane">
-      <Form formTitle="Create Invoice" action={`http://${process.env.BASE_URL}/trans/newInvoice`} response={this.response}  >
+      <Form formTitle="Create Invoice" action={`${process.env.BASE_URL}/trans/newInvoice`} response={this.response}  >
         <Input name="date" label="Date" />
         <Input name="description" label="Description" />
         <Input name="name" label="Customer Name" />
@@ -39,6 +46,7 @@ class CreateInvoice extends React.Component{
         <Input name="acctname" label="Revenue Account Name" />
         <Input name="acctno" label="Revenue Account Number" />
         <br /><br />
+        <Input name="item[]" label="Item" /><Input name="price[]" label="Price" /><Input name="quant[]" label="Quantity" /><br/>
         <Input name="item[]" label="Item" /><Input name="price[]" label="Price" /><Input name="quant[]" label="Quantity" />
         <div className="buttondiv">
         <Button id="submit" value="Create Invoice" />

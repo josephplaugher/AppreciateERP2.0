@@ -23,11 +23,7 @@ const FindInvoices = (req, res) => {
   let prepare = QB.build(); 
   console.log('the query', prepare, 'the inputs', popInputs);
   const findInvoiceQuery = new Query(prepare,popInputs);
-    try {
-      findInvoiceQuery.runQuery(res);
-    } catch (er) {
-      console.log('sql error', er);
-    }
+  findInvoiceQuery.runQuery(res);
 }
 
 module.exports = FindInvoices;

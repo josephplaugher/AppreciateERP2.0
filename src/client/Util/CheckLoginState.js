@@ -4,10 +4,11 @@ const checkLoginState = () => {
     return new Promise((resolve, reject) => {
         Ajax.get("http://"+ process.env.BASE_URL + "/users/checkLoginState")
             .then(res => {
+                console.log('userdata: ', res.data.userData);
                 if (typeof res.data.userData === 'undefined') {
-                    resolve(false);
+                    resolve('not logged in');
                 } else {
-                    resolve(true);
+                    resolve(res.data.userData);
                 }
             })
             .catch(e => { reject('error checking login state: ', e) });

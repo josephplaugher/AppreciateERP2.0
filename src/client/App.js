@@ -24,17 +24,17 @@ class AppreciateCo extends React.Component {
 
   setLoginState = () => {
     let auth = checkLoginState();
-    auth.then((result) => {
-      if (result) {
+    auth.then((userData) => {
+      if (userData === 'not logged in') {
         this.setState({ 
-          isLoggedIn: true,
-          userData: JSON.parse(sessionStorage.getItem('AppCoUser')) 
+          isLoggedIn:false,
+          userData: {} 
         });
       } else {
-        sessionStorage.removeItem('AppCoUser');
         this.setState({ 
-          isLoggedIn: false,
-          userData: {} });
+          isLoggedIn: true,
+          userData: userData 
+        });
       }
     });
   }
@@ -48,7 +48,7 @@ class AppreciateCo extends React.Component {
           isLoggedIn: true
       });
     }
-    if(typeofres.error !== 'undefined') {
+    if(res.error !== 'undefined') {
       console.error('submit error: ', res.error);
     }
   }

@@ -23,7 +23,7 @@ class COA extends React.Component {
   }
   
   componentDidMount() {
-      Ajax.get("http://localhost:3004/trans/coa")
+      Ajax.get(process.env.BASE_URL + "/trans/coa")
       .then(res => {
           this.setState({
             table: res.data.table
