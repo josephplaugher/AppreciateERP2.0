@@ -16,7 +16,6 @@ Query.prototype.runQuery = function(res) {
 
 Query.prototype.runInputQuery = function() {
     userConn.query(this.query)
-        .then( data => console.log('the query: ', this.query, 'result: ', data))
         .catch(e => console.error('query with error: ', this.query, 'error: ',e.stack))
 }
 
@@ -26,7 +25,7 @@ Query.prototype.returnResult = function () {
     return new Promise((resolve, reject) => {
         userConn.query(this.query)
             .then(data => {
-                console.log('the query: ', this.query, 'result: ', data)
+                //console.log('the query: ', this.query, 'result: ', data)
                 resolve(data)
             })
             .catch(e => 

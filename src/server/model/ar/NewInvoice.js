@@ -1,5 +1,6 @@
 const Query = require('./../../util/Query');
 const GenID  = require('./../../util/GenID');
+const DebitCredit = require('./../accounting/DebitCredit');
 
 function NewInvoice(req, res){
   this.req = req;
@@ -9,6 +10,8 @@ function NewInvoice(req, res){
   this.invoiceTotal = '';
   this.invnum = '';
   this.inputs['empid'] = req.session.empid;
+  this.inputs.revacctno = req.body.acctno;
+  this.inputs.revacctname = req.body.acctname;
   this.today = new Date();
   this.error = {};
 }
@@ -22,7 +25,7 @@ NewInvoice.prototype.enterNewInvoice = function() {
     this.getARNo();
   }).catch( (error) => {
     this.setError(`Something went wrong, but we're working to fix it! Please try again.`);
-    console.error('get ar no error: ', error);
+    console.error('get invnum error: ', error);
   });
 }
 
@@ -40,8 +43,8 @@ NewInvoice.prototype.getARNo = function() {
   const AR = new Query("SELECT acctno FROM sys_coa WHERE acctname = 'Accounts Receivable' ",[]);
   const number = AR.returnResult();
   number.then( (no) => { 
-    this.inputs['acctname'] = 'Accounts Receivable';
-    this.inputs['arno'] = no.rows[0].acctno;
+    this.inputs['aracctname'] = 'Accounts Receivable';
+    this.inputs['aracctno'] = no.rows[0].acctno;
     this.continueNewInvoice();
   }).catch( (error) => {
     console.error('get ar no error: ', error)
@@ -57,8 +60,11 @@ NewInvoice.prototype.continueNewInvoice = function() {
   for(i = 0; i < this.inputs.item.length; i++ ) {
     this.invoiceLines(u.item[i],u.price[i], u.quant[i], u.line_total[i]);
   }
-  //this.creditEntry();
-  //this.debitEntry();
+//set some input necessary for the journal entries
+  this.inputs['cashyn'] = 'no';
+  this.inputs['payee_payer_id'] = this.inputs.customerid;
+  this.creditEntry();
+  this.debitEntry();
   let msg = 'Invoice #' +this.inputs.invnum + ' entered successfully';
   console.log('inputs: ', this.inputs);
   this.res.status(200).json({ success: msg, userNotify: {}});
@@ -94,7 +100,7 @@ NewInvoice.prototype.invoiceHeader = function() {
     customerid, customer, acctname, acctno, status, header, empid) 
     VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,'t', $12)`, 
     [this.today,i.invnum,i.date,i.description,i.invdue,i.invoiceTotal,
-    i.customerid, i.customer, i.acctname, i.acctno, 'unpaid', i.empid]);
+    i.customerid, i.customer, i.aracctname, i.aracctno, 'unpaid', i.empid]);
   
   header.runInputQuery();
 }
@@ -111,26 +117,22 @@ NewInvoice.prototype.invoiceLines = function(item, price, quant, line_total) {
 }
 
 NewInvoice.prototype.creditEntry = function() {
+  console.log('credit');
+  this.inputs['credit'] = this.inputs.invoiceTotal;
+  this.inputs.acctno = this.inputs.revacctno;
+  this.inputs.acctname = this.inputs.revacctname;
+  const Credit = new DebitCredit(this.inputs);
+  Credit.runCredit();
 
 }
 
-NewInvoice.prototype.debititEntry = function() {
-  
+NewInvoice.prototype.debitEntry = function() {
+  console.log('debit');
+  this.inputs['debit'] = this.inputs.invoiceTotal;
+  this.inputs.acctno = this.inputs.aracctno;
+  this.inputs.acctname = this.inputs.aracctname;
+  const Debit = new DebitCredit(this.inputs);
+  Debit.runDebit();
 }
-  //**** run validation on all input types first!! */
-
-   // res.status(200).json({ success: true, userNotify: 'this is your new invoice number...' });
-    /*
-    const query = {
-      "text": "INSERT into invoices() ",
-      "values" : [req.body.email]
-    };
-    loginConn.query(query)
-      .then(data => module.exports.checkPassword(req,res,data))
-      .catch(e => console.error(e.stack))
-      */
-
-
-
 
 module.exports = NewInvoice;

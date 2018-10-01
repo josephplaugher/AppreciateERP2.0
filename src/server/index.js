@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-
 app.use(bodyParser.json()); // Parse application/json
 
 //use sessions for user login
+app.set('trust proxy', 1) // trust first proxy
 app.use(session({
     store: new FileStore(),
     secret: uuid(),

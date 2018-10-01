@@ -6,6 +6,8 @@ const logout = user.logout;
 const newUser = newAccount.newUser;
 const addUser = newAccount.newUser;
 
+const session = require('express-session');
+
 routes.post('/users/login', login);
 routes.get('/users/checkLoginState', (req, res) => {
     console.log('user session:', req.session.userData);
