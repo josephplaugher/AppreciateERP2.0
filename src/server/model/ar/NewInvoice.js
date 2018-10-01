@@ -10,6 +10,7 @@ function NewInvoice(req, res){
   this.invnum = '';
   this.inputs['empid'] = req.session.empid;
   this.today = new Date();
+  this.error = {};
 }
 
 //all the other funtions are dispatched from this one
@@ -19,7 +20,10 @@ NewInvoice.prototype.enterNewInvoice = function() {
   Invnum.then( result => {
     this.inputs['invnum'] = result.rows[0].id;
     this.getARNo();
-  }).catch( console.error('get ar no error: ', error));
+  }).catch( (error) => {
+    this.setError(`Something went wrong, but we're working to fix it! Please try again.`);
+    console.error('get ar no error: ', error);
+  });
 }
 
 NewInvoice.prototype.generateInvoiceNumber = function () {
