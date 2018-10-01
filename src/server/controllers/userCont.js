@@ -8,6 +8,9 @@ const addUser = newAccount.newUser;
 
 routes.post('/users/login', login);
 routes.get('/users/checkLoginState', (req, res) => {
+    console.log('user session:', req.session.userData);
+    res.status(200).json({ userData: req.session.userData });
+    /*
     if(typeof req.session !== 'undefined') {
         if(typeof req.session.userData !== 'undefined') {
             res.status(200).json({ userData: req.session.userData });
@@ -17,6 +20,7 @@ routes.get('/users/checkLoginState', (req, res) => {
     } else {
         res.status(200).json({ isLoggedIn: false});
     }
+    */
 });
 /*
 routes.post('/user/logout', logout);

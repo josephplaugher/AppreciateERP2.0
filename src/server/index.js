@@ -1,10 +1,6 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const userCont = require('./controllers/userCont.js');
-const transCont = require('./controllers/transCont.js');
-const peopleCont = require('./controllers/peopleCont.js');
-const lsCont = require('./controllers/lsCont.js');
 const app = express();
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
@@ -40,6 +36,11 @@ app.use(session({
     cookie:{secure: app.get('env') === 'production'}
 }));
 
+const userCont = require('./controllers/userCont.js');
+const transCont = require('./controllers/transCont.js');
+const peopleCont = require('./controllers/peopleCont.js');
+const lsCont = require('./controllers/lsCont.js');
+
 app.use('/', userCont);
 
 //check for existing token. This goes below the login controller
@@ -49,5 +50,6 @@ app.use('/', transCont);
 app.use('/', peopleCont);
 app.use('/', lsCont);
 app.all('/*', (req, res) => {
+  console.log('sessionID: ', req.sessionID, 'userdata: ', req.session.userData);
   res.render('index');
 });
