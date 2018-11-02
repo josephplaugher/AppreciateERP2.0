@@ -15,7 +15,7 @@ class AppreciateCo extends React.Component {
     super(props);
     this.state = {
       error: null,
-      isLoggedIn: false,
+      isLoggedIn: true,
       userData: {}
     }
     this.setLoginState();
@@ -27,8 +27,8 @@ class AppreciateCo extends React.Component {
     auth.then((userData) => {
       if (userData === 'not logged in') {
         this.setState({ 
-          isLoggedIn:false,
-          userData: {} 
+         // isLoggedIn:false,
+         // userData: {} 
         });
       } else {
         this.setState({ 

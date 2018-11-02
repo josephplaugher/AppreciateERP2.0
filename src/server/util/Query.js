@@ -14,22 +14,32 @@ Query.prototype.runQuery = function(res) {
         .catch(e => console.error(e.stack))
 }
 
-Query.prototype.runInputQuery = function() {
-    userConn.query(this.query)
-        .catch(e => console.error('query with error: ', this.query, 'error: ',e.stack))
+Query.prototype.runInputQuery = function () {
+    return new Promise((resolve) => {
+        userConn.query(this.query)
+            .then(data => {
+                resolve(data);
+            })
+            .catch(e => {
+                //console.error('query with error: ', this.query, 'error: ', e.stack)
+                resolve({error:e});
+            });
+    });
 }
 
 //this query execution does not trigger a server response
 //rather it returns a value from the query
 Query.prototype.returnResult = function () {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         userConn.query(this.query)
             .then(data => {
                 //console.log('the query: ', this.query, 'result: ', data)
-                resolve(data)
+                resolve(data);
             })
-            .catch(e => 
-                console.error('query with error: ', this.query, 'error: ', e.stack))
+            .catch(e => {
+                //console.error('query with error: ', this.query, 'error: ', e.stack)
+                resolve({error:e});
+            });
     });
 }
 

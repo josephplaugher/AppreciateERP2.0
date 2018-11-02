@@ -1,36 +1,50 @@
-import FormClass from 'Util/FormClass'
+import * as ReactForm from 'reactform-appco'
 import React from 'react'
-import Form from 'Util/Form'
-import Input from 'Util/Input'
-import Button from 'Util/Button'
 import 'css/workingPane.css'
 import 'css/form.css'
 import 'css/userNotify.css'
 import 'css/lsr.css'
 
-class EnterDeposit extends FormClass{
+const Form = ReactForm.Form;
+const Input = ReactForm.Input;
+const Button = ReactForm.Button;
+
+class EnterDeposit extends React.Component{
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataView: false,
+      table: [],
+      userNotify: {}
+    }
+    this.response = this.response.bind(this);
+  }
+
+  response = (res) => {
+    if(res.success)
+    this.setState({});
+  }
 
   render() {
-
-    this.route = 'EnterDeposit';
 
     return (
       <div>
       <div id="userNotify">
       </div>
       <div id="workingPane">
-      <Form formTitle="Enter Deposit" onSubmit={this.onSubmit}  >
-        <Input name="date" label="Date" value={this.state.date} onChange={this.onChange} error={this.state.userNotify.date} />
-        <Input name="docno" label="Document Number" value={this.state.docno} onChange={this.onChange} error={this.state.userNotify.docno}/>
-        <Input name="decription" label="Description" value={this.state.description} onChange={this.onChange} error={this.state.userNotify.description} />
-        <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} error={this.state.userNotify.amount}/> 
-        <Input name="bankname" label="Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} error={this.state.userNotify.bankname}/>
-        <Input name="bankno" label="Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} error={this.state.userNotify.bankno}/>
-        <Input name="acctname" label="Account Name" value={this.state.acctname} onChange={this.onChange} onBlur={this.onFocusOut} lsr={this.state.lsracctname} error={this.state.userNotify.acctname}/>
-        <Input name="acctno" label="Account Number" value={this.state.acctno} onChange={this.onChange} lsr={this.state.lsracctno} error={this.state.userNotify.acctno}/>
-        <Input name="transtype" label="Transaction Type" value={this.state.transtype} onChange={this.onChange} error={this.state.userNotify.transtype}/>
+      <Form formTitle="Enter Deposit" action={`${process.env.BASE_URL}/trans/EnterDeposit`} response={this.response}  >
+        <Input name="itemdate" label="Item Date" />
+        <Input name="docno" label="Document Number" />
+        <Input name="decription" label="Description" />
+        <Input name="amount" label="Amount" /> 
+        <Input name="bankname" label="Bank Name" />
+        <Input name="bankno" label="Bank Number" />
+        <Input name="acctname" label="Account Name" />
+        <Input name="acctno" label="Account Number" />
+        <Input name="transtype" label="Transaction Type" />
         <div className="buttondiv">
-        <Button id="submit" value="Submit" />
+          <Button id="submit" value="Enter Deposit" />
         </div>
       </Form>
       </div>

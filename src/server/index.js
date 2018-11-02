@@ -51,6 +51,6 @@ app.use('/', transCont);
 app.use('/', peopleCont);
 app.use('/', lsCont);
 app.all('/*', (req, res) => {
-  console.log('sessionID: ', req.sessionID, 'userdata: ', req.session.userData);
+  //console.log('sessionID: ', req.sessionID, 'userdata: ', req.session.userData);
   res.render('index');
 });

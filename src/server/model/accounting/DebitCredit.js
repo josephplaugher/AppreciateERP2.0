@@ -17,24 +17,42 @@ DebitCredit.prototype.journNum = function () {
 
 DebitCredit.prototype.runDebit = function () {
     var i = this.inputs;
+    console.log('the inputs', i);
     var Debit = new Query(`INSERT INTO sys_gl 
             (journ_num, transtype, itemdate, time, description, 
             debit, acctno, acctname, payee_payer_id, empid, cashyn) 
             VALUES ($1, $2, $3, DEFAULT,$4, $5, $6, $7, $8, $9, $10)`,
-        [i.journ_num, i.transtype, i.date, i.description, i.debit, 
-            i.acctno, i.acctname, i.payee_payer_id, i.empid, i.cashyn]);
-    Debit.runInputQuery();
+        [i.journ_num, i.transtype, i.itemdate, i.description, i.debit,
+        i.acctno, i.acctname, i.payee_payer_id, i.empid, i.cashyn]);
+    return new Promise((resolve, reject) => {
+        Debit.runInputQuery()
+            .then(result => {
+                resolve(result);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
 }
 
 DebitCredit.prototype.runCredit = function () {
     var i = this.inputs;
+    console.log('the inputs', i);
     var Credit = new Query(`INSERT INTO sys_gl 
             (journ_num, transtype, itemdate, time, description, 
             credit, acctno, acctname, payee_payer_id, empid, cashyn) 
             VALUES ($1, $2, $3, DEFAULT, $4, $5, $6, $7, $8, $9, $10)`,
-        [i.journ_num, i.transtype, i.date, i.description, i.credit, 
+        [i.journ_num, i.transtype, i.itemdate, i.description, i.credit, 
             i.acctno, i.acctname, i.payee_payer_id, i.empid, i.cashyn]);
-    Credit.runInputQuery();
+    return new Promise((resolve, reject) => {
+        Credit.runInputQuery()
+            .then( result => {
+                resolve(result);
+            })
+            .catch( error => {
+                reject(error);
+            });
+    });
 }
 
 module.exports = DebitCredit;

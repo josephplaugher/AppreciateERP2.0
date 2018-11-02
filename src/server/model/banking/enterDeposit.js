@@ -1,28 +1,57 @@
-const db = require('../../util/postgres.js');
-const userConn = db.userConn;
+const DebitCredit = require('./../accounting/DebitCredit');
+const BaseObject = require('./../../util/BaseObject');
 
-EnterDeposit = (req, res) => {
-  var i = req.body;
-  const creditQuery = {
-    "text": "INSERT INTO sys_gl (docno, description, credit, date, payee_payer, payee_payer_id, acctname, acctno,transtype, empid)" +
-      "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
-    "values": [i.docno, i.description, i.amount, i.date, i.customer, i.customerid, i.acctname, i.acctno, i.transtype, i.empid]
-  };
-  userConn.query(creditQuery)
-    .then(data => module.exports.debitQuery(req, res))
-    .catch(e => console.error(e.stack))
+function NewDeposit(req, res) {
+  BaseObject.apply(this, arguments);
+  this.inputs = req.body;
+  this.res = res;
 }
 
-debitQuery = (req, res) => {
-  var i = req.body;
-  const debitQuery = {
-    "text": "INSERT INTO sys_gl (docno, description, debit, date, payee_payer, payee_payer_id, acctname, acctno,transtype, empid)"+
-    "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
-    "values" : [i.docno, i.description, i.amount, i.date, i.customer, i.customerid, i.acctname, i.acctno, i.transtype, i.empid]
-  };
-  userConn.query(debitQuery)
-    .then(data => res.status(200).json({ success: true, userNotify: 'Deposit Entered Successfully' }))
-    .catch(e => console.error(e.stack))
+NewDeposit.prototype = BaseObject.prototype;
+NewDeposit.prototype.constructor = BaseObject;
+
+NewDeposit.prototype.preprocess = function() {
+  this.inputs['transtype'] = 'deposit';
+  this.inputs['credit'] = this.inputs['debit'] = this.inputs.amount;
+  this.inputs['payee_payer_id'] = this.inputs.customerid;
+  this.inputs['cashyn'] = 'yes';
+  Promise.all([this.creditEntry(), this.debitEntry()])
+    .then( result => {
+    this.respond(this.res, '', true, {success:'Deposit entered successfully.'});
+  }).catch( error => {
+    //log it to the system
+    console.log(error);
+    this.respond(this.res, '', false, {error:'Something went wrong. Please try again.'});
+  })
+  }
+
+NewDeposit.prototype.creditEntry = function () {
+  console.log('the inputs', this.inputs);
+  const Credit = new DebitCredit(this.inputs);
+  return new Promise((resolve, reject) => {
+    var cred = Credit.runCredit()
+    cred.then(result => {
+      resolve(result);
+    }).catch(error => {
+      reject(error);
+    });
+  });
 }
 
-module.exports = { EnterDeposit, debitQuery};
+NewDeposit.prototype.debitEntry = function () {
+  console.log('the inputs', this.inputs);
+  this.inputs.acctname = this.inputs.bankname;
+  this.inputs.acctno = this.inputs.bankno;
+
+  const Debit = new DebitCredit(this.inputs);
+  return new Promise((resolve,reject) => {
+    var deb = Debit.runDebit()
+    deb.then(result => {
+      resolve(result);
+    }).catch(error => {
+      reject(error);
+    });
+  });
+}
+
+module.exports = NewDeposit;

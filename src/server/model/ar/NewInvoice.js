@@ -71,7 +71,7 @@ NewInvoice.prototype.continueNewInvoice = function() {
 }
 
 NewInvoice.prototype.rowCheck = function() {
-  //console.log('inputs: ', this.inputs);
+  console.log('inputs: ', this.inputs);
   //if at least one row is entered and no incomplete rows are entered, do nothing, otherwise send error response.
   for(i = 0; i  < this.inputs.item.length; i++ ) {
     if(!this.inputs.item[i] || !this.inputs.price[i] || !this.inputs.quant[i] ) {
