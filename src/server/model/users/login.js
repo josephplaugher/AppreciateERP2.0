@@ -1,19 +1,24 @@
-const jwt = require('jsonwebtoken'); 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const db = require('./../../util/postgres');
 const loginConn = db.loginConn;
 
-login = (req, res) => {
-    const query = {
-      "text": "SELECT company_id, customerid, empid, status, email, company_name, lname, fname, password, admin, industry, maintcode FROM login WHERE email = $1 ",
-      "values" : [req.body.email]
-    };
-    loginConn.query(query)
-      .then(data => module.exports.checkPassword(req,res,data))
-      .catch(e => console.error(e.stack))
+function login(req, res){
+  this.req = req;
+  this.res = res;
 }
 
-checkPassword = (req,res,data) => {
+login.prototype.getUserData = function() {
+  const query = {
+    "text": "SELECT company_id, customerid, empid, status, email, company_name, lname, fname, password, admin, industry, maintcode FROM login WHERE email = $1 ",
+    "values" : [this.req.body.email]
+  };
+  loginConn.query(query)
+    .then(data => this.checkPassword(this.req, this.res,data))
+    .catch(e => console.error(e.stack))
+}
+
+login.prototype.checkPassword = function(req,res,data) {
   if(data.rows[0]) {
     //if the email resulted in a user entry, compare password hashes
     var dbhash = data.rows[0].password;
@@ -29,12 +34,15 @@ checkPassword = (req,res,data) => {
           res.status(200).json({ success: false, userNotify: 'That email or password is invalid' });
         } else if(result == true){
           delete data.rows[0].password;//ensure the pw hash isn't sent along to the client
-          req.session.userData = {};//set the session values for this user
+          //req.session.userData = {};//set the session values for this user
+          let userData = {};
           for(prop in data.rows[0]) {
-            req.session.userData[prop] = data.rows[0][prop];
-            //console.log('key: ',prop, 'val: ', data.rows[0][prop]);
+            userData[prop] = data.rows[0][prop];
           }
-          res.status(200).json({ userNotify: {}, userData: data.rows[0] });
+          var token = jwt.sign({ userData: userData }, 'shhhhh', {expiresIn: "15000ms"});
+          //console.log('session object in login.js: ', req.session)
+          res.cookie('AppreciateCoCookie', token, {maxAge: 15000, httpOnly: true, withCredentials: true})
+          res.status(200).json({ userNotify: {}, userData: userData, token: token });
         }    
     });
   }else{
@@ -43,8 +51,4 @@ checkPassword = (req,res,data) => {
   }
 }
 
-logout = (req, res) => {
-
-}
-
-module.exports =  {login, checkPassword, logout}
+module.exports = login;

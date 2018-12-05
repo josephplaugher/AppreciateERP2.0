@@ -1,6 +1,6 @@
 /*
 const jwt = require('jsonwebtoken'); 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const db = require('./../../postgres.js');
 const config = require('./../../config');
 const userConn = db.userConn;

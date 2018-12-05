@@ -2,8 +2,13 @@ import axios from 'axios'
 
 const get = (url) => {
     const request = axios({
+        withCredentials: true,
         method: 'get', url: url,
-        responseType: 'JSON'
+        responseType: 'JSON',
+        headers: 
+            { 
+            authorization: 'Bearer ' + sessionStorage.getItem('AppCoToken')
+            }
     })
     request
         .catch(error => console.log('ajax error: ' + error))
@@ -13,10 +18,15 @@ const get = (url) => {
 const post = (url, formData) => {
 
     const request = axios({
+        withCredentials: true,
         url: url,
         method: 'post',
         data: formData,
-        config: { headers: { "Content-Type": "multipart/form-data" } },
+        headers: 
+            { 
+            "Content-Type": "multipart/form-data",
+            authorization: 'Bearer ' + sessionStorage.getItem('AppCoToken')
+            },
         responseType: 'json'
     })
     request

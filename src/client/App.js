@@ -1,10 +1,11 @@
 import * as ReactForm from 'reactform-appco'
 import React from 'react'
+import ValRules from 'Util/ValRules'
 import EB from 'Util/EB'
 import checkLoginState from 'Util/CheckLoginState'
 import Home from './mainmenu/home'
-import 'css/main.css'
-import 'css/userNotify.css'
+import 'css/main.scss'
+import 'css/userNotify.scss'
 
 const Form = ReactForm.Form;
 const Input = ReactForm.Input;
@@ -15,40 +16,50 @@ class AppreciateCo extends React.Component {
     super(props);
     this.state = {
       error: null,
-      isLoggedIn: true,
+      isLoggedIn: false,
       userData: {}
     }
-    this.setLoginState();
+    this.setLoginState = this.setLoginState.bind(this);
     this.response = this.response.bind(this);
+    this.setLoginState();
   }
 
   setLoginState = () => {
-    let auth = checkLoginState();
-    auth.then((userData) => {
-      if (userData === 'not logged in') {
-        this.setState({ 
-         // isLoggedIn:false,
-         // userData: {} 
-        });
-      } else {
-        this.setState({ 
-          isLoggedIn: true,
-          userData: userData 
-        });
-      }
-    });
+    const AppCoToken = sessionStorage.getItem('AppCoToken');
+    if(AppCoToken !== null) {
+      let auth = checkLoginState();
+      auth.then((userData) => {
+        if (userData) {
+          console.log('user data in setLoginState', userData)
+          let userData = JSON.parse(sessionStorage.getItem('AppCoToken'));
+          this.setState({ 
+            isLoggedIn: true,
+            userData: userData 
+          });
+        } else {
+          sessionStorage.removeItem('AppCoUser');
+          sessionStorage.removeItem('AppCoToken');
+          this.setState({ 
+            isLoggedIn: false,
+            userData: {} 
+          });
+        }
+      });
+    }
   }
 
   response = (res) => {
     if(typeof res.userData !== 'undefined') {
       sessionStorage.setItem('AppCoUser', JSON.stringify(res.userData));
+      sessionStorage.setItem('AppCoToken', res.token);
       this.setState({
+          token: res.token,
           userNotify: res.userNotify,
           userData: res.userData,
           isLoggedIn: true
       });
     }
-    if(res.error !== 'undefined') {
+    if(typeof res.error !== 'undefined') {
       console.error('submit error: ', res.error);
     }
   }
@@ -65,7 +76,9 @@ class AppreciateCo extends React.Component {
           ) : (
               <div id="sign-in">
                 <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
-                <Form formTitle="Sign In" action="http://localhost:3004/users/login" response={this.response} >
+                <Form formTitle="Sign In" 
+                  action="http://localhost:3004/login" 
+                  valRules={ValRules} response={this.response} >
                   <Input name="email" label="Email" /><br />
                   <Input name="password" label="Password" />
                   <div className="buttondiv">
