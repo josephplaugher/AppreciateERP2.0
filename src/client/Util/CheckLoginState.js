@@ -2,9 +2,9 @@ import Ajax from './Ajax'
 
 const checkLoginState = () => {
     return new Promise((resolve, reject) => {
-        Ajax.get(process.env.BASE_URL)
+        Ajax.get(process.env.BASE_URL + "/checkLoginState")
             .then(res => {
-                resolve(res.data.userData);
+                resolve(res.headers.authorized);
             })
             .catch(e => { reject('error checking login state: ', e) });
     });

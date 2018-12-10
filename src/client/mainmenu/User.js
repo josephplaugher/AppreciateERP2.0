@@ -14,7 +14,7 @@ class User extends Component {
     render() {
       return (
       <div id="user">
-        <p>Logged in as {this.props.lname}</p>
+        <p>Signed in as {this.props.lname}, {this.props.fname}</p>
         <Button id="sign out" className="submit" value="Sign Out" />
       </div>
       )

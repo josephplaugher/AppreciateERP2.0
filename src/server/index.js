@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const Auth = require('./util/Auth');
 const uuid = require('uuid');
 const login = require('./model/users/login');
 const userCont = require('./controllers/userCont.js');
@@ -32,40 +33,22 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-
 app.use(cookieParser());
 app.use(bodyParser.json()); // Parse application/json
 
-const auth = (req) => {
-  console.log('cookie: ', req.cookies, 'token: ', req.headers.authorization)
-  var token;
-  if(req.headers.authorization) {
-    token = jwt.verify(req.headers.authorization, 'shhhhh');
-  }
-  if(typeof req.cookies['AppreciateCoCookie'] === 'undefined' || typeof token === 'undefined' ) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-//login route is first as it does not require a cookie or token
+//login route does not require a cookie or token
 app.post('/login', (req, res) => {
   const Login = new login(req, res);
   Login.getUserData();
 });
-//for all other routes, first check the cookie and token
-app.use('/', (req, res, next) => {
-  let Auth = auth(req);
-  if(Auth) {
-    console.log('authorized')
-    next();
-  } else {
-    console.log('not authorized')
-    res.render('unauth');
-  }
-  
+
+app.get('/checkLoginState', Auth, (req, res) => {
+  res.status(200).json({checkLoginState: 'done'});
 });
 
-app.use('/', transCont);
-app.use('/', peopleCont);
-app.use('/', lsCont);
+//all these routes require a valid cookie and token
+app.use('/', Auth, transCont);
+app.use('/', Auth, peopleCont);
+app.use('/', Auth, lsCont);
+//this route renders the UI. The UI will check for the cookie and token
+//and log the user out if they don't exist.
 app.all('/*', (req, res) => {
   res.render('index');
 });

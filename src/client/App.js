@@ -28,10 +28,9 @@ class AppreciateCo extends React.Component {
     const AppCoToken = sessionStorage.getItem('AppCoToken');
     if(AppCoToken !== null) {
       let auth = checkLoginState();
-      auth.then((userData) => {
-        if (userData) {
-          console.log('user data in setLoginState', userData)
-          let userData = JSON.parse(sessionStorage.getItem('AppCoToken'));
+      auth.then( authorized => {
+        if(authorized) {
+          let userData = JSON.parse(sessionStorage.getItem('AppCoUser'));
           this.setState({ 
             isLoggedIn: true,
             userData: userData 
@@ -77,7 +76,7 @@ class AppreciateCo extends React.Component {
               <div id="sign-in">
                 <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
                 <Form formTitle="Sign In" 
-                  action="http://localhost:3004/login" 
+                  action={`${process.env.BASE_URL}/login`}
                   valRules={ValRules} response={this.response} >
                   <Input name="email" label="Email" /><br />
                   <Input name="password" label="Password" />

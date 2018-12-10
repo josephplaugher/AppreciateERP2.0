@@ -7,7 +7,7 @@ const get = (url) => {
         responseType: 'JSON',
         headers: 
             { 
-            authorization: 'Bearer ' + sessionStorage.getItem('AppCoToken')
+                csrf: sessionStorage.getItem('AppCoToken')
             }
     })
     request
@@ -25,7 +25,7 @@ const post = (url, formData) => {
         headers: 
             { 
             "Content-Type": "multipart/form-data",
-            authorization: 'Bearer ' + sessionStorage.getItem('AppCoToken')
+            csrf: sessionStorage.getItem('AppCoToken')
             },
         responseType: 'json'
     })
