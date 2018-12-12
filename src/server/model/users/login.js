@@ -39,9 +39,9 @@ login.prototype.checkPassword = function(req,res,data) {
           for(prop in data.rows[0]) {
             userData[prop] = data.rows[0][prop];
           }
-          var token = jwt.sign({ userData: userData }, 'shhhhh', {expiresIn: "15000ms"});
+          var token = jwt.sign({ userData: userData }, 'shhhhh', {expiresIn: "60000ms"});
           //console.log('session object in login.js: ', req.session)
-          res.cookie('AppreciateCoCookie', {token: token}, {maxAge: 15000, httpOnly: true})
+          res.cookie('AppreciateCoCookie', {token: token}, {maxAge: 60000, httpOnly: true})
           res.status(200).json({ userNotify: {}, userData: userData, token: token });
         }    
     });
