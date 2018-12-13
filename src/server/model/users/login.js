@@ -38,11 +38,11 @@ login.prototype.checkPassword = function(req,res,data) {
           let userData = {};
           for(prop in data.rows[0]) {
             userData[prop] = data.rows[0][prop];
-          }
-          
+          }          
           var token = jwt.sign({ userData: userData }, 'shhhhh', {expiresIn: "60000ms"});
           res.cookie('AppreciateCoCookie', {token: token}, {maxAge: 60000, httpOnly: true})
-          res.status(200).json({ userNotify: {}, userData: userData, token: token });
+          //res.header('token', token);
+          res.status(200).json({ userNotify: {}, userData: userData, token: token});
         }    
     });
   }else{

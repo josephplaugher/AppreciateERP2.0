@@ -31,6 +31,7 @@ class AppreciateCo extends React.Component {
       auth.then( headers => {
         if(headers.authorized === "true") {
           let userData = JSON.parse(sessionStorage.getItem('AppCoUser'));
+          sessionStorage.setItem('AppCoToken', headers.token);
           this.setState({ 
             isLoggedIn: true,
             userData: userData 
