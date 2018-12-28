@@ -2,6 +2,7 @@ import * as ReactForm from 'reactform-appco'
 import React from 'react'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
+import ValRules from 'Util/ValRules'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
@@ -62,7 +63,10 @@ class GL extends React.Component {
 
     return (
       <div id="workingPane">
-        <Form formTitle="Search General Ledger" action={`${process.env.BASE_URL}/trans/gl`} response={this.response}  >
+        <Form formTitle="Search General Ledger" 
+              action={`${process.env.BASE_URL}/trans/gl`} 
+              response={this.response}
+              valrules={ValRules}  >
           <Input name="itemstartdate" label="Item Start Date" />
           <Input name="itemenddate" label="Item End Date" />
           <Input name="glstartdate" label="Ledger Start Date" />
