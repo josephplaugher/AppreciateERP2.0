@@ -4,8 +4,8 @@ import ValRules from 'Util/ValRules'
 import EB from 'Util/EB'
 import checkLoginState from 'Util/CheckLoginState'
 import Home from './mainmenu/home'
-import 'css/main.scss'
-import 'css/userNotify.scss'
+import 'css/main.css'
+import 'css/userNotify.css'
 
 const Form = ReactForm.Form;
 const Input = ReactForm.Input;
@@ -78,7 +78,7 @@ class AppreciateCo extends React.Component {
                 <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
                 <Form formTitle="Sign In" 
                   action={`${process.env.BASE_URL}/login`}
-                  valRules={ValRules} response={this.response} >
+                  valrules={ValRules} response={this.response} >
                   <Input name="email" label="Email" /><br />
                   <Input name="password" label="Password" />
                   <div className="buttondiv">

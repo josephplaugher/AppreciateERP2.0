@@ -34,15 +34,17 @@ login.prototype.checkPassword = function(req,res,data) {
           res.status(200).json({ success: false, userNotify: 'That email or password is invalid' });
         } else if(result == true){
           delete data.rows[0].password;//ensure the pw hash isn't sent along to the client
-          //req.session.userData = {};//set the session values for this user
           let userData = {};
           for(prop in data.rows[0]) {
             userData[prop] = data.rows[0][prop];
           }          
-          var token = jwt.sign({ userData: userData }, 'shhhhh', {expiresIn: "60000ms"});
-          res.cookie('AppreciateCoCookie', {token: token}, {maxAge: 60000, httpOnly: true})
-          //res.header('token', token);
-          res.status(200).json({ userNotify: {}, userData: userData, token: token});
+          var token = jwt.sign({ userData: userData }, process.env.JWT_SECRET, {expiresIn: "1h"});
+          res.cookie(process.env.COOKIE_NAME, {token: token}, 
+            {expires: new Date(Date.now() + (60*60*1000)), 
+              maxAge: (60*60*1000), 
+              httpOnly: true,
+              secure: process.env.NODE_ENV === true});
+          res.status(200).json({ userNotify: {}, userData: userData, token, token});
         }    
     });
   }else{
