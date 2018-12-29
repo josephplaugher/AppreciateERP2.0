@@ -12,6 +12,7 @@ const Input = ReactForm.Input;
 const Button = ReactForm.Button;
 
 class GL extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
