@@ -1,5 +1,6 @@
 import * as ReactForm from 'reactform-appco'
 import React from 'react'
+import SetUrl from 'Util/SetUrl'
 import ValRules from 'Util/ValRules'
 import EB from 'Util/EB'
 import checkLoginState from 'Util/CheckLoginState'
@@ -77,7 +78,7 @@ class AppreciateCo extends React.Component {
               <div id="sign-in">
                 <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
                 <Form formTitle="Sign In" 
-                  action={`${process.env.BASE_URL}/login`}
+                  action={`${SetUrl()}/login`}
                   valrules={ValRules} response={this.response} >
                   <Input name="email" label="Email" /><br />
                   <Input name="password" label="Password" />

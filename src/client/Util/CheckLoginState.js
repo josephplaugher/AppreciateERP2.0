@@ -1,8 +1,9 @@
 import Ajax from './Ajax'
+import SetUrl from './SetUrl'
 
 const checkLoginState = () => {
     return new Promise((resolve, reject) => {
-        Ajax.get(process.env.BASE_URL + "/checkLoginState")
+        Ajax.get(SetUrl() + "/checkLoginState")
             .then(res => {
                 resolve(res.headers);
             })
