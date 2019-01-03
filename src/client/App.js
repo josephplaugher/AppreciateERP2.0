@@ -69,6 +69,7 @@ class AppreciateCo extends React.Component {
 
     return (
       <div id="container">
+      <div id="logoBox"><img src={SetUrl() + '/AppreciateLogo.png'} alt="Appreciate Logo" /></div>
         <div>
           {this.state.isLoggedIn ? (
           <EB comp="Home">
@@ -76,7 +77,6 @@ class AppreciateCo extends React.Component {
           </EB>
           ) : (
               <div id="sign-in">
-                <div id="logoBox"><img src={require('./AppreciateLogo.png')} alt="Appreciate Logo" /></div>
                 <Form formTitle="Sign In" 
                   action={`${SetUrl()}/login`}
                   valrules={ValRules} response={this.response} >

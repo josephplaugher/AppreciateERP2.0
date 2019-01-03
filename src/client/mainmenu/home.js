@@ -22,7 +22,6 @@ class Home extends React.Component {
     const userData = this.props.userData;
     return (
       <div id="home-container">
-        <div id="logoBox"><img src={require('./../AppreciateLogo.png')} alt="Appreciate Logo"/></div> 
         <User userData={userData} />
         <Router>
         <div id="nav-pane">
