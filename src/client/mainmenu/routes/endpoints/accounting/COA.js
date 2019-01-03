@@ -1,15 +1,12 @@
 import React from 'react'
 import Ajax from 'Util/Ajax'
+import SetUrl from 'Util/SetUrl'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
 import LightBox from 'Util/LightBox'
-import * as ReactForm from 'reactform-appco'
+import {Form, Input, Button} from 'reactform-appco'
 import 'css/workingPane.css'
 import 'css/form.css'
-
-const Form = ReactForm.Form
-const Input = ReactForm.Input
-const Button = ReactForm.Button
 
 class COA extends React.Component {
 
@@ -23,7 +20,7 @@ class COA extends React.Component {
   }
   
   componentDidMount() {
-      Ajax.get(process.env.BASE_URL + "/trans/coa")
+      Ajax.get(SetUrl() + "/trans/coa")
       .then(res => {
           this.setState({
             table: res.data.table
