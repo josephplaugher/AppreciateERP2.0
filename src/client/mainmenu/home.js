@@ -23,7 +23,7 @@ class Home extends React.Component {
     return (
       <div id="home-container">
         <div id="logoBox"><img src={require('./../AppreciateLogo.png')} alt="Appreciate Logo"/></div> 
-        <User lname={userData.lname} />
+        <User userData={userData} />
         <Router>
         <div id="nav-pane">
           <Link to="/accounting" id="accounting" className="nav">Accounting</Link>

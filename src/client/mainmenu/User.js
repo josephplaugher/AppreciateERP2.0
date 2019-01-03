@@ -12,9 +12,11 @@ class User extends Component {
   }
 
     render() {
+      const signed = `Current User: ${this.props.userData.lname}, ${this.props.userData.fname}`
+
       return (
       <div id="user">
-        <p>Signed in as {this.props.lname}, {this.props.fname}</p>
+        <p>{signed}</p>
         <Button id="sign out" className="submit" value="Sign Out" />
       </div>
       )
