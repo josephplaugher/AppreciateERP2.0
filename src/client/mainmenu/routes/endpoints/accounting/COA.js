@@ -7,6 +7,7 @@ import LightBox from 'Util/LightBox'
 import {Form, Input, Button} from 'reactform-appco'
 import 'css/workingPane.css'
 import 'css/form.css'
+import 'react-table/react-table.css'
 
 class COA extends React.Component {
 
