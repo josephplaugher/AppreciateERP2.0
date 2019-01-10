@@ -20,6 +20,7 @@ class COA extends React.Component {
     }
   }
   
+  
   componentDidMount() {
       Ajax.get(SetUrl() + "/trans/coa")
       .then(res => {
