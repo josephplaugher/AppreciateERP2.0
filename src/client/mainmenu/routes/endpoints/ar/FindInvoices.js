@@ -61,11 +61,12 @@ class FindInvoices extends React.Component {
       <Form formTitle="Find Invoices" 
         action={`${SetUrl()}/trans/FindInvoices`}
         valrules={ValRules}
-        response={this.response} >
+        response={this.response}
+        clearOnSubmit="false" >
         <Input name="invnum" label="Invoice Number" className="textinput" labelClass="label" errorClass="input-error" />
         <Input name="total" label="Total" className="textinput" labelClass="label" errorClass="input-error" />
         <Input name="invdate" label="Invoice Date" className="textinput" labelClass="label" errorClass="input-error" />
-        <Input name="date" label="Date Entered" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="ledgerdate" label="Date Entered" className="textinput" labelClass="label" errorClass="input-error" />
         <Input name="customer" label="Customer Name" className="textinput" labelClass="label" errorClass="input-error" />
         <Input name="customerid" label="Customer ID" className="textinput" labelClass="label" errorClass="input-error" />
         <div className="buttondiv">

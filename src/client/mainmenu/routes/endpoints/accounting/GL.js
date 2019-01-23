@@ -66,7 +66,9 @@ class GL extends React.Component {
         <Form formTitle="Search General Ledger" 
               action={`${SetUrl()}/trans/gl`} 
               response={this.response}
-              valrules={ValRules}  >
+              valrules={ValRules} 
+              clearOnSubmit="false" >
+          <Input name="transid" label="Transaction ID" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="docstartdate" label="Document Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="docenddate" label="Document End Date" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="ledgerstartdate" label="Ledger Start Date" className="textinput" labelClass="label" errorClass="input-error"/>

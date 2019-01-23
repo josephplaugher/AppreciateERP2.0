@@ -29,6 +29,15 @@ const ValRules = [
         required: false,
         alphanumeric: true,
         errorMsg: 'Please provide a date'
+    },
+    {
+        name: 'ledgerdate',
+        alphanumeric: true,
+        errorMsg: 'Please enter valid date'
+    },
+    {
+        name: 'invnum',
+        alphanumeric: true,
     }
 ]
 

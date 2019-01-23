@@ -11,7 +11,7 @@ function login(req, res){
 login.prototype.getUserData = function() {
   const query = {
     "text": "SELECT company_id, customerid, empid, status, email, company_name, lname, fname, password, admin, industry, maintcode FROM login WHERE email = $1 ",
-    "values" : [this.req.body.email]
+    "values" : [this.req.body.username]
   };
   loginConn.query(query)
     .then(data => this.checkPassword(this.req, this.res,data))

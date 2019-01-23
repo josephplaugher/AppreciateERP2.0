@@ -80,7 +80,7 @@ class AppreciateCo extends React.Component {
                 <Form formTitle="Sign In" 
                   action={`${SetUrl()}/login`}
                   valrules={ValRules} response={this.response} >
-                  <Input name="email" label="Email" /><br />
+                  <Input name="username" label="Email" /><br />
                   <Input name="password" label="Password" />
                   <div className="buttondiv">
                     <Button id="submit" value="Sign In" />
