@@ -20,16 +20,18 @@
 }
 
 .label {
+    color: #2665C4;
     position: absolute;
     margin-top: -9px;
     margin-left: 10px;
-    font-size: 8px;
+    font-size: 12px;
 }
 
 .input-error {
     color: red;
     font-size: 12px;
-    margin-left: 50px;
+    margin-left: 20px;
+    margin-top: 60px;
     position: absolute;
 }
 
@@ -47,4 +49,5 @@
 .buttondiv {
     clear: both;
     margin-left: 30px;
+    margin-top: 20px;
 }

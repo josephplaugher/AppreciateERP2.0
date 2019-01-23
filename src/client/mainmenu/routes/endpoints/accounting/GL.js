@@ -2,6 +2,7 @@ import * as ReactForm from 'reactform-appco'
 import React from 'react'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
+import SetUrl from 'Util/SetUrl'
 import ValRules from 'Util/ValRules'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
@@ -52,8 +53,8 @@ class GL extends React.Component {
 
     const columns = [
       { Header: 'Trans Id', accessor: 'transid' },
-      { Header: 'Item Date', accessor: 'itemdate' },
-      { Header: 'Ledger Date', accessor: 'gldate' },
+      { Header: 'Document Date', accessor: 'docdate' },
+      { Header: 'Ledger Date', accessor: 'ledgerdate' },
       { Header: 'Debit', accessor: 'debit' },
       { Header: 'Credit', accessor: 'credit' },
       { Header: 'Account Name', accessor: 'acctname' },
@@ -63,15 +64,15 @@ class GL extends React.Component {
     return (
       <div id="workingPane">
         <Form formTitle="Search General Ledger" 
-              action={`${process.env.BASE_URL}/trans/gl`} 
+              action={`${SetUrl()}/trans/gl`} 
               response={this.response}
               valrules={ValRules}  >
-          <Input name="itemstartdate" label="Item Start Date" />
-          <Input name="itemenddate" label="Item End Date" />
-          <Input name="glstartdate" label="Ledger Start Date" />
-          <Input name="glenddate" label="Ledger End Date" />
-          <Input name="acctname" label="Account Name" />
-          <Input name="acctno" label="Account Number" />
+          <Input name="docstartdate" label="Document Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="docenddate" label="Document End Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="ledgerstartdate" label="Ledger Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="ledgerenddate" label="Ledger End Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="acctname" label="Account Name" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="acctno" label="Account Number" className="textinput" labelClass="label" errorClass="input-error"/>
           <div className="buttondiv">
             <Button id="search" value="Search" />
           </div>
@@ -98,8 +99,8 @@ class GL extends React.Component {
               <LightBox close={this.closeLightBox} >
                 <Form formTitle="Transactions Details" clearOnSubmit="false" >
                 <Input name="transid" label="Trans ID" prePopVal={this.state.transid} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="itemdate" label="Item Date" prePopVal={this.state.itemdate} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="gldate" label="Ledger Date" prePopVal={this.state.gldate} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="docdate" label="Document Date" prePopVal={this.state.docdate} className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="ledgerdate" label="Ledger Date" prePopVal={this.state.ledgerdate} className="textinput" labelClass="label" errorClass="input-error" />
                 <Input name="debit" label="Debit" prePopVal={this.state.debit} className="textinput" labelClass="label" errorClass="input-error" />
                 <Input name="credit" label="Credit" prePopVal={this.state.credit} className="textinput" labelClass="label" errorClass="input-error" /> 
                 <Input name="transtype" label="Transaction Type" prePopVal={this.state.transtype} className="textinput" labelClass="label" errorClass="input-error" />

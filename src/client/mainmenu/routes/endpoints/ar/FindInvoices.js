@@ -1,14 +1,12 @@
-import * as ReactForm from 'reactform-appco'
+import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
+import ValRules from 'Util/ValRules'
+import SetUrl from 'Util/SetUrl'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
-
-const Form = ReactForm.Form;
-const Input = ReactForm.Input;
-const Button = ReactForm.Button;
 
 class FindInvoices extends React.Component {
   
@@ -60,16 +58,19 @@ class FindInvoices extends React.Component {
     return (
       <div id="workingPane">
       <EB comp="Form in FindInvoices">
-      <Form formTitle="Find Invoices" action="http://localhost:3004/trans/FindInvoices" response={this.response} >
-        <Input name="invnum" label="Invoice Number" />
-        <Input name="total" label="Total" />
-        <Input name="invdate" label="Invoice Date" />
-        <Input name="date" label="Date Entered" />
-        <Input name="customer" label="Customer Name" />
-        <Input name="customerid" label="Customer ID" />
+      <Form formTitle="Find Invoices" 
+        action={`${SetUrl()}/trans/FindInvoices`}
+        valrules={ValRules}
+        response={this.response} >
+        <Input name="invnum" label="Invoice Number" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="total" label="Total" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="invdate" label="Invoice Date" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="date" label="Date Entered" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="customer" label="Customer Name" className="textinput" labelClass="label" errorClass="input-error" />
+        <Input name="customerid" label="Customer ID" className="textinput" labelClass="label" errorClass="input-error" />
         <div className="buttondiv">
             <Button id="search" value="Search" />
-          </div>
+        </div>
         </Form><br/>   
         </EB>
         <div id="resultField">

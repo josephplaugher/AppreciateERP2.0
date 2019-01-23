@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 const Auth = (req, res, next) => {
+  console.log('auth')
     const authorized = 'authorized';
     const cookieName = process.env.COOKIE_NAME;
     if (req.cookies[cookieName] && req.headers.csrf) {//check if cookie and token exist

@@ -26,7 +26,7 @@ const ValRules = [
     },
     {
         name: 'date',
-        required: true,
+        required: false,
         alphanumeric: true,
         errorMsg: 'Please provide a date'
     }
