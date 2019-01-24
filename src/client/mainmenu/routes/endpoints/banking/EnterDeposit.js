@@ -1,13 +1,12 @@
-import * as ReactForm from 'reactform-appco'
+import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
+import EB from 'Util/EB'
+import CustValRules from './CustValRules'
+import SetUrl from 'Util/SetUrl'
 import 'css/workingPane.css'
 import 'css/form.css'
 import 'css/userNotify.css'
 import 'css/lsr.css'
-
-const Form = ReactForm.Form;
-const Input = ReactForm.Input;
-const Button = ReactForm.Button;
 
 class EnterDeposit extends React.Component{
   
@@ -22,33 +21,41 @@ class EnterDeposit extends React.Component{
   }
 
   response = (res) => {
-    if(res.success)
-    this.setState({});
+    if(res.success) {
+      this.setState({userNotify: {success: res.userNotify.success}});
+    }
+    if(res.error) {
+      this.setState({userNotify: {error: res.userNotify.error}});
+    }
   }
 
   render() {
 
     return (
-      <div>
+      <>
       <div id="userNotify">
+        {this.state.userNotify.success}
       </div>
       <div id="workingPane">
-      <Form formTitle="Enter Deposit" action={`${process.env.BASE_URL}/trans/EnterDeposit`} response={this.response}  >
-        <Input name="itemdate" label="Item Date" />
-        <Input name="docno" label="Document Number" />
-        <Input name="decription" label="Description" />
-        <Input name="amount" label="Amount" /> 
-        <Input name="bankname" label="Bank Name" />
-        <Input name="bankno" label="Bank Number" />
-        <Input name="acctname" label="Account Name" />
-        <Input name="acctno" label="Account Number" />
-        <Input name="transtype" label="Transaction Type" />
+      <Form formTitle="Enter Deposit"
+        action={`${SetUrl()}/trans/EnterDeposit`} 
+        valrules={CustValRules}
+        response={this.response}  >
+        <Input name="docdate" label="Document Date" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="docno" label="Document Number" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="decription" label="Description" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="amount" label="Amount" className="textinput" labelClass="label" errorClass="input-error"/> 
+        <Input name="bankname" label="Bank Name" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="bankno" label="Bank Number" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="acctname" label="Account Name" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="acctno" label="Account Number" className="textinput" labelClass="label" errorClass="input-error"/>
+        <Input name="transtype" label="Transaction Type" className="textinput" labelClass="label" errorClass="input-error"/>
         <div className="buttondiv">
           <Button id="submit" value="Enter Deposit" />
         </div>
       </Form>
       </div>
-      </div>
+      </>
     )
   }
 }

@@ -32,7 +32,7 @@ class AppreciateCo extends React.Component {
       let auth = checkLoginState();
       auth.then( headers => {
         console.log('headers, ', headers)
-        if(headers.authorized === "true") {
+        if(typeof headers.token !== undefined) {
           let userData = JSON.parse(sessionStorage.getItem('AppCoUser'));
           sessionStorage.setItem('AppCoToken', headers.token);
           this.setState({ 

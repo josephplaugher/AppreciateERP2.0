@@ -46,6 +46,7 @@ class GL extends React.Component {
     });
     if (res.error) {
       console.error('submit error: ', res.error);
+      this.setState({userNotify: {error:res.error}})
     }
   }
 
@@ -62,17 +63,19 @@ class GL extends React.Component {
       { Header: 'Transaction Type', accessor: 'transtype' }]
 
     return (
+      <>
+      <div id="userNotify">{this.state.userNotify.error}</div>
       <div id="workingPane">
         <Form formTitle="Search General Ledger" 
               action={`${SetUrl()}/trans/gl`} 
               response={this.response}
               valrules={ValRules} 
               clearOnSubmit="false" >
-          <Input name="transid" label="Transaction ID" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="docstartdate" label="Document Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="docenddate" label="Document End Date" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="ledgerstartdate" label="Ledger Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="ledgerenddate" label="Ledger End Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="ledgerenddate" label="Ledger End Date" className="textinput" labelClass="label" errorClass="input-error"/><br/>
+          <Input name="transid" label="Transaction ID" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="acctname" label="Account Name" className="textinput" labelClass="label" errorClass="input-error"/>
           <Input name="acctno" label="Account Number" className="textinput" labelClass="label" errorClass="input-error"/>
           <div className="buttondiv">
@@ -115,6 +118,7 @@ class GL extends React.Component {
             )}
             </div>
       </div>
+      </>
     )
   }
 }

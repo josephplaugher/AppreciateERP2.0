@@ -19,7 +19,7 @@ DebitCredit.prototype.runDebit = function () {
     var i = this.inputs;
     console.log('the inputs', i);
     var Debit = new Query(`INSERT INTO sys_gl 
-            (journ_num, transtype, itemdate, time, description, 
+            (journ_num, transtype, docdate, time, description, 
             debit, acctno, acctname, payee_payer_id, empid, cashyn) 
             VALUES ($1, $2, $3, DEFAULT,$4, $5, $6, $7, $8, $9, $10)`,
         [i.journ_num, i.transtype, i.itemdate, i.description, i.debit,
@@ -39,7 +39,7 @@ DebitCredit.prototype.runCredit = function () {
     var i = this.inputs;
     console.log('the inputs', i);
     var Credit = new Query(`INSERT INTO sys_gl 
-            (journ_num, transtype, itemdate, time, description, 
+            (journ_num, transtype, docdate, time, description, 
             credit, acctno, acctname, payee_payer_id, empid, cashyn) 
             VALUES ($1, $2, $3, DEFAULT, $4, $5, $6, $7, $8, $9, $10)`,
         [i.journ_num, i.transtype, i.itemdate, i.description, i.credit, 
