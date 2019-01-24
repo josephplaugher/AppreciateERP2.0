@@ -1,9 +1,15 @@
 const routes = require('express').Router();
-const customers = require('./../model/ar/customers');
-const allCust = customers.allCust;
-const custById = customers.custById;
+const FindCustomers = require('../model/ar/findCustomers');
+const FindSuppliers = require('../model/ap/findSuppliers');
 
-routes.get('/people/customers', allCust);
-routes.get('/people/customers/:id', custById);
+routes.post('/people/findCustomers', (req, res) => {
+    const Customers = new FindCustomers(req, res);
+    Customers.Find();
+});
+
+routes.post('/people/findSuppliers', (req, res) => {
+    const Suppliers = new FindSuppliers(req, res);
+    Suppliers.Find();
+});
 
 module.exports = routes;

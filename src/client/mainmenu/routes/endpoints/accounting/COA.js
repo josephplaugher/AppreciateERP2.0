@@ -61,6 +61,7 @@ class COA extends React.Component {
             <div id="resultField">
             <EB comp="ReactTable in COA">
             <ReactTable
+              filterable
               getTdProps={(state, rowInfo, column, instance) => {
                 return {
                   onClick: (e, handleOriginal) => {this.selectItem(rowInfo.original);}

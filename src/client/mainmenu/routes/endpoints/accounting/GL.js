@@ -82,6 +82,7 @@ class GL extends React.Component {
         <div id="resultField">
         <EB comp="ReactTable in GL">
             <ReactTable
+              filterable
               getTdProps={(state, rowInfo, column, instance) => {
                 return {
                   onClick: (e, handleOriginal) => {this.selectItem(rowInfo.original);}

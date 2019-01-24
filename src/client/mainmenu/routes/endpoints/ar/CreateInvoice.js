@@ -1,16 +1,13 @@
-import * as ReactForm from 'reactform-appco'
+import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
 import InvoiceLines from 'Util/InvoiceLines'
 import EB from 'Util/EB'
+import SetUrl from 'Util/SetUrl'
 import ValRules from 'Util/ValRules'
 import 'css/workingPane.css'
 import 'css/form.css'
 import 'css/userNotify.css'
 import 'css/lsr.css'
-
-const Form = ReactForm.Form;
-const Input = ReactForm.Input;
-const Button = ReactForm.Button;
 
 class CreateInvoice extends React.Component{
 
@@ -32,14 +29,14 @@ class CreateInvoice extends React.Component{
   render() {
 
     return (
-      <div>
+      <>
       <div id="userNotify">
       {this.state.userNotify.success}
       </div>
       <div id="workingPane">
       <Form formTitle="Create Invoice" 
-        action={`${process.env.BASE_URL}/trans/newInvoice`} 
-        lsURL={`${process.env.BASE_URL}/liveSearch/`}
+        action={`${SetUrl()}/trans/newInvoice`} 
+        lsURL={`${SetUrl()}/liveSearch/`}
         response={this.response} 
         clearOnSubmit='false'
         valrules={ValRules}>
@@ -61,11 +58,11 @@ class CreateInvoice extends React.Component{
           <Button id="submit" value="Create Invoice" />
           </div>
       </Form>
-      <div className="buttondiv">
-      <Button id="addLine" value="Add a Line" onClick={this.addLine}/>
+        <div className="buttondiv">
+          <Button id="addLine" value="Add a Line" onClick={this.addLine}/>
+        </div>
       </div>
-      </div>
-      </div>
+      </>
     )
   }
 }

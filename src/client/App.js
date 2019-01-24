@@ -27,9 +27,11 @@ class AppreciateCo extends React.Component {
 
   setLoginState = () => {
     const AppCoToken = sessionStorage.getItem('AppCoToken');
+    console.log('appco token', AppCoToken)
     if(AppCoToken !== null) {
       let auth = checkLoginState();
       auth.then( headers => {
+        console.log('headers, ', headers)
         if(headers.authorized === "true") {
           let userData = JSON.parse(sessionStorage.getItem('AppCoUser'));
           sessionStorage.setItem('AppCoToken', headers.token);
@@ -80,8 +82,8 @@ class AppreciateCo extends React.Component {
                 <Form formTitle="Sign In" 
                   action={`${SetUrl()}/login`}
                   valrules={ValRules} response={this.response} >
-                  <Input name="username" label="Email" /><br />
-                  <Input name="password" label="Password" />
+                  <Input name="email" label="Email" className="textinput" labelClass="label" errorClass="input-error"/>
+                  <Input name="password" label="Password" className="textinput" labelClass="label" errorClass="input-error"/>
                   <div className="buttondiv">
                     <Button id="submit" value="Sign In" />
                   </div>
