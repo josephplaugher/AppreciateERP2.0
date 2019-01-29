@@ -7,6 +7,7 @@ import {
 import User from './User'
 import Accounting from './accounting'
 import Banking from './banking'
+import Statements from './Statements'
 import 'css/main.css'
 import 'css/logo.css'
 
@@ -29,7 +30,8 @@ class Home extends React.Component {
             <Route path="/accounting" component={Accounting}/>
           <br/><Link to="/banking" id="banking" className="nav">Banking</Link>
             <Route path="/banking" component={Banking}/>
-        
+          <br/><Link to="/finstmts" id="finstmts" className="nav">Financial Statements</Link>
+            <Route path="/finstmts" component={Statements}/>
         </div>
         </Router>  
       </div>

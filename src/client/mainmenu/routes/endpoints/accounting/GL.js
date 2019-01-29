@@ -1,4 +1,4 @@
-import * as ReactForm from 'reactform-appco'
+import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
@@ -7,10 +7,6 @@ import ValRules from 'Util/ValRules'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
-
-const Form = ReactForm.Form;
-const Input = ReactForm.Input;
-const Button = ReactForm.Button;
 
 class GL extends React.Component {
   constructor(props) {

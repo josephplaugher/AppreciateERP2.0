@@ -10,6 +10,7 @@ const login = require('./model/users/login');
 const userCont = require('./controllers/userCont.js');
 const transCont = require('./controllers/transCont.js');
 const peopleCont = require('./controllers/peopleCont.js');
+const stmtCont = require('./controllers/stmtCont');
 const lsCont = require('./controllers/lsCont.js');
 
 app.use(express.static('public'));
@@ -47,6 +48,7 @@ app.get('/checkLoginState', Auth, (req, res) => {
 app.use('/', Auth, transCont);
 app.use('/', Auth, peopleCont);
 app.use('/', Auth, lsCont);
+app.use('/', Auth, stmtCont);
 //this route renders the UI. The UI will check for the cookie and token
 //and log the user out if they don't exist.
 app.all('/*', (req, res) => {

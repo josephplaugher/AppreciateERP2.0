@@ -12,7 +12,7 @@ Query.prototype.runQuery = function(res) {
     userConn.query(this.query)
         .then(data => res.status(200).json({ table: data.rows, userNotify: {} }))
         .catch(e => {
-            res.status(200).json({ table: [], userNotify: {error: 'Something went wrong, we are looing into it.'} })
+            res.status(200).json({ table: [], userNotify: {error: 'Something went wrong, we are looking into it.'} })
             console.error(e.stack)
         })
 }
