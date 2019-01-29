@@ -59,14 +59,14 @@ class IncomeStatement extends React.Component {
     const revenue = this.state.revenue.map( (item) => 
     <>
       <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
-      <div className="acct-total">{item.creditbal}</div>
+      <div className="acct-total">{parseFloat(item.creditbal - item.debitbal).toFixed(2)}</div>
     </>
     );
 
     const expense = this.state.expense.map( (item) => 
     <>
       <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
-      <div className="acct-total">{item.debitbal}</div>
+      <div className="acct-total">{parseFloat(item.debitbal - item.creditbal).toFixed(2)}</div>
     </>
     );
 

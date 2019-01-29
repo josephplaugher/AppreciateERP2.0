@@ -1,20 +1,31 @@
 import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
-import ReactTable from 'react-table'
 import EB from 'Util/EB'
 import SetUrl from 'Util/SetUrl'
 import ValRules from 'Util/ValRules'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
+import 'css/statement.css'
 
 class BalanceSheet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dataView: false,
-      table: [],
-      userNotify: {}
+      userNotify: {},
+      currentAssets: [],
+      fixedAssets: [],
+      currentAssetsTotal: '',
+      fixedAssetsTotal: '',
+      assetsTotal: '',
+      currentLiabilities: [],
+      longTermLiabilities: [],
+      currentLiabilitiesTotal: '',
+      longTermLiabilitiesTotal: '',
+      liabilitiesTotal: '',
+      equity: [],
+      equityTotal: ''
     }
   }
 
@@ -37,63 +48,106 @@ class BalanceSheet extends React.Component {
   }
 
   response = (res) => {
+    let d = res.statementData;
     this.setState({
-      table: res.table
+      currentAssets: d.currentAssets,
+      fixedAssets: d.fixedAssets,
+      currentAssetsTotal: d.currentAssetsTotal,
+      fixedAssetsTotal: d.fixedAssetsTotal,
+      assetsTotal: d.assetsTotal,
+      currentLiabilities: d.currentLiabilities,
+      longTermLiabilities: d.longTermLiabilities,
+      currentLiabilitiesTotal: d.currentLiabilitiesTotal,
+      longTermLiabilitiesTotal: d.longTermLiabilitiesTotal,
+      liabilitiesTotal: d.liabilitiesTotal,
+      equity: d.equity,
+      equityTotal: d.equityTotal
     });
     if (res.error) {
       console.error('submit error: ', res.error);
-      this.setState({userNotify: {error:res.error}})
+      this.setState({userNotify: res.userNotify})
     }
   }
 
   render() {
+    const currentAssets = this.state.currentAssets.map( (item) => 
+    <>
+      <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
+      <div className="acct-total">{parseFloat(item.debitbal - item.creditbal).toFixed(2)}</div>
+    </>
+    );
 
-    const columns = [
-      { Header: 'Trans Id', accessor: 'transid' },
-      { Header: 'Document Date', accessor: 'docdate' },
-      { Header: 'Ledger Date', accessor: 'ledgerdate' },
-      { Header: 'Debit', accessor: 'debit' },
-      { Header: 'Credit', accessor: 'credit' },
-      { Header: 'Account Name', accessor: 'acctname' },
-      { Header: 'Account Number', accessor: 'acctno' },
-      { Header: 'Transaction Type', accessor: 'transtype' }]
+    const fixedAssets = this.state.fixedAssets.map( (item) => 
+    <>
+      <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
+      <div className="acct-total">{parseFloat(item.debitbal - item.creditbal).toFixed(2)}</div>
+    </>
+    );
+
+    const currentLiabilities = this.state.currentLiabilities.map( (item) => 
+    <>
+      <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
+      <div className="acct-total">{parseFloat(item.creditbal - item.debitbal).toFixed(2)}</div>
+    </>
+    );
+
+    const longTermLiabilities = this.state.longTermLiabilities.map( (item) => 
+    <>
+      <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
+      <div className="acct-total">{parseFloat(item.creditbal - item.debitbal).toFixed(2)}</div>
+    </>
+    );
+
+    const equity = this.state.equity.map( (item) => 
+    <>
+      <div className="acct-name" id={`${item.acctname}_${item.acctno}`}>{item.acctname}</div>
+      <div className="acct-total">{parseFloat(item.creditbal - item.debitbal).toFixed(2)}</div>
+    </>
+    );
 
     return (
       <>
       <div id="userNotify">{this.state.userNotify.error}</div>
       <div id="workingPane">
-        <Form formTitle="Balance Sheet" 
-              action={`${SetUrl()}/trans/gl`} 
+        <Form formTitle="Income Statement" 
+              action={`${SetUrl()}/stmts/balance`} 
               response={this.response}
               valrules={ValRules} 
               clearOnSubmit="false" >
-          <Input name="docstartdate" label="Document Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="docenddate" label="Document End Date" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="ledgerstartdate" label="Ledger Start Date" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="ledgerenddate" label="Ledger End Date" className="textinput" labelClass="label" errorClass="input-error"/><br/>
-          <Input name="transid" label="Transaction ID" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="acctname" label="Account Name" className="textinput" labelClass="label" errorClass="input-error"/>
-          <Input name="acctno" label="Account Number" className="textinput" labelClass="label" errorClass="input-error"/>
+          <Input name="date" label="Date" className="textinput" labelClass="label" errorClass="input-error"/>
+          <br/>
           <div className="buttondiv">
-            <Button id="search" value="Search" />
+            <Button id="search" value="Generate Statement" />
           </div>
         </Form><br/>
-        <div id="resultField">
-        <EB comp="ReactTable in GL">
-            <ReactTable
-              filterable
-              getTdProps={(state, rowInfo, column, instance) => {
-                return {
-                  onClick: (e, handleOriginal) => {this.selectItem(rowInfo.original);}
-                }
-                }
-              }
-              data={this.state.table}
-              columns={columns}
-            />
-            </EB>
+        <EB comp="Statement Field in Income Statement">
+        <div id="statementField">
+            <div className="header">Assets</div>
+            <div className="header">Current Assets</div>
+            <div className="statement-line">{currentAssets}</div>
+            <div className="total-header">Total Current Assets</div><div className="subtotal">{this.state.currentAssetsTotal}</div>
+
+            <div className="header">Fixed Assets</div>
+            <div className="statement-line">{fixedAssets}</div>
+            <div className="total-header">Total Fixed Assets</div><div className="subtotal">{this.state.fixedAssetsTotal}</div>
+
+            <div className="total-header">Total Assets</div><div className="subtotal">{this.state.assetsTotal}</div>
+
+            <div className="header">Current Liabilities</div>
+            <div className="statement-line">{currentLiabilities}</div>
+            <div className="total-header">Total Current Liabilities</div><div className="subtotal">{this.state.currentLiabilitiesTotal}</div>
+
+            <div className="header">Long-Term Liabilities</div>
+            <div className="statement-line">{longTermLiabilities}</div>
+            <div className="total-header">Total Long-Term Liabilities</div><div className="subtotal">{this.state.longTermLiabilitiesTotal}</div>
+
+            <div className="total-header">Total Liabilities</div><div className="subtotal">{this.state.liabilitiesTotal}</div>
+
+            <div className="header">Equity</div>
+            <div className="statement-line">{equity}</div>
+            <div className="total-header">Total Equity</div><div className="subtotal">{this.state.equityTotal}</div>
         </div>
-       
+       </EB>
 
         <div >  
             {this.state.dataView ? (

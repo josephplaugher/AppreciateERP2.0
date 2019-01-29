@@ -5,10 +5,7 @@ const Cash = require('../model/statements/cash');
 
 routes.post('/stmts/income', Income);
 
-routes.post('/stmts/balance', (req, res) => {
-    const BalanceSheet = new Balance(req, res);
-    BalanceSheet.Run()
-});
+routes.post('/stmts/balance', Balance);
 
 routes.post('/stmts/cash', (req, res) => {
     const CashFlows = new Cash(req, res);

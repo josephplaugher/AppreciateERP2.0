@@ -25,11 +25,11 @@ const Income = (req, res) => {
             for(i = 0; i < data.rows.length; i++) {
                 if(data.rows[i].type === 'Income') {
                     revenue.push(data.rows[i])
-                    revenueTotal += parseFloat(data.rows[i].creditbal);
+                    revenueTotal += parseFloat(data.rows[i].creditbal - data.rows[i].debitbal);
                 }
                 if(data.rows[i].type === 'Expense') {
                     expense.push(data.rows[i])
-                    expenseTotal += parseFloat(data.rows[i].debitbal);
+                    expenseTotal += parseFloat(data.rows[i].debitbal - data.rows[i].creditbal);
                 }
             }
             var profit = revenueTotal - expenseTotal;
