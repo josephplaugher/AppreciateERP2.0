@@ -19,16 +19,28 @@ const Income = (req, res) => {
             var expense = []
             let i;
             // this loop adds all the income and expense result sets to their respective arrays for the server response
+            var revenueTotal = 0;
+            var expenseTotal = 0;
+            
             for(i = 0; i < data.rows.length; i++) {
                 if(data.rows[i].type === 'Income') {
                     revenue.push(data.rows[i])
+                    revenueTotal += parseFloat(data.rows[i].creditbal);
                 }
                 if(data.rows[i].type === 'Expense') {
                     expense.push(data.rows[i])
+                    expenseTotal += parseFloat(data.rows[i].debitbal);
                 }
             }
+            var profit = revenueTotal - expenseTotal;
             res.status(200).json({
-                statementData: {revenue: revenue, expense, expense},
+                statementData: {
+                    revenue: revenue,
+                    expense: expense, 
+                    revenueTotal: parseFloat(revenueTotal).toFixed(2), 
+                    expenseTotal: parseFloat(expenseTotal).toFixed(2),
+                    profit: parseFloat(profit).toFixed(2)
+                },
                 success: true
             })
         })

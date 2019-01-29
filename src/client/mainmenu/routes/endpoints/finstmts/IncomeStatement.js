@@ -18,7 +18,7 @@ class IncomeStatement extends React.Component {
       expense: [],
       revenueTotal: '',
       expenseTotal: '',
-      profitTotal: ''
+      profit: ''
     }
   }
 
@@ -44,7 +44,10 @@ class IncomeStatement extends React.Component {
     let d = res.statementData;
     this.setState({
       revenue: d.revenue,
-      expense: d.expense
+      expense: d.expense,
+      revenueTotal: d.revenueTotal,
+      expenseTotal: d.expenseTotal,
+      profit: d.profit
     });
     if (res.error) {
       console.error('submit error: ', res.error);
@@ -87,14 +90,13 @@ class IncomeStatement extends React.Component {
         <div id="statementField">
             <div className="header">Income</div>
             <div className="statement-line">{revenue}</div>
-            <div className="total-header">Total Income</div><div className="subtotal">{/*revenue-total*/}</div>
+            <div className="total-header">Total Income</div><div className="subtotal">{this.state.revenueTotal}</div>
 
             <div className="header">Expense</div>
             <div className="statement-line">{expense}</div>
-            <div className="total-header">Total Expense</div><div className="subtotal">{/*expense-total*/}</div>
+            <div className="total-header">Total Expense</div><div className="subtotal">{this.state.expenseTotal}</div>
 
-            <div className="header">Net Income</div>
-            <div className="total-header">Total Income</div><div className="subtotal">{/*profit-total*/}</div>
+            <div className="total-header">Net Income</div><div className="subtotal">{this.state.profit}</div>
         </div>
        </EB>
 
