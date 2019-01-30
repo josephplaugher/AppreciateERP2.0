@@ -4,7 +4,7 @@ import SetUrl from 'Util/SetUrl'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
 import LightBox from 'Util/LightBox'
-import {Form, Input, Button} from 'reactform-appco'
+//import {Form, Input, Button} from 'reactform-appco'
 import 'css/workingPane.css'
 import 'css/form.css'
 import 'react-table/react-table.css'
@@ -78,11 +78,12 @@ class COA extends React.Component {
             {this.state.dataView ? (
               <div id="lightbox-container" className="lightbox-background">
               <LightBox close={this.closeLightBox} >
-                <Form formTitle="Account Details" onSubmit={this.onSubmit}  >
-                <Input name="acctno" label="Account Number" prePopVal={this.state.acctno} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="acctname" label="Account Name" prePopVal={this.state.acctname} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="description" label="Description" prePopVal={this.state.description} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="type" label="Type" prePopVal={this.state.type} className="textinput" labelClass="label" errorClass="input-error" />
+                <Form formTitle="Account Details" 
+                      onSubmit={this.onSubmit} prepopulate={{"acctno":this.state.acctno, "acctname":this.state.acctname}} >
+                <Input name="acctno" label="Account Number" className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="acctname" label="Account Name" className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="description" label="Description" className="textinput" labelClass="label" errorClass="input-error" />
+                <Input name="type" label="Type" className="textinput" labelClass="label" errorClass="input-error" />
                 </Form>
               </LightBox>  
               </div>
