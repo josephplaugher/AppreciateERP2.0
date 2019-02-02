@@ -2,6 +2,7 @@ import React from 'react';
 import 'css/form.css'
 
 class Form extends React.Component {
+
     render() {
         
         return (

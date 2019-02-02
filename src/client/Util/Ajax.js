@@ -4,7 +4,7 @@ const get = (url) => {
     const request = axios({
         withCredentials: true,
         method: 'get', url: url,
-        responseType: 'JSON',
+        responseType: 'json',
         headers: 
             { 
                 csrf: sessionStorage.getItem('AppCoToken')
@@ -16,17 +16,14 @@ const get = (url) => {
 }
 
 const post = (url, formData) => {
-
     const request = axios({
         withCredentials: true,
         url: url,
         method: 'post',
         data: formData,
-        headers: 
-            { 
-            "Content-Type": "multipart/form-data",
-            csrf: sessionStorage.getItem('AppCoToken')
-            },
+        config: {
+            headers: { "Content-Type": "multipart/form-data" }
+        },
         responseType: 'json'
     })
     request

@@ -24,8 +24,13 @@ class Input extends React.Component {
           value= {this.props.value}
           onChange={this.props.onChange}
           autoComplete="off"
+          className="textinput"
         />
-        <div id={lsr} className="search-result">{this.props.lsr}</div>
+        {this.props.lsr ? (
+          <div id={lsr} className="search-result">{this.props.lsr}</div>
+          ) : ( 
+          null
+          )}
         </div>
       );
     }

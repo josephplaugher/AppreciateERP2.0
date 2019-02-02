@@ -1,4 +1,5 @@
 import Ajax from './Ajax'
+import SetUrl from './SetUrl'
 
 class LiveSearch {
     constructor(){
@@ -13,12 +14,13 @@ class LiveSearch {
     }
 
     search = (name, value) => {
+        console.log('searching now: ', name, value)
         return new Promise( (resolve, reject) => {
-        Ajax.get("http://localhost:3004/LiveSearch/"+ name +"."+ value + "/")
-            .then((res) => {
-                resolve(res);
-                reject(res.data.error);
-                });
+            Ajax.get(SetUrl() + "/LiveSearch/"+ name +"."+ value + "/")
+                .then((res) => {
+                    resolve(res);
+                    reject(res.data.error);
+                    });
         });
     }
 }
