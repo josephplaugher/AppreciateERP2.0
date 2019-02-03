@@ -132,10 +132,9 @@ class GL extends React.Component {
     } else {
       newList = list.map((item) =>
         <p className="lsr" 
-        onClick={(event) => this.lsrSelect(event)} 
-        id={item[Object.keys(item)[0]]} 
-        key={item[Object.keys(item)[0]]}
-        onBlur={function() {this.setState({ [target]: ''})}}
+          onClick={(event) => this.lsrSelect(event)} 
+          id={item[Object.keys(item)[0]]} 
+          key={item[Object.keys(item)[0]]}
         >
         {item[Object.keys(item)[0]]}
         </p>
