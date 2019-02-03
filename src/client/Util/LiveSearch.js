@@ -14,7 +14,6 @@ class LiveSearch {
     }
 
     search = (name, value) => {
-        console.log('searching now: ', name, value)
         return new Promise( (resolve, reject) => {
             Ajax.get(SetUrl() + "/LiveSearch/"+ name +"."+ value + "/")
                 .then((res) => {

@@ -24,6 +24,7 @@ class Input extends React.Component {
           value= {this.props.value}
           autoComplete="off"
           className="readonlytextinput"
+          readOnly
         />
         </div>
       );

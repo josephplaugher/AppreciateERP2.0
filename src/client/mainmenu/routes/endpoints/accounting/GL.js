@@ -4,11 +4,13 @@ import EB from 'Util/EB'
 import Ajax from 'Util/Ajax'
 import SetUrl from 'Util/SetUrl'
 import Input from 'Util/Input'
+import ReadOnlyInput from 'Util/ReadOnlyInput'
 import Button from 'Util/Button'
 import LightBox from 'Util/LightBox'
 import Validate from 'Util/Validate'
 import ValRules from 'Util/ValRules'
 import LiveSearch from 'Util/LiveSearch'
+import AutoFill from 'Util/AutoFill'
 import 'css/workingPane.css'
 import 'css/form.css'
 
@@ -29,13 +31,17 @@ class GL extends React.Component {
         acctno: '',
         transid: ''
       },
+      currentView: {},
+      docdate: '',
       docstartdate: '',
       docenddate: '',
+      ledgerdate: '',
       ledgerstartdate: '',
       ledgerenddate: '',
       acctname: '',
       acctno: '',
       transid: '',
+      transtype: '',
       ls_acctname: '',
       ls_acctno: '',
     }
@@ -48,16 +54,23 @@ class GL extends React.Component {
   }
 
   selectItem = (row) => {
-    //switch from search view to data view
-    this.setState({ dataView: true, userNotify: {} });
-    //place all the resulting data into state
+    //place all the resulting data for the clicked row into current view state
+    var newView = {};
     for (var key in row) {
-      //clear previous selection
       //fill with new data select
-      this.setState({
-        [key]: row[key]
-      });
+      if(!row[key]) {
+        newView[key] = '';
+        console.log('on select: ', newView[key])
+      } else {
+        newView[key] = row[key]
+      }
     }
+    console.log('new view: ', newView)
+      this.setState({
+        currentView: newView,
+        dataView: true, 
+        userNotify: {}
+      });
   }
 
   closeLightBox = () => {
@@ -87,12 +100,13 @@ class GL extends React.Component {
   }
 
   runLiveSearch = (LS, name, value, lsSource) => {
+    var target = 'ls_' + lsSource;
     //get a list of options as the user types ,like Google live search
     //first, if the input change leaves the field blank,
     //clear the options list
     if (value === '') {
       this.setState({
-        lsr: ''
+        [target]: ''
       });
       //if the input value is not blank, fetch the options
     } else {
@@ -103,23 +117,27 @@ class GL extends React.Component {
           //that contains the result set.
           //takes the result of the ajax request and
           //the name of the field in question
-          this.setLSRList(res, lsSource);
+          this.setLSRList(res, target);
         })
       }
     }//else
   }
 
-  setLSRList = (res, lsSource) => {
+  setLSRList = (res, target) => {
     //if there is not result, set a message for that, else, set the results into state
     let list = res.data.results;
-    var target = 'ls_' + lsSource;
     let newList;
     if (res.data.nr) {
       newList = res.data.nr;
     } else {
       newList = list.map((item) =>
-        <p className="lsr" onClick={(event) => 
-          this.lsrSelect(event)} id={item[Object.keys(item)[0]]} key={item[Object.keys(item)[0]]}>{item[Object.keys(item)[0]]}
+        <p className="lsr" 
+        onClick={(event) => this.lsrSelect(event)} 
+        id={item[Object.keys(item)[0]]} 
+        key={item[Object.keys(item)[0]]}
+        onBlur={function() {this.setState({ [target]: ''})}}
+        >
+        {item[Object.keys(item)[0]]}
         </p>
       );
     }
@@ -234,12 +252,12 @@ class GL extends React.Component {
         <div id="userNotify">{this.state.userNotify.error}</div>
         <div id="workingPane">
           <p className="formTitle">General Ledger</p>
-          <form onSubmit={(event)=>{this.onSubmit(event)}} >
-            <Input name="docstartdate" label="Document Start Date" value={this.state.docstartdate} onChange={this.onChange} ls="false" />
-            <Input name="docenddate" label="Document End Date" value={this.state.docenddate} onChange={this.onChange} ls="false" />
-            <Input name="ledgerstartdate" label="Ledger Start Date" value={this.state.ledgerstartdate} onChange={this.onChange} ls="false" />
-            <Input name="ledgerenddate" label="Ledger End Date" value={this.state.ledgerenddate} onChange={this.onChange} ls="false" /><br />
-            <Input name="transid" label="Transaction ID" value={this.state.transid} onChange={this.onChange} ls="false" />
+          <form onSubmit={(event) => { this.onSubmit(event) }} >
+            <Input name="docstartdate" label="Document Start Date" value={this.state.docstartdate} onChange={this.onChange} />
+            <Input name="docenddate" label="Document End Date" value={this.state.docenddate} onChange={this.onChange} />
+            <Input name="ledgerstartdate" label="Ledger Start Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
+            <Input name="ledgerenddate" label="Ledger End Date" value={this.state.ledgerenddate} onChange={this.onChange} /><br />
+            <Input name="transid" label="Transaction ID" value={this.state.transid} onChange={this.onChange} />
             <Input name="acctname" label="Account Name" value={this.state.acctname} onChange={this.onChange} lsr={this.state.ls_acctname} />
             <Input name="acctno" label="Account Number" value={this.state.acctno} onChange={this.onChange} lsr={this.state.ls_acctno} />
             <div className="buttondiv">
@@ -267,14 +285,15 @@ class GL extends React.Component {
             {this.state.dataView ? (
               <div id="lightbox-container" className="lightbox-background">
                 <LightBox close={this.closeLightBox} >
-                  <Form formTitle="Transactions Details" >
-                    <Input name="transid" label="Trans ID" prePopVal={this.state.transid} className="textinput" labelClass="label" errorClass="input-error" />
-                    <Input name="docdate" label="Document Date" prePopVal={this.state.docdate} className="textinput" labelClass="label" errorClass="input-error" />
-                    <Input name="ledgerdate" label="Ledger Date" prePopVal={this.state.ledgerdate} className="textinput" labelClass="label" errorClass="input-error" />
-                    <Input name="debit" label="Debit" prePopVal={this.state.debit} className="textinput" labelClass="label" errorClass="input-error" />
-                    <Input name="credit" label="Credit" prePopVal={this.state.credit} className="textinput" labelClass="label" errorClass="input-error" />
-                    <Input name="transtype" label="Transaction Type" prePopVal={this.state.transtype} className="textinput" labelClass="label" errorClass="input-error" />
-                  </Form>
+                <p className="formTitle">Transactions Details</p>
+                  <form>
+                    <ReadOnlyInput name="transid" label="Trans ID" value={this.state.currentView.transid} />
+                    <ReadOnlyInput name="docdate" label="Document Date" value={this.state.currentView.docdate} />
+                    <ReadOnlyInput name="ledgerdate" label="Ledger Date" value={this.state.currentView.ledgerdate} />
+                    <ReadOnlyInput name="debit" label="Debit" value={this.state.currentView.debit} />
+                    <ReadOnlyInput name="credit" label="Credit" value={this.state.currentView.credit} />
+                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
+                  </form>
                 </LightBox>
               </div>
             ) : (
