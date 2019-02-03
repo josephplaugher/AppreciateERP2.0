@@ -60,12 +60,10 @@ class GL extends React.Component {
       //fill with new data select
       if(!row[key]) {
         newView[key] = '';
-        console.log('on select: ', newView[key])
       } else {
         newView[key] = row[key]
       }
     }
-    console.log('new view: ', newView)
       this.setState({
         currentView: newView,
         dataView: true, 
