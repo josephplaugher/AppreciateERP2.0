@@ -11,6 +11,7 @@ import Validate from 'Util/Validate'
 import ValRules from 'Util/ValRules'
 import LiveSearch from 'Util/LiveSearch'
 import AutoFill from 'Util/AutoFill'
+import SubmitForm from 'Util/SubmitForm'
 import 'css/workingPane.css'
 import 'css/form.css'
 
@@ -50,7 +51,7 @@ class GL extends React.Component {
     this.runLiveSearch = this.runLiveSearch.bind(this);
     this.setLSRList = this.setLSRList.bind(this);
     this.lsrSelect = this.lsrSelect.bind(this);
-    this.submitData = this.submitData.bind(this);
+    //this.submitData = this.submitData.bind(this);
   }
 
   selectItem = (row) => {
@@ -168,6 +169,13 @@ class GL extends React.Component {
 
   onSubmit = (event) => {
     event.preventDefault();
+    const SubmitResult = new SubmitForm(this.state.formData, ValRules, '/trans/gl');
+    if(SubmitResult.error) {
+      console.log('submit error: ', SubmitResult.error)
+    } 
+    console.log('returnData: ', SubmitResult.returnData)  
+  }  
+  /*
     //validate the inputs first
     let val = new Validate(this.state.formData, ValRules);
     let prom = val.isError();
@@ -203,7 +211,7 @@ class GL extends React.Component {
         }
       });
   }
-
+*/
 
   autoFill = (id, val) => {
     const autofill = new AutoFill();
