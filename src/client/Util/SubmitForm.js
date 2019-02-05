@@ -24,8 +24,8 @@ class SubmitForm {
         this.returnData = newReturnData
     }
 
-    finish = () => {
-        return({error: this.error, returnData: this.returnData})
+    finish = (data) => {
+        return({error: this.error, returnData: this.returnData, data: data})
     }
 
     //validate the inputs first
@@ -33,31 +33,29 @@ class SubmitForm {
         let val = new Validate(this.formData, this.ValRules);
         let prom = val.isError();
         prom.then((error) => {
+            this.submitData()
+            /*
             if (error.hasError) {
                 this.setError('userNotify', error)
             } else {
                 this.setReturnData('userNotify', {})
-                //once we're happy with data, submit it
-                this.submitData();
+        
             }
+            */
         })
     }
 
     submitData = () => {
+        //console.log('promise running')
+        return new Promise((resolve, reject) => {
         Ajax.post(SetUrl() + this.url, this.formData)
-        .then((resp) => {
-            if(typeof resp.data.error == 'undefined') {
-                console.log('resp: ', resp.data)
-                this.setReturnData('response',resp.data);
-                this.finish()
-            } else {
-                
-                this.setReturnData('userNotify',resp.data.error)
-                this.finish()
-            }
-        });
+            .then((resp) => {
+                //console.log('resp in SubmitForm: ', resp.data)
+                resolve(this.returnData(resp.data))
+                reject(this.setError('error', resp.error)
+            });
+        })
     }
-
 }
 
 export default SubmitForm;

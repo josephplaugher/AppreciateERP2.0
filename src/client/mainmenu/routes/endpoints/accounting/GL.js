@@ -169,11 +169,10 @@ class GL extends React.Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const SubmitResult = new SubmitForm(this.state.formData, ValRules, '/trans/gl');
-    if(SubmitResult.error) {
-      console.log('submit error: ', SubmitResult.error)
-    } 
-    console.log('returnData: ', SubmitResult.returnData)  
+    var SubmitPromise = new SubmitForm(this.state.formData, ValRules, '/trans/gl');
+    SubmitPromise
+    .then( resp => console.log('resp in GL: ', resp)) 
+    .catch( error => console.log('submit error: ', error)) 
   }  
   /*
     //validate the inputs first
