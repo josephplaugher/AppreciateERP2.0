@@ -1,5 +1,6 @@
-const Query = require('../../util/Query')
 const QueryBuilder = require('../../util/QueryBuilder')
+const pg = require('../../util/postgres')
+const userConn = pg.userConn;
 
 const GL = (req, res) => {
   var i = req.body;
@@ -58,8 +59,14 @@ const GL = (req, res) => {
 
   let prepare = QB.build(); 
   //console.log('the query', prepare, 'the inputs', i);
-  const find = new Query(prepare,popInputs);
-  find.runQuery(res);
+  userConn.query({"text":prepare,"values":popInputs})
+    .then(data => {
+        res.status(200).json({ table: data.rows, userNotify: {} })
+    })
+    .catch(e => {
+        res.status(200).json({ table: [], userNotify: {error: 'Something went wrong, we are looking into it.'} })
+        console.error(e.stack)
+    })
 }
 
 module.exports = GL;

@@ -81,13 +81,11 @@ setQuery = (name, val) => {
             query = 'no match';
             break;
     }
-    console.log('query: ', query);
     return query;
 }
 
   
 runQuery = (sql, val, res) => {
-    console.log('value: ', val);
     const param = val;
     const query = {
         "text": sql,

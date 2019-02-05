@@ -1,5 +1,6 @@
 import React from 'react'
-import validate from './Validate'
+import Validate from './Validate'
+import SetUrl from './SetUrl'
 import Ajax from './Ajax'
 import LiveSearch from './LiveSearch'
 import AutoFill from './AutoFill'
@@ -12,12 +13,9 @@ class FormClass extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
-      userNotify: '',
-      formData: '',
-      lsr: '', //live search result. list of value from live search
-      validForm: false,
-      searchView: true
+      table: [],
+      userNotify: {},
+      formData: {}
     };
     this.route = '';
     this.onSubmit = this.onSubmit.bind(this);
@@ -61,11 +59,10 @@ class FormClass extends React.Component{
 
   runLiveSearch(name, value, lsSource) {
     //get a list of options as the user types ,like Google live search
-    //set the name of the location to place the search result. The inputs must have a "lsr={this.state.lsr}""
+    //set the name of the location to place the search result. The inputs must have a "lsr={this.state.lsr[inputname]}""
     let targetField = 'lsr' + lsSource;
     let ls = new LiveSearch();
     let list = ls.getLSA(); 
-    console.log('list: ',list);
     //first, if the input change leaves the field blank, clear the options list
     if(value === ''){
       this.setState({
@@ -83,7 +80,6 @@ class FormClass extends React.Component{
   }
 
   setLSRList(res, targetField) {
-    console.log('lsr:',res);
     //if there is not result, set a message for that, else, set the results into state
     let list = res.data.results;
     let newList;
@@ -91,9 +87,14 @@ class FormClass extends React.Component{
       newList = res.data.nr;
     }else{
       newList = list.map((item) => 
-      <p className="lsr" onClick={(event)=> this.lsrSelect(event)} id={item[Object.keys(item)[0]]}>{item[Object.keys(item)[0]]}</p>
-        );
-      console.log('new list:',newList);
+          <p className="lsr" 
+            onClick={(event) => this.lsrSelect(event)} 
+            id={item[Object.keys(item)[0]]} 
+            key={item[Object.keys(item)[0]]}
+          >
+          {item[Object.keys(item)[0]]}
+          </p>
+       );
     }
     //place the "list" value into state
       this.setState({
@@ -116,8 +117,7 @@ class FormClass extends React.Component{
   autoFill = (id, val) => {
     const autofill = new AutoFill();
     var dest = autofill.getRef(id);
-    console.log('dest: ', dest);
-    Ajax.get("http://localhost:3004/autofill/" + id + "/"+ val)
+    Ajax.get(SetUrl() + "/autofill/" + id + "/"+ val)
     .then((res) => {
       if(res.data.results){
         let obj = res.data.results;
@@ -132,10 +132,9 @@ class FormClass extends React.Component{
 
   onSubmit = (event) => {
     event.preventDefault();
-    let val = new validate(this.state.formData);
-    let prom = val.getPromise();
+    let val = new Validate(this.state.formData, this.valRules);
+    let prom = val.isError();
     prom.then( (error) => {
-      console.log('the error: ',error);
         if(error.hasError){ 
           this.setState({
             userNotify: error,
@@ -146,22 +145,15 @@ class FormClass extends React.Component{
           this.setState({
             validForm: true
           })
-          console.log('about to submit...');
           this.submitData();
         }
       }) 
   }
 
   submitData = () => {
-    console.log('submitting now...');
-    Ajax.post("http://localhost:3004/"+ this.route + "/", this.state.formData)
+    Ajax.post(SetUrl() + this.route, this.state.formData)
     .then((res) => {
-      if(res.data.success){
-        this.setState({
-            success: res.data.success,
-            userNotify: res.data.userNotify
-          })
-      }
+      this.response(res)
     })
   }
 }

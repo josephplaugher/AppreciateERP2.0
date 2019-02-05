@@ -13,12 +13,12 @@ setQuery = (name, val) => {
     switch(name) {
         case 'acctname':
         case 'cor':    
-            query = "SELECT acctname FROM sys_coa WHERE LOWER(acctname) LIKE LOWER($1) LIMIT 5";
+            query = "SELECT acctname FROM sys_coa WHERE LOWER(acctname) LIKE LOWER($1) ORDER BY acctname ASC LIMIT 5";
         break;
 
         case 'acctno':
         case 'cor_acctno':
-            query = "SELECT acctno FROM sys_coa WHERE CAST(acctno AS TEXT) LIKE $1 LIMIT 5";
+            query = "SELECT acctno FROM sys_coa WHERE CAST(acctno AS TEXT) LIKE $1 ORDER BY acctno ASC LIMIT 5";
         break;
 
         case 'bankname':

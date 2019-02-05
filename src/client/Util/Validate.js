@@ -1,4 +1,4 @@
-class validate {
+class Validate {
     constructor(inputs, valRules){
         this.error = {};
         this.inputs = inputs;
@@ -112,4 +112,4 @@ class validate {
 
 }
 
-export default validate;
+export default Validate;
