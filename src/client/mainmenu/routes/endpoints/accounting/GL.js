@@ -13,6 +13,7 @@ import 'css/form.css'
 class GL extends FormClass {
   constructor(props) {
     super(props);
+    this.useLiveSearch = true
     this.route = '/trans/gl'
     this.valRules = ValRules
     this.state = {
@@ -61,10 +62,6 @@ class GL extends FormClass {
         dataView: true, 
         userNotify: {}
       });
-  }
-
-  closeLightBox = () => {
-    this.setState({ dataView: false });
   }
 
   response = (res) => {

@@ -38,11 +38,14 @@ class FormClass extends React.Component{
     });
     //place updated data into state
     this.rebuildFormData(name,value,lsSource);
-    //run live search if applicable to current input, not othewise
-    let ls = new LiveSearch();
-    let list = ls.getLSA(); 
-    if(list.includes(name)){
-      this.runLiveSearch(name, value, lsSource);
+    //run live seach if its turned on in the descendant class
+    if(this.useLiveSearch) {
+      let ls = new LiveSearch();
+      let list = ls.getLSA(); 
+      //run live search if applicable to current input, not othewise
+      if(list.includes(name)){
+        this.runLiveSearch(name, value, lsSource);
+      }
     }
   }
 
@@ -151,10 +154,21 @@ class FormClass extends React.Component{
   }
 
   submitData = () => {
-    Ajax.post(SetUrl() + this.route, this.state.formData)
+    let bodyData;
+    if(typeof this.extraData !== 'undefined') {
+        bodyData = Object.assign(this.extraData, this.state.formData);
+    } else {
+        bodyData = this.state.formData;
+    }
+    Ajax.post(SetUrl() + this.route, bodyData)
     .then((res) => {
       this.response(res)
     })
+  }
+
+  //controlls for the light box on most pages
+  closeLightBox = () => {
+    this.setState({dataView: false});
   }
 }
 

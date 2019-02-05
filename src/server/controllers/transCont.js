@@ -1,5 +1,7 @@
 const routes = require('express').Router();
 const coa = require('./../model/accounting/coa');
+const getCOA = coa.get;
+const editCOA = coa.edit;
 const GL = require('./../model/accounting/gl');
 const JournalEntry = require('./../model/accounting/JournalEntry');
 const newInvoice = require('./../model/ar/NewInvoice');
@@ -9,7 +11,8 @@ const findBankTrans = require('./../model/banking/findBankTrans');
 const enterDeposit = require('./../model/banking/enterDeposit');
 
 //General Ledger, Chart of Accounts, Journal Entries
-routes.get('/trans/coa', coa);
+routes.get('/trans/coa', getCOA);
+routes.post('/trans/editCOA', editCOA)
 routes.post('/trans/gl', GL);
 
 routes.post('/trans/je', (req, res) => {
