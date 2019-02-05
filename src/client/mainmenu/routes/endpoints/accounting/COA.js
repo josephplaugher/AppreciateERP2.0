@@ -36,6 +36,9 @@ class COA extends FormClass {
     }
     this.getCOA = this.getCOA.bind(this)
     this.response = this.response.bind(this)
+    this.disableAcct = this.disableAcct.bind(this)
+    this.enableAcct = this.enableAcct.bind(this)
+    this.deleteAcct = this.deleteAcct.bind(this)
   }
   
   componentDidMount() {
@@ -79,6 +82,35 @@ class COA extends FormClass {
     this.getCOA()
   }
 
+  disableAcct = () => {
+    Ajax.get(SetUrl() + "/trans/disableAcct/" + this.state.formData.acctno)
+      .then(res => {
+        this.getCOA()
+        this.setState({status: 'disabled', userNotify: res.data.userNotify})
+      })
+  }
+
+  enableAcct = () => {
+    Ajax.get(SetUrl() + "/trans/enableAcct/" + this.state.formData.acctno)
+      .then(res => {
+        this.setState({status: 'Active', userNotify: res.data.userNotify})
+        this.getCOA()
+      })
+  }
+
+  deleteAcct = () => {
+    Ajax.get(SetUrl() + "/trans/deleteAcct/" + this.state.formData.acctno)
+      .then(res => {
+        console.log(res.data.deleted)
+        if(res.data.deleted === false) {
+          this.setState({userNotify: res.data.userNotify})
+        }else{
+          this.closeLightBox()
+          this.getCOA()
+        }
+      })
+  }
+
     render() {
       const columns = [
         {Header: 'Account Name', accessor: 'acctname'},
@@ -112,11 +144,21 @@ class COA extends FormClass {
                 <p className="formTitle">Account Details</p>
                 <form onSubmit={this.onSubmit} >
                 <ReadOnlyInput name="acctno" label="Account Number" value={this.state.acctno} />
-                <Input name="acctname" label="Account Name" value={this.state.acctname} onChange={this.onChange} ls="false"/>
-                <Input name="description" label="Description" value={this.state.description} onChange={this.onChange} ls="false"/>
-                <Input name="type" label="Type" value={this.state.type} onChange={this.onChange} ls="false"/>
+                <Input name="acctname" label="Account Name" value={this.state.acctname} onChange={this.onChange} />
+                <Input name="description" label="Description" value={this.state.description} onChange={this.onChange} />
+                <ReadOnlyInput name="type" label="Type" value={this.state.type} />
+                <ReadOnlyInput name="status" label="Status" value={this.state.status} />
                 <div className="buttondiv"><Button type="submit" value="Save Changes"/></div>
                 </form>
+                <div id="actions">
+                {this.state.status === "disabled" ? (
+                  <Button value="Enable Account" onClick={ () => this.enableAcct() } />
+                ):(
+                  <Button value="Disable Account" onClick={ () => this.disableAcct() } />
+                )}
+                <Button value="Delete Account" onClick={ () => this.deleteAcct() } />
+                </div>
+                <p className="errorMsg">{this.state.userNotify}</p>
               </LightBox>  
               </div>
             ):(

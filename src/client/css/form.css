@@ -45,6 +45,10 @@
     position: absolute;
 }
 
+.errorMsg {
+    color: red;
+}
+
 .submit {
     margin: 0px;
     padding: 3px 18px 3px 18px;

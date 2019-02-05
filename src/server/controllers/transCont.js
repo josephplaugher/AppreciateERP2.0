@@ -2,6 +2,9 @@ const routes = require('express').Router();
 const coa = require('./../model/accounting/coa');
 const getCOA = coa.get;
 const editCOA = coa.edit;
+const disableAcct = coa.disable;
+const enableAcct = coa.enable;
+const deleteAcct = coa.deleteAcct;
 const GL = require('./../model/accounting/gl');
 const JournalEntry = require('./../model/accounting/JournalEntry');
 const newInvoice = require('./../model/ar/NewInvoice');
@@ -12,6 +15,9 @@ const enterDeposit = require('./../model/banking/enterDeposit');
 
 //General Ledger, Chart of Accounts, Journal Entries
 routes.get('/trans/coa', getCOA);
+routes.get('/trans/disableAcct/:acctno', disableAcct)
+routes.get('/trans/enableAcct/:acctno', enableAcct)
+routes.get('/trans/deleteAcct/:acctno', deleteAcct)
 routes.post('/trans/editCOA', editCOA)
 routes.post('/trans/gl', GL);
 
