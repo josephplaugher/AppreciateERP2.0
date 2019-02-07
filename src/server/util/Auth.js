@@ -15,7 +15,7 @@ const Auth = (req, res, next) => {
           verifiedToken = jwt.verify(csrf, process.env.JWT_SECRET);
         } catch (error) {
           res.header(authorized, false);
-          res.headers('token', null);
+          res.header('token', null);
           res.clearCookie(cookieName);
           next();
         }

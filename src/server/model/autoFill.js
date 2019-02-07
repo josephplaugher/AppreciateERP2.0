@@ -30,7 +30,7 @@ setQuery = (name, val) => {
         break;
 
         case 'customer':
-            query = "SELECT id FROM customers WHERE LOWER(name) = LOWER($1) ";
+            query = "SELECT id AS customerid FROM customers WHERE LOWER(name) = LOWER($1) ";
         break;
 
         case 'customerid':
@@ -38,7 +38,7 @@ setQuery = (name, val) => {
         break;
 
         case 'supplier':
-            query = "SELECT id FROM suppliers WHERE LOWER(name) = LOWER($1) ";
+            query = "SELECT id AS supplierid FROM suppliers WHERE LOWER(name) = LOWER($1) ";
         break;
 
         case 'supplierid':

@@ -9,7 +9,7 @@ function NewInvoice(req, res){
   this.lineTotal = [];
   this.invoiceTotal = '';
   this.invnum = '';
-  this.inputs['empid'] = req.session.empid;
+  this.inputs['empid'] = '';
   this.inputs.revacctno = req.body.acctno;
   this.inputs.revacctname = req.body.acctname;
   this.today = new Date();
