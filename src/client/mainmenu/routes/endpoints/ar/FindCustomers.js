@@ -6,7 +6,6 @@ import Input from 'Util/Input'
 import ReadOnlyInput from 'Util/ReadOnlyInput'
 import Button from 'Util/Button'
 import ValRules from './CustValRules'
-import SetUrl from 'Util/SetUrl'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
@@ -82,6 +81,7 @@ class FindCustomers extends FormClass{
     return (
       <div id="workingPane">
       <EB comp="Form in FindCustomers" >
+      <p className="formTitle">Find Customers</p>
       <form onSubmit={this.onSubmit} >
         <Input name="customerid" label="ID" value={this.state.customerid} onChange={this.onChange} lsr={this.state.lsrcustomerid}/>
         <Input name="customer" label="Customer Name" value={this.state.customer} onChange={this.onChange}lsr={this.state.lsrcustomer}/>

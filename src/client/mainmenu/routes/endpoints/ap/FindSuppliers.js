@@ -1,45 +1,71 @@
-import {Form, Input, Button} from 'reactform-appco'
 import React from 'react'
 import ReactTable from 'react-table'
 import EB from 'Util/EB'
-import CustValRules from './CustValRules'
-import SetUrl from 'Util/SetUrl'
+import FormClass from 'Util/FormClass'
+import Input from 'Util/Input'
+import ReadOnlyInput from 'Util/ReadOnlyInput'
+import Button from 'Util/Button'
+import ValRules from 'Util/ValRules'
 import LightBox from 'Util/LightBox'
 import 'css/workingPane.css'
 import 'css/form.css'
 
-class FindSuppliers extends React.Component{
-
+class FindSuppliers extends FormClass{
   constructor(props) {
     super(props);
+    this.useLiveSearch = true
+    this.route = '/people/findSuppliers'
+    this.valRules = ValRules
     this.state = {
       dataView: false,
       table: [],
-      userNotify: {}
+      userNotify: {},
+      formData: {
+        supplierid: '',
+        supplier: '',
+        contact: '',
+        phone: '',
+        email: '',
+        street: '',
+        city: '',
+        state: '',
+        zip: ''
+      },
+      supplierid: '',
+      supplier:  '',
+      contact: '',
+      phone: '',
+      email: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      supplier: '',
     }
   }
 
   selectItem = (row) => {
-    //switch from data view to search view
-    this.setState({ dataView: true, userNotify: {}});
-
-    //place all the resulting data into state
-    for(var key in row){
-      //clear previous selection
+    //place all the resulting data for the clicked row into current view state
+    var newView = {};
+    for (var key in row) {
       //fill with new data select
-      this.setState({
-        [key]: row[key]
-      }); 
+      if(!row[key]) {
+        newView[key] = '';
+      } else {
+        newView[key] = row[key]
+      }
     }
-  }
-
-  closeLightBox = () => {
-    this.setState({dataView: false});
+      this.setState({
+        currentView: newView,
+        dataView: true, 
+        userNotify: {}
+      });
   }
 
   response = (res) => {
+    console.log('resp: ', res)
     this.setState({
-      table: res.table
+      table: res.data.table
     });
     if (res.error) {
       console.error('submit error: ', res.error);
@@ -49,34 +75,30 @@ class FindSuppliers extends React.Component{
   render() {
 
     const columns = [
-      { Header: 'Supplier', accessor: 'name' },
+      { Header: 'supplier', accessor: 'name' },
       { Header: 'Contact Name', accessor: 'contact' }]
 
     return (
       <div id="workingPane">
       <EB comp="Form in FindSuppliers" >
-      <Form 
-        formTitle="Find Suppliers" 
-        action={`${SetUrl()}/people/findSuppliers`}
-        valrules={CustValRules}
-        response={this.response}
-        clearOnSubmit="false" >
-        <Input name="id" label="ID" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="name" label="Name" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="contact" label="Cantact Name" className="textinput" labelClass="label" errorClass="input-error" />
-        <Input name="phone" label="Phone" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="email" label="Email" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="street" label="Street" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="city" label="City" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="state" label="State" className="textinput" labelClass="label" errorClass="input-error"/>
-        <Input name="zip" label="zip" className="textinput" labelClass="label" errorClass="input-error"/>
+      <p className="formTitle">Find Suppliers</p>
+      <form onSubmit={this.onSubmit} >
+        <Input name="supplierid" label="ID" value={this.state.supplierid} onChange={this.onChange} lsr={this.state.lsrsupplierid}/>
+        <Input name="supplier" label="Supplier Name" value={this.state.supplier} onChange={this.onChange}lsr={this.state.lsrsupplier}/>
+        <Input name="contact" label="Cantact Name" value={this.state.contact} onChange={this.onChange} />
+        <Input name="phone" label="Phone" value={this.state.phone} onChange={this.onChange}/>
+        <Input name="email" label="Email" value={this.state.email} onChange={this.onChange}/>
+        <Input name="street" label="Street" value={this.state.street} onChange={this.onChange}/>
+        <Input name="city" label="City" value={this.state.city} onChange={this.onChange}/>
+        <Input name="state" label="State" value={this.state.state} onChange={this.onChange}/>
+        <Input name="zip" label="zip" value={this.state.zip} onChange={this.onChange}/>
         <div className="buttondiv">
-            <Button id="submit" value="Submit" />
+        <Button id="submit" value="Submit" />
         </div>
-      </Form>
+      </form>
       </EB>
       <div id="resultField">
-        <EB comp="ReactTable in SearchCustomers">
+        <EB comp="ReactTable in Searchsuppliers">
             <ReactTable
               filterable
               getTdProps={(state, rowInfo, column, instance) => {
@@ -94,17 +116,21 @@ class FindSuppliers extends React.Component{
             {this.state.dataView ? (
               <div id="lightbox-container" className="lightbox-background">
               <LightBox close={this.closeLightBox} >
-                <Form formTitle="Customer Details" clearOnSubmit="false" >
-                <Input name="id" label="ID" prePopVal={this.state.id} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="name" label="Name" prePopVal={this.state.name} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="contact" label="Contact Person" prePopVal={this.state.contact} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="phone" label="Phone" prePopVal={this.state.phone} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="email" label="Email" prePopVal={this.state.email} className="textinput" labelClass="label" errorClass="input-error" /> 
-                <Input name="street" label="Street" prePopVal={this.state.street} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="city" label="city" prePopVal={this.state.city} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="state" label="State" prePopVal={this.state.state} className="textinput" labelClass="label" errorClass="input-error" />
-                <Input name="zip" label="Zip" prePopVal={this.state.zip} className="textinput" labelClass="label" errorClass="input-error" />
-                </Form>
+              <p className="formTitle">Supplier Details</p>
+                <form  onClick={this.onSave}>
+                <ReadOnlyInput name="id" label="ID" value={this.state.currentView.supplierid} onChange={this.onChange}/>
+                <Input name="name" label="Name" value={this.state.currentView.supplier} onChange={this.onChange}/>
+                <Input name="contact" label="Cantact Name" value={this.state.currentView.contact} onChange={this.onChange} />
+                <Input name="phone" label="Phone" value={this.state.currentView.phone} onChange={this.onChange}/>
+                <Input name="email" label="Email" value={this.state.currentView.email} onChange={this.onChange}/>
+                <Input name="street" label="Street" value={this.state.currentView.street} onChange={this.onChange}/>
+                <Input name="city" label="City" value={this.state.currentView.city} onChange={this.onChange}/>
+                <Input name="state" label="State" value={this.state.currentView.state} onChange={this.onChange}/>
+                <Input name="zip" label="zip" value={this.state.currentView.zip} onChange={this.onChange}/>
+                <div className="buttondiv">
+                <Button id="submit" value="Save Changes" />
+                </div>
+                </form>
               </LightBox>  
               </div>
             ):(
