@@ -92,7 +92,7 @@ class GL extends FormClass {
         <div id="userNotify">{this.state.userNotify.error}</div>
         <div id="workingPane">
           <p className="formTitle">General Ledger</p>
-          <form onSubmit={(event) => { this.onSubmit(event) }} >
+          <form onSubmit={this.onSubmit} >
             <Input name="docstartdate" label="Document Start Date" value={this.state.docstartdate} onChange={this.onChange} />
             <Input name="docenddate" label="Document End Date" value={this.state.docenddate} onChange={this.onChange} />
             <Input name="ledgerstartdate" label="Ledger Start Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
