@@ -7,14 +7,10 @@ if(process.env.NODE_ENV === 'production') {
     db_host = process.env.DB_HOST_DEV
 }
 
-const setUserDB = (dbnumber) => {
-    return '1000' //dbnumber
-}
-
 const userConn = new Pool({
     user: process.env.DB_USERNAME,
     host: db_host,
-    database: setUserDB(),
+    database: '1000',
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT
 })
