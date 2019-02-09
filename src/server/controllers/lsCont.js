@@ -5,6 +5,6 @@ const search = liveSearch.search;
 const fill = autoFill.fill;
 
 routes.get('/LiveSearch/:name.:value', search);
-routes.get('/autofill/:name/:value', fill);
+routes.get('/LiveSearch/autofill/:name/:value', fill);
 
 module.exports = routes;

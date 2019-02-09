@@ -120,7 +120,7 @@ class FormClass extends React.Component{
   autoFill = (id, val) => {
     const autofill = new AutoFill();
     var dest = autofill.getRef(id);
-    Ajax.get(SetUrl() + "/autofill/" + id + "/"+ val)
+    Ajax.get(SetUrl() + "/LiveSearch/autofill/" + id + "/"+ val)
     .then((res) => {
       if(res.data.results){
         let obj = res.data.results;

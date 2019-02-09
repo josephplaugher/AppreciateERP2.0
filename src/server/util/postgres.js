@@ -6,10 +6,15 @@ if(process.env.NODE_ENV === 'production') {
 } else {
     db_host = process.env.DB_HOST_DEV
 }
+
+const setUserDB = (dbnumber) => {
+    return '1000' //dbnumber
+}
+
 const userConn = new Pool({
     user: process.env.DB_USERNAME,
     host: db_host,
-    database: '1000',
+    database: setUserDB(),
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT
 })
@@ -32,4 +37,4 @@ loginConn
         console.log('db conn error: ',error)
     })
 
-module.exports = { userConn, loginConn};
+module.exports = { userConn, loginConn, setUserDB};

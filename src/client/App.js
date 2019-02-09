@@ -16,6 +16,8 @@ class AppreciateCo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      email: '',
+      password: '',
       error: null,
       isLoggedIn: false,
       userData: {}
@@ -31,8 +33,9 @@ class AppreciateCo extends React.Component {
     if(AppCoToken !== null) {
       let auth = checkLoginState();
       auth.then( headers => {
-        //console.log('headers, ', headers)
-        if(typeof headers.token !== undefined) {
+        console.log('headers, ', headers)
+        if(typeof headers.token !== 'null' && headers.authorized !== 'false') {
+          console.log('authorized')
           let userData = JSON.parse(sessionStorage.getItem('AppCoUser'));
           sessionStorage.setItem('AppCoToken', headers.token);
           this.setState({ 
@@ -40,6 +43,7 @@ class AppreciateCo extends React.Component {
             userData: userData 
           });
         } else {
+          console.log('not authorized')
           sessionStorage.removeItem('AppCoUser');
           sessionStorage.removeItem('AppCoToken');
           this.setState({ 

@@ -43,10 +43,10 @@ app.get('/checkLoginState', Auth, (req, res) => {
 });
 
 //all these routes require a valid cookie and token
-app.use('/', Auth, transCont);
-app.use('/', Auth, peopleCont);
-app.use('/', Auth, lsCont);
-app.use('/', Auth, stmtCont);
+app.use('/trans*', Auth, transCont);
+app.use('/people*', Auth, peopleCont);
+app.use('/LiveSearch*', Auth, lsCont);
+app.use('/stmts*', Auth, stmtCont);
 //this route renders the UI. The UI will check for the cookie and token
 //and log the user out if they don't exist.
 app.all('/*', (req, res) => {
