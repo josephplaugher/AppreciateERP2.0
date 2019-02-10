@@ -1,8 +1,10 @@
 const db = require('./../../util/postgres');
-const userConn = db.userConn;
+const userConn = db.userConn;   
 
 get = (req, res) => {
-  userConn.query('SELECT acctname, acctno, description, type, subtype, status FROM sys_coa ORDER BY acctno ASC')
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+  Connection.query('SELECT acctname, acctno, description, type, subtype, status FROM sys_coa ORDER BY acctno ASC')
       .then(data => {
         res.status(200).json({ table: data.rows });
       }) 

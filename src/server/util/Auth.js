@@ -24,10 +24,12 @@ const Auth = (req, res, next) => {
           res.clearCookie(cookieName);
           next();
         }
-        //console.log('token verified: ', verifiedToken)
+        //console.log('csrf token: ', verifiedToken)
         //console.log('raw token: ', token)
         //upon authentication, renew the token and the cookie
-        var token = jwt.sign({verifiedToken}, process.env.JWT_SECRET, {expiresIn: "1h"});
+        req.headers['dbconn'] = verifiedToken.userData.company_id;
+        delete verifiedToken.exp;
+        var token = jwt.sign(verifiedToken, process.env.JWT_SECRET, {expiresIn: "1h"});
         res.cookie(process.env.COOKIE_NAME, {token:token}, 
           {expires: new Date(Date.now() + (60*60*1000)), 
             maxAge: (60*60*1000), 
