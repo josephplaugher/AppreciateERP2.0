@@ -1,5 +1,8 @@
 const Query = require('./../../util/Query');
 
+// const Connection = userConn(req.headers['dbconn']); //db connection
+// Connection.connect(); //activate the connection
+
 function DebitCredit(inputs) {
     this.inputs = inputs;
     this.today = new Date();

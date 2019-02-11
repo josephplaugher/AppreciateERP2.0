@@ -5,10 +5,10 @@ const get = (url) => {
         withCredentials: true,
         method: 'get', url: url,
         responseType: 'json',
-        headers: 
-            { 
-                csrf: sessionStorage.getItem('AppCoToken')
-            }
+        headers:
+        {
+            csrf: sessionStorage.getItem('AppCoToken')
+        }
     })
     request
         .catch(error => console.log('ajax error: ' + error))
@@ -21,14 +21,16 @@ const post = (url, formData) => {
         url: url,
         method: 'post',
         data: formData,
-        config: {
-            headers: { "Content-Type": "multipart/form-data" }
-        },
-        responseType: 'json'
+        responseType: 'json',
+        headers: 
+            { 
+            csrf: sessionStorage.getItem('AppCoToken')
+            }
     })
     request
         .catch(error => console.log('ajax error: ' + error))
     return request;
+
 }
 
 

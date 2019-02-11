@@ -1,11 +1,11 @@
-const db = require('./../util/postgres');
-const userConn = db.userConn;
+const pg = require('./postgres')
+const userConn = pg.userConn;
 
 fill = (req, res) => {
     let name = req.params.name;
     let val = req.params.value;
     let query = module.exports.setQuery(name);    
-    module.exports.runQuery(query, val, res); 
+    module.exports.runQuery(query, val, req, res); 
 }
 
 setQuery = (name, val) => {
@@ -85,13 +85,16 @@ setQuery = (name, val) => {
 }
 
   
-runQuery = (sql, val, res) => {
+runQuery = (sql, val, req, res) => {
+    const Connection = userConn(req.headers['dbconn']); //db connection
+    Connection.connect(); //activate the connection
+
     const param = val;
     const query = {
         "text": sql,
         "values": [param],
     }
-        userConn.query(query)
+    Connection.query(query)
           .then(data => {
             if(data.rows[0]){
                 res.status(200).json({ results: data.rows[0] })

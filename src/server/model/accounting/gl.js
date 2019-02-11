@@ -1,10 +1,12 @@
 const QueryBuilder = require('../../util/QueryBuilder')
-const pg = require('../../util/postgres')
-const userConn = pg.userConn;
+const db = require('../../util/postgres');
+const userConn = db.userConn;   
 
 const GL = (req, res) => {
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+
   var i = req.body;
-  //console.log('the inputs at start: ', req.body)
   QB = new QueryBuilder(`
   SELECT transid, docdate, ledgerdate, debit, credit, acctname, acctno, transtype 
   FROM sys_gl WHERE transid IS NOT NULL`,'');
@@ -59,7 +61,7 @@ const GL = (req, res) => {
 
   let prepare = QB.build(); 
   //console.log('the query', prepare, 'the inputs', i);
-  userConn.query({"text":prepare,"values":popInputs})
+  Connection.query({"text":prepare,"values":popInputs})
     .then(data => {
         res.status(200).json({ table: data.rows, userNotify: {} })
     })

@@ -16,11 +16,13 @@ FindCustomers.prototype.Find = function () {
 }
 
 FindCustomers.prototype.AllCustomers = function () {
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
   const query = `
     SELECT 
       id, name, contact, phone, email, street, city, state, zip
     FROM customers`;
-  client.query(query)
+  Connection.query(query)
     .then(data => this.res.status(200).json({ message: data.rows }))
     .catch(e => console.error(e.stack))
 }
@@ -54,8 +56,10 @@ FindCustomers.prototype.ByCriteria = function () {
   }
 
   let prepare = QB.build();
-  //console.log('the query', prepare, 'the inputs', i);
-  userConn.query({ "text": prepare, "values": popInputs })
+  const Connection = userConn(this.req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+
+  Connection.query({ "text": prepare, "values": popInputs })
     .then(data => {
       this.res.status(200).json({ table: data.rows, userNotify: {} })
     })

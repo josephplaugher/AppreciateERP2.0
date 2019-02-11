@@ -1,6 +1,6 @@
 const routes = require('express').Router();
-const liveSearch = require('./../model/liveSearch');
-const autoFill = require('./../model/autoFill');
+const liveSearch = require('./../util/liveSearch');
+const autoFill = require('./../util/autoFill');
 const search = liveSearch.search;
 const fill = autoFill.fill;
 

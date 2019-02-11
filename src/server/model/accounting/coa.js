@@ -1,8 +1,10 @@
 const db = require('./../../util/postgres');
-const userConn = db.userConn;
+const userConn = db.userConn;   
 
 get = (req, res) => {
-  userConn.query('SELECT acctname, acctno, description, type, subtype, status FROM sys_coa ORDER BY acctno ASC')
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+  Connection.query('SELECT acctname, acctno, description, type, subtype, status FROM sys_coa ORDER BY acctno ASC')
       .then(data => {
         res.status(200).json({ table: data.rows });
       }) 
@@ -10,6 +12,8 @@ get = (req, res) => {
 }
 
 edit = (req, res) => {
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
   let Query = {
     "text":`
       UPDATE sys_coa 
@@ -18,7 +22,7 @@ edit = (req, res) => {
       RETURNING description, acctname `,
      "values": [req.body.description, req.body.acctname, req.body.acctno] 
   }
-  userConn.query(Query)
+  Connection.query(Query)
     .then(data => {
       res.status(200).json({ newValues: data.rows[0], userNotify: 'Account Updated' });
     }) 
@@ -26,7 +30,9 @@ edit = (req, res) => {
 }
 
 disable = (req, res) => {
-  console.log('acctno: ', req.params.acctno)
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+
   let Query = {
     "text":`
       UPDATE sys_coa 
@@ -34,15 +40,17 @@ disable = (req, res) => {
       WHERE acctno = $1`,
      "values": [req.params.acctno] 
   }
-  userConn.query(Query)
+  Connection.query(Query)
     .then(data => {
-      console.log('disable: ', data)
       res.status(200).json({ userNotify: 'Account Disabled. This account cannot be used until enabled again.' });
     }) 
     .catch(e => console.error(e.stack))
 }
 
 enable = (req, res) => {
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+
   console.log('acctno: ', req.params.acctno)
   let Query = {
     "text":`
@@ -51,7 +59,7 @@ enable = (req, res) => {
       WHERE acctno = $1`,
      "values": [req.params.acctno] 
   }
-  userConn.query(Query)
+  Connection.query(Query)
     .then(data => {
       console.log('disable: ', data)
       res.status(200).json({ userNotify: 'Account Enabled.' });
@@ -60,13 +68,16 @@ enable = (req, res) => {
 }
 
 deleteAcct = (req, res) => {
+  const Connection = userConn(req.headers['dbconn']); //db connection
+  Connection.connect(); //activate the connection
+
   //check to see if any transactions exist
   let check = {
     "text":`
       select acctno from sys_gl WHERE acctno = $1`,
      "values": [req.params.acctno] 
   }
-  userConn.query(check)
+  Connection.query(check)
     .then(data => {
       //if there are transcations, tell the user no
       if(data.rowCount > 0) {
@@ -82,7 +93,7 @@ deleteAcct = (req, res) => {
                 delete from sys_coa WHERE acctno = $1`,
               "values": [req.params.acctno] 
             }
-            userConn.query(Query)
+            Connection.query(Query)
               .then(data => {
                 console.log('delete ', data)
                 res.status(200).json({ 

@@ -63,7 +63,6 @@ class FindCustomers extends FormClass{
   }
 
   response = (res) => {
-    console.log('resp: ', res)
     this.setState({
       table: res.data.table
     });
