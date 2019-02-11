@@ -1,7 +1,10 @@
-const db = require('../../util/postgres');
-const Conn = db.userConn;
+const pg = require('../../util/postgres')
+const userConn = pg.userConn;
 
 const Balance = (req, res) => {
+    const Connection = userConn(req.headers['dbconn']); //db connection
+    Connection.connect(); //activate the connection
+
     const query = {
         "text": `
             SELECT 
@@ -12,7 +15,7 @@ const Balance = (req, res) => {
             ORDER BY acctname ASC`,
         "values": [req.body.date]
     }
-    Conn.query(query)
+    Connection.query(query)
         .then(data => {
             var currentAssets = [];
             var fixedAssets = [];

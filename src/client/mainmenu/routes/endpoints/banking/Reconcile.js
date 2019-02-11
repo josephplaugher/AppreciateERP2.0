@@ -3,7 +3,6 @@ import Ajax from 'Util/Ajax'
 import React from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import Form from 'Util/Form'
 import Input from 'Util/Input'
 import Button from 'Util/Button'
 import 'css/workingPane.css'
@@ -79,7 +78,7 @@ class FindBankTrans extends FormClass {
       <div id="workingPane">
         
       <div id="searchPane">
-        <Form formTitle="Reconcile Bank" onSubmit={this.onSubmit} >
+        <form formTitle="Reconcile Bank" onSubmit={this.onSubmit} >
         <Input name="bankname" label="Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} error={this.state.userNotify.bankname}/>
         <Input name="bankno" label="Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} error={this.state.userNotify.bankno}/>  
         <Input name="startdate" label="Start Date" value={this.state.startdate} onChange={this.onChange} error={this.state.userNotify.startdate}/>
@@ -87,7 +86,7 @@ class FindBankTrans extends FormClass {
         <div className="buttondiv">
         <Button id="search" value="Search" />
         </div>
-        </Form><br/>
+        </form><br/>
       </div>    
       
       <div id="displayPane">

@@ -1,7 +1,10 @@
-const db = require('../../util/postgres');
-const Conn = db.userConn;
+const pg = require('../../util/postgres')
+const userConn = pg.userConn;
 
 const Income = (req, res) => {
+    const Connection = userConn(req.headers['dbconn']); //db connection
+    Connection.connect(); //activate the connection
+
     const inputs = req.body;
     const query = {
         "text": `
@@ -13,7 +16,7 @@ const Income = (req, res) => {
             ORDER BY acctname ASC`,
         "values": [inputs.startdate, inputs.enddate]
     }
-    Conn.query(query)
+    Connection.query(query)
         .then(data => {
             var revenue = [];
             var expense = []
