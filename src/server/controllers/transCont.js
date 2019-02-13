@@ -11,7 +11,7 @@ const JournalEntry = require('./../model/accounting/JournalEntry');
 const newInvoice = require('./../model/ar/NewInvoice');
 const findInvoices = require('./../model/ar/findInvoices');
 const findAPInvoices = require('./../model/ap/findAPInvoices');
-const findBankTrans = require('./../model/banking/findBankTrans');
+const bankLedger = require('../model/banking/bankLedger');
 const enterDeposit = require('./../model/banking/enterDeposit');
 
 //General Ledger, Chart of Accounts, Journal Entries
@@ -49,6 +49,6 @@ routes.post('/trans/FindAPInvoices', findAPInvoices);
 
 //Banking
 
-routes.post('/trans/findBankTrans', findBankTrans);
+routes.post('/trans/bankLedger', bankLedger);
 
 module.exports = routes;

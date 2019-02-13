@@ -125,7 +125,7 @@ class GL extends FormClass {
             {this.state.dataView ? (
               <div id="lightbox-container" className="lightbox-background">
                 <LightBox close={this.closeLightBox} >
-                <p className="formTitle">Transactions Details</p>
+                <p className="formTitle">Transaction Details</p>
                   <form>
                     <ReadOnlyInput name="transid" label="Trans ID" value={this.state.currentView.transid} />
                     <ReadOnlyInput name="docdate" label="Document Date" value={this.state.currentView.docdate} />

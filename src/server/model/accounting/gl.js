@@ -7,9 +7,15 @@ const GL = (req, res) => {
   Connection.connect(); //activate the connection
 
   var i = req.body;
-  QB = new QueryBuilder(`
-  SELECT transid, docdate, ledgerdate, debit, credit, acctname, acctno, transtype 
-  FROM sys_gl WHERE transid IS NOT NULL`,'');
+  var baseQuery;
+  if(typeof i.bankname !== 'undefined') {
+    baseQuery = `SELECT transid, docdate, ledgerdate, debit, credit, acctname, acctno, transtype 
+    FROM sys_gl WHERE sys_coa.type = 'Bank' `;
+  } else {
+    baseQuery = `SELECT transid, docdate, ledgerdate, debit, credit, acctname, acctno, transtype 
+    FROM sys_gl WHERE transid IS NOT NULL`;
+  }
+  QB = new QueryBuilder(baseQuery,'');
   let d = 1;
   if(i.docstartdate !== '' && i.docenddate !== '') { 
     QB.addCondition(' AND docdate BETWEEN $1 AND $2');

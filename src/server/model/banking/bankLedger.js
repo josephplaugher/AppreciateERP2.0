@@ -2,7 +2,7 @@
 const pg = require('../../util/postgres')
 const userConn = pg.userConn;
 
-const findBankTrans = (req,res) => {
+const bankLedger = (req,res) => {
     const Connection = userConn(req.headers['dbconn']); //db connection
     Connection.connect(); //activate the connection
 
@@ -16,4 +16,4 @@ const findBankTrans = (req,res) => {
         .catch(e => console.error(e.stack))
 }
     
-module.exports = findBankTrans;
+module.exports = bankLedger;
