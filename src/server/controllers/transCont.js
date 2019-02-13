@@ -5,6 +5,7 @@ const editCOA = coa.edit;
 const disableAcct = coa.disable;
 const enableAcct = coa.enable;
 const deleteAcct = coa.deleteAcct;
+const newAcct = require('./../model/accounting/newAcct');
 const GL = require('./../model/accounting/gl');
 const JournalEntry = require('./../model/accounting/JournalEntry');
 const newInvoice = require('./../model/ar/NewInvoice');
@@ -19,6 +20,10 @@ routes.get('/trans/disableAcct/:acctno', disableAcct)
 routes.get('/trans/enableAcct/:acctno', enableAcct)
 routes.get('/trans/deleteAcct/:acctno', deleteAcct)
 routes.post('/trans/editCOA', editCOA)
+routes.post('/trans/newAcct',(req, res) => {
+    const NewAcct = new newAcct(req, res);
+    NewAcct.start();
+})
 routes.post('/trans/gl', GL);
 
 routes.post('/trans/je', (req, res) => {

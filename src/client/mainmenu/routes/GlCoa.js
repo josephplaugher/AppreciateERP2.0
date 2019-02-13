@@ -5,6 +5,7 @@ import {
   } from 'react-router-dom'
 import GL from './endpoints/accounting/GL'
 import COA from './endpoints/accounting/COA'
+import NewAcct from './endpoints/accounting/NewAcct'
 import JE from './endpoints/accounting/JE'
 import 'css/subRoutes.css'
 
@@ -14,11 +15,14 @@ const GlCoa = ({ match }) => (
         General Ledger</Link><br/>
       <Link to={`${match.url}/coa`} id="chartOfAccounts" className="nav">
         Chart of Accounts</Link><br/>
+      <Link to={`${match.url}/newAcct`} id="newacct" className="nav">
+        Create New Account</Link><br/>
       <Link to={`${match.url}/je`} id="journalEntry" className="nav">
         Journal Entry</Link><br/>
 
     <Route path="/accounting/GlCoa/gl" component={GL}/>
     <Route path="/accounting/GlCoa/coa" component={COA}/>
+    <Route path="/accounting/GlCoa/newAcct" component={NewAcct}/>
     <Route path="/accounting/GlCoa/je" component={JE}/>
 
     </div>

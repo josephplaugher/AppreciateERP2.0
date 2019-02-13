@@ -45,6 +45,11 @@
     position: absolute;
 }
 
+.text {
+    color: #2665C4;
+    font-size: 12px;
+}
+
 .errorMsg {
     color: red;
 }

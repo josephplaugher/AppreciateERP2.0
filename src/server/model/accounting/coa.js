@@ -95,7 +95,6 @@ deleteAcct = (req, res) => {
             }
             Connection.query(Query)
               .then(data => {
-                console.log('delete ', data)
                 res.status(200).json({ 
                   deleted: true,
                   userNotify: 'Account Deleted.' });
