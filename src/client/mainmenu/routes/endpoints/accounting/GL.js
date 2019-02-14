@@ -128,11 +128,11 @@ class GL extends FormClass {
                 <p className="formTitle">Transaction Details</p>
                   <form>
                     <ReadOnlyInput name="transid" label="Trans ID" value={this.state.currentView.transid} />
+                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
                     <ReadOnlyInput name="docdate" label="Document Date" value={this.state.currentView.docdate} />
                     <ReadOnlyInput name="ledgerdate" label="Ledger Date" value={this.state.currentView.ledgerdate} />
                     <ReadOnlyInput name="debit" label="Debit" value={this.state.currentView.debit} />
                     <ReadOnlyInput name="credit" label="Credit" value={this.state.currentView.credit} />
-                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
                   </form>
                 </LightBox>
               </div>

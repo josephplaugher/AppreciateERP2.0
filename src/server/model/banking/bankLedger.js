@@ -8,12 +8,16 @@ const bankLedger = (req,res) => {
 
     var i = req.body;
     const query = {
-        "text": "SELECT transid, date, sys_gl.debit AS deposit, sys_gl.credit AS withdrawal, acctname, acctno, transtype, description FROM sys_gl WHERE date BETWEEN $1 AND $2 AND acctno = $3 AND acctname = $4 order by transid DESC",
-        "values": [i.startdate,i.enddate, i.bankno, i.bankname]
+        "text":`SELECT 
+            transid,transtype,docdate,docno,ledgerdate,acctno,acctname,description,debit,credit,clr
+        FROM sys_gl 
+        WHERE 
+            acctno = $1 AND ledgerdate BETWEEN $2 AND $3 ORDER BY ledgerdate DESC`,
+        "values": [i.bankno,i.startdate,i.enddate]
     }
     Connection.query(query)
-        .then(data => res.status(200).json({ table: data.rows, userNotify: '' }))
-        .catch(e => console.error(e.stack))
+        .then(data => res.status(200).json({ table: data.rows, userNotify: {} }))
+        .catch(e => console.error('Bank legder query error: ',e.stack))
 }
     
 module.exports = bankLedger;

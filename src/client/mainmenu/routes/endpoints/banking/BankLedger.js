@@ -21,13 +21,10 @@ class BankLedger extends FormClass {
       userNotify: {},
       table: [],
       formData: {
-        docstartdate: '',
-        docenddate: '',
         ledgerstartdate: '',
         ledgerenddate: '',
-        acctname: '',
-        acctno: '',
-        transid: ''
+        bankno: '',
+        bankname: ''
       },
       currentView: {},
       docdate: '',
@@ -79,6 +76,7 @@ class BankLedger extends FormClass {
 
     const columns = [
       { Header: 'Trans Id', accessor: 'transid' },
+      { Header: 'Cleared', accessor: 'clr' },
       { Header: 'Document Date', accessor: 'docdate' },
       { Header: 'Ledger Date', accessor: 'ledgerdate' },
       { Header: 'Debit', accessor: 'debit' },
@@ -93,11 +91,8 @@ class BankLedger extends FormClass {
         <div id="workingPane">
           <p className="formTitle">Bank Ledger</p>
           <form onSubmit={this.onSubmit} >
-            <Input name="docstartdate" label="Document Start Date" value={this.state.docstartdate} onChange={this.onChange} />
-            <Input name="docenddate" label="Document End Date" value={this.state.docenddate} onChange={this.onChange} />
-            <Input name="ledgerstartdate" label="Ledger Start Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
-            <Input name="ledgerenddate" label="Ledger End Date" value={this.state.ledgerenddate} onChange={this.onChange} /><br />
-            <Input name="transid" label="Transaction ID" value={this.state.transid} onChange={this.onChange} />
+            <Input name="startdate" label="Start Date" value={this.state.startdate} onChange={this.onChange} />
+            <Input name="enddate" label="End Date" value={this.state.enddate} onChange={this.onChange} />
             <Input name="bankname" label="Ledger Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} />
             <Input name="bankno" label="Ledger Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} />
             <div className="buttondiv">
@@ -128,11 +123,16 @@ class BankLedger extends FormClass {
                 <p className="formTitle">Transaction Details</p>
                   <form>
                     <ReadOnlyInput name="transid" label="Trans ID" value={this.state.currentView.transid} />
+                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
                     <ReadOnlyInput name="docdate" label="Document Date" value={this.state.currentView.docdate} />
+                    <ReadOnlyInput name="docno" label="Document Number" value={this.state.currentView.docno} />
                     <ReadOnlyInput name="ledgerdate" label="Ledger Date" value={this.state.currentView.ledgerdate} />
+                    <ReadOnlyInput name="description" label="Description" value={this.state.currentView.description} />
+                    <ReadOnlyInput name="acctname" label="Ledger Bank Name" value={this.state.currentView.acctname} onChange={this.onChange} lsr={this.state.lsrbankname} />
+                    <ReadOnlyInput name="acctno" label="Ledger Bank Number" value={this.state.currentView.acctno} onChange={this.onChange} lsr={this.state.lsrbankno} />
                     <ReadOnlyInput name="debit" label="Debit" value={this.state.currentView.debit} />
                     <ReadOnlyInput name="credit" label="Credit" value={this.state.currentView.credit} />
-                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
+                    <ReadOnlyInput name="clear" label="Cleared" value={this.state.currentView.clr} />
                   </form>
                 </LightBox>
               </div>
