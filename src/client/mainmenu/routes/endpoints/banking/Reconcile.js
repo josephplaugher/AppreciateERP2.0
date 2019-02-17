@@ -1,132 +1,208 @@
-import FormClass from 'Util/FormClass'
-import Ajax from 'Util/Ajax'
 import React from 'react'
-import ReactTable from 'react-table'
-import 'react-table/react-table.css'
+import EB from 'Util/EB'
+import Ajax from 'Util/Ajax'
+import SetUrl from 'Util/SetUrl'
+import FormClass from 'Util/FormClass'
 import Input from 'Util/Input'
+import ReadOnlyInput from 'Util/ReadOnlyInput'
+import CheckBox from 'Util/CheckBox'
 import Button from 'Util/Button'
+import {ClearTally,UpdateClearTally} from './ClearTally'
+import LightBox from 'Util/LightBox'
+import ValRules from 'Util/ValRules'
 import 'css/workingPane.css'
 import 'css/form.css'
-import 'css/userNotify.css'
-import 'css/lsr.css'
+import './bankrec.css'
 
-class FindBankTrans extends FormClass {
-
-  showSearch = () => {
-    this.setState({ searchView: true});
-  }
-
-  //override the submitData function from parent class
-  submitData = () => {
-    console.log('submitting now...');
-    Ajax.post("http://localhost:3004/"+ this.route + "/", this.state.formData)
-    .then((res) => {
-      if(res.data.table){
-        this.setState({
-            resultSet: res.data.table,
-            userNotify: res.data.userNotify
-          })
-      }
-    })
-  }
-
-  selectTransaction = (row) => {
-    //switch from data view to search view
-    this.setState({ searchView: false, userNotify: ''});
-    console.log('click',row);
-
-    //place all the resulting data into state
-    this.clearPrev();
-    for(var key in row){
-      console.log(key,row[key]);
-      //clear previous selection
-    
-      //fill with new data select
-      this.setState({
-        [key]: row[key]
-      }); 
+class BankLedger extends FormClass {
+  constructor(props) {
+    super(props);
+    this.useLiveSearch = true
+    this.route = '/trans/bankRec'
+    this.valRules = ValRules
+    this.state = {
+      dataView: false,
+      userNotify: {},
+      bankdata: [],
+      formData: {
+        stmtenddate: '2018-1-1',
+        bankno: '1000',
+        bankname: 'Bank'
+      },
+      stmtenddate: '2018-1-1',
+      currentView: {},
+      docdate: '',
+      ledgerdate: '',
+      acctname: '',
+      bankname: 'Bank',
+      bankno: '1000',
+      acctno: '',
+      transid: '',
+      transtype: '',
+      lsracctname: '',
+      lsracctno: '',
+      clearedDeposits: '',
+      clearedWithdrawals: '',
+      clearedBal: '',
+      lastRecBal: ''
     }
   }
 
-  //this functiond doesn't work. It doesnn't clear previous state. why not?
-  clearPrev = () => {
+  selectItem = (row) => {
+    //place all the resulting data for the clicked row into current view state
+    var newView = {};
+    for (var key in row) {
+      //fill with new data select
+      if(!row[key]) {
+        newView[key] = '';
+      } else {
+        newView[key] = row[key]
+      }
+    }
+      this.setState({
+        currentView: newView,
+        dataView: true, 
+        userNotify: {}
+      });
+  }
+
+  response = (res) => {
+    if (res.error) {
+      console.error('submit error: ', res.error);
+      this.setState({ userNotify: { error: res.error } })
+    }
+    let table = res.data.table
+    this.getRecBal();
+    this.clearTally(table)
+    table.unshift({transid:'Trans ID',clr:'Clear-all',ledgerdate: 'Ledger Date',debit:'Deposits',credit:'Withdrawals'})
     this.setState({
-      deposit:'',
-      withdrawal:'',
-      description:'',
-      transtype:''
+      bankdata: table
+    }); 
+  }
+
+  getRecBal() {
+    Ajax.get(SetUrl() + "/trans/getLastRecBal/" + this.state.bankno)
+      .then(res => {
+        if(typeof res.data.recData.ClearedBal !== 'undefined') {
+          let bal = res.data.recData.ClearedBal;
+          console.log('get rec bal: ', res.data)
+          this.setState({
+            lastRecBal: bal
+          })
+        } else {
+          this.setState({lastRecBal: 0})
+        }
+  })
+}
+
+  setChecked(event) {
+    console.log('id: ', event.target.id, 'checked? ',event.target.checked)
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
     });
+    const rowData = JSON.parse(event.target.id)
+    const newTally = UpdateClearTally(this.state.clearedList,this.state.clearedBal,this.state.clearedDeposits,this.state.clearedWithdrawals, rowData)
+    // this.setState({
+
+    // })
+  }
+
+  clearTally(table) {
+    let clear = ClearTally(table)
+    this.setState({clearedDeposits: clear.clearedDepositstotal,
+      ClearedWithdrawals: clear.ClearedWithdrawalsTotal,
+      clearedBal: clear.clearedTotal,
+      clearedList: clear.clearedList})
   }
 
   render() {
 
-    this.route = 'findBankTrans';
-    
-    const columns = [
-        {Header: 'Trans Id', accessor: 'transid'},
-        {Header: 'Date', accessor: 'date'},
-        {Header: 'Deposit', accessor: 'deposit'}, 
-        {Header: 'Withdrawal', accessor: 'withdrawal'},
-        {Header: 'Account Name', accessor: 'acctname'},
-        {Header: 'Account Number', accessor: 'acctno'},
-        {Header: 'Description', accessor: 'description'}]
+    const table = this.state.bankdata.map( row => 
+      <tr id={row.transid} key={row.transid} className="bank-rec-row" >
+        <td className="bank-data-id">{row.transid}</td> 
+        <td className="bank-data-checkbox">
+        {row.clr === 'clr' ? (
+          <CheckBox 
+            name={'clearedTrans' + row.transid} 
+            id={JSON.stringify(row)} 
+            checked={true}
+            onChange={(e)=>this.setChecked(e)}  />
+        ) : (
+          <CheckBox 
+            name={'clearedTrans' + row.transid} 
+            id={JSON.stringify(row)} 
+            checked={false}
+            onChange={(e)=>this.setChecked(e)}  />
+        )}
+        </td>
+        <td className="bank-data">{row.ledgerdate}</td>
+        <td className="bank-data">{row.debit}</td> 
+        <td className="bank-data">{row.credit}</td>
+      </tr>
+    ) 
 
     return (
-      <div>
-      <div id="userNotify">
-      </div>
-      <div id="workingPane">
-        
-      <div id="searchPane">
-        <form formTitle="Reconcile Bank" onSubmit={this.onSubmit} >
-        <Input name="bankname" label="Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} error={this.state.userNotify.bankname}/>
-        <Input name="bankno" label="Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} error={this.state.userNotify.bankno}/>  
-        <Input name="startdate" label="Start Date" value={this.state.startdate} onChange={this.onChange} error={this.state.userNotify.startdate}/>
-        <Input name="enddate" label="End Date" value={this.state.enddate} onChange={this.onChange} error={this.state.userNotify.enddate}/>
-        <div className="buttondiv">
-        <Button id="search" value="Search" />
-        </div>
-        </form><br/>
-      </div>    
-      
-      <div id="displayPane">
-      <div className="buttondiv">
-        <Button id="search" value="Return to Search" onClick={this.showSearch} />
-      </div>
-        <Form formTitle="Transaction Details" onSubmit={this.onSubmit}  >
-          <Input name="date" label="Date" value={this.state.date} onChange={this.onChange} error={this.state.userNotify.date} />
-          <Input name="docno" label="Document Number" value={this.state.docno} onChange={this.onChange} error={this.state.userNotify.docno}/>
-          <Input name="decription" label="Description" value={this.state.description} onChange={this.onChange} error={this.state.userNotify.description} />
-          <Input name="deposit" label="Deposit" value={this.state.deposit} onChange={this.onChange} error={this.state.userNotify.deposit}/> 
-          <Input name="withdrawal" label="Withdrawal" value={this.state.withdrawal} onChange={this.onChange} error={this.state.userNotify.withdrawal}/> 
-          <Input name="bankname" label="Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} error={this.state.userNotify.bankname}/>
-          <Input name="bankno" label="Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} error={this.state.userNotify.bankno}/>
-          <Input name="acctname" label="COA Account Name" value={this.state.acctname} onChange={this.onChange} onBlur={this.onFocusOut} lsr={this.state.lsracctname} error={this.state.userNotify.acctname}/>
-          <Input name="acctno" label="COA Account Number" value={this.state.acctno} onChange={this.onChange} lsr={this.state.lsracctno} error={this.state.userNotify.acctno}/>
-          <Input name="transtype" label="Transaction Type" value={this.state.transtype} onChange={this.onChange} error={this.state.userNotify.transtype}/>
-          <div className="buttondiv">
-          <Button id="submit" value="Button" />
-          <Button id="search" value="Return to Search" onClick={this.showSearch} />
+      <>
+        <div id="userNotify">{this.state.userNotify.error}</div>
+        <div id="workingPane">
+          <p className="formTitle">Bank Reconciliation</p>
+          <form onSubmit={this.onSubmit} >
+            <Input name="stmtenddate" label="Statement End Date" value={this.state.stmtenddate} onChange={this.onChange} />
+            <Input name="bankname" label="Ledger Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} />
+            <Input name="bankno" label="Ledger Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} />
+            <div className="buttondiv">
+              <Button id="search" value="Get Transactions" />
+            </div>
+            <div id="rec-details">
+            <ReadOnlyInput name="clearedDeposits" label="Cleared Deposits" value={this.state.clearedDeposits} />
+            <ReadOnlyInput name="clearedWithdrawals" label="Cleared Withdrawals" value={this.state.clearedWithdrawals} />
+            <ReadOnlyInput name="clearedBal" label="Cleared Balance" value={this.state.clearedBal} />
+            <ReadOnlyInput name="lastRecBal" label="Last Reconciled Balance" value={this.state.lastRecBal} />
+            </div>
+           
+          </form><br />
+          <div id="resultField">
+            <EB comp="Recon table in Reconcile">
+              <table>
+                <tbody>
+              {table} 
+                </tbody>
+              </table>
+            </EB>
           </div>
-        </Form>
-      </div>
-        
-        <div id="searchResultPane">
-          <ReactTable
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: (e, handleOriginal) => {this.selectTransaction(rowInfo.original);}
-              }
-              }
-            }
-            data={this.state.resultSet}
-            columns={columns}
-          />
+
+
+          <div >
+            {this.state.dataView ? (
+              <div id="lightbox-container" className="lightbox-background">
+                <LightBox close={this.closeLightBox} >
+                <p className="formTitle">Transaction Details</p>
+                  <form>
+                    <ReadOnlyInput name="transid" label="Trans ID" value={this.state.currentView.transid} />
+                    <ReadOnlyInput name="transtype" label="Transaction Type" value={this.state.currentView.transtype} />
+                    <ReadOnlyInput name="docdate" label="Document Date" value={this.state.currentView.docdate} />
+                    <ReadOnlyInput name="docno" label="Document Number" value={this.state.currentView.docno} />
+                    <ReadOnlyInput name="ledgerdate" label="Ledger Date" value={this.state.currentView.ledgerdate} />
+                    <ReadOnlyInput name="description" label="Description" value={this.state.currentView.description} />
+                    <ReadOnlyInput name="acctname" label="Ledger Bank Name" value={this.state.currentView.acctname} onChange={this.onChange} lsr={this.state.lsrbankname} />
+                    <ReadOnlyInput name="acctno" label="Ledger Bank Number" value={this.state.currentView.acctno} onChange={this.onChange} lsr={this.state.lsrbankno} />
+                    <ReadOnlyInput name="debit" label="Debit" value={this.state.currentView.debit} />
+                    <ReadOnlyInput name="credit" label="Credit" value={this.state.currentView.credit} />
+                    <ReadOnlyInput name="clear" label="Cleared" value={this.state.currentView.clr} />
+                  </form>
+                </LightBox>
+              </div>
+            ) : (
+                null
+              )}
+          </div>
         </div>
-      </div>
-      </div>
+      </>
     )
   }
 }
 
-export default FindBankTrans;
+export default BankLedger

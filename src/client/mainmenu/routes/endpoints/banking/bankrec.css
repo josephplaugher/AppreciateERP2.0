@@ -1,0 +1,37 @@
+#id{
+    overflow: scroll;
+}
+
+.bank-rec-row {
+    display: block;
+    width: 100%;
+    margin: 5px;
+}
+
+.bank-data {
+    display: inline-block;
+    width: 180px;
+    color: #2665C4;
+    padding: 5px;
+    word-wrap: break-word;
+}
+
+.bank-data-id {
+    display: inline-block;
+    width: 80px;
+    color: #2665C4;
+    padding: 5px;
+}
+
+.bank-data-checkbox {
+    display: inline-block;
+    width: 50px;
+    color: #2665C4;
+    padding: 5px;
+}
+
+#rec-details {
+    margin-top: 20px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
