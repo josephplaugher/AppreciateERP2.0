@@ -11,7 +11,7 @@ const bankRec = (req,res) => {
         "text":`SELECT 
             transid, ledgerdate, description, payee_payer, docno, clr, debit, credit
         FROM sys_gl WHERE acctno = $1 AND ledgerdate <= $2
-        AND (clr = 'clr' OR clr IS NULL) ORDER BY ledgerdate DESC`,
+        AND (clr = 'true' OR clr IS NULL) ORDER BY ledgerdate DESC`,
         "values": [i.bankno,i.stmtenddate]
     }
     Connection.query(query)

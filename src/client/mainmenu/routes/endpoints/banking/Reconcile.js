@@ -44,6 +44,7 @@ class BankLedger extends FormClass {
       clearedDeposits: '',
       clearedWithdrawals: '',
       clearedBal: '',
+      clearedList: {},
       lastRecBal: ''
     }
   }
@@ -74,7 +75,7 @@ class BankLedger extends FormClass {
     let table = res.data.table
     this.getRecBal();
     this.clearTally(table)
-    table.unshift({transid:'Trans ID',clr:'Clear-all',ledgerdate: 'Ledger Date',debit:'Deposits',credit:'Withdrawals'})
+    table.unshift({transid:'Trans ID',clr: null,ledgerdate: 'Ledger Date',debit:'Deposits',credit:'Withdrawals'})
     this.setState({
       bankdata: table
     }); 
@@ -95,25 +96,26 @@ class BankLedger extends FormClass {
   })
 }
 
-  setChecked(event) {
-    console.log('id: ', event.target.id, 'checked? ',event.target.checked)
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value
-    });
-    const rowData = JSON.parse(event.target.id)
-    const newTally = UpdateClearTally(this.state.clearedList,this.state.clearedBal,this.state.clearedDeposits,this.state.clearedWithdrawals, rowData)
-    // this.setState({
-
-    // })
-  }
-
   clearTally(table) {
     let clear = ClearTally(table)
-    this.setState({clearedDeposits: clear.clearedDepositstotal,
-      ClearedWithdrawals: clear.ClearedWithdrawalsTotal,
+    console.log('initial clears in bank rec: ', clear)
+    this.setState({
+      clearedDeposits: clear.clearedDepositsTotal,
+      clearedWithdrawals: clear.clearedWithdrawalsTotal,
+      clearedBal: clear.clearedTotal,
+      clearedList: clear.clearedList})
+  }
+
+  setChecked(event) {
+    const rowData = JSON.parse(event.target.id)
+    console.log('clears before update: list, ',this.state.clearedList)
+    // console.log('clr bal: ',this.state.clearedBal)
+    // console.log('clr dep: ',this.state.clearedDeposits)
+    // console.log('clr with: ',this.state.clearedWithdrawals)
+    let clear = UpdateClearTally(this.state.clearedList,this.state.clearedBal,this.state.clearedDeposits,this.state.clearedWithdrawals, rowData)
+    this.setState({
+      clearedDeposits: clear.clearedDepositsTotal,
+      clearedWithdrawals: clear.clearedWithdrawalsTotal,
       clearedBal: clear.clearedTotal,
       clearedList: clear.clearedList})
   }
@@ -124,19 +126,12 @@ class BankLedger extends FormClass {
       <tr id={row.transid} key={row.transid} className="bank-rec-row" >
         <td className="bank-data-id">{row.transid}</td> 
         <td className="bank-data-checkbox">
-        {row.clr === 'clr' ? (
           <CheckBox 
             name={'clearedTrans' + row.transid} 
             id={JSON.stringify(row)} 
-            checked={true}
-            onChange={(e)=>this.setChecked(e)}  />
-        ) : (
-          <CheckBox 
-            name={'clearedTrans' + row.transid} 
-            id={JSON.stringify(row)} 
-            checked={false}
-            onChange={(e)=>this.setChecked(e)}  />
-        )}
+            checked={row.clr}
+            onChange={(e)=>this.setChecked(e)} 
+          />
         </td>
         <td className="bank-data">{row.ledgerdate}</td>
         <td className="bank-data">{row.debit}</td> 
