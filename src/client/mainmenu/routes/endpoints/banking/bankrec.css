@@ -1,28 +1,26 @@
-#bank-grid {
-    grid-template-columns: auto;
-    grid-template-rows: 200px auto 200px;
+#scroll-container {
+    width: 75%;
+    float: left;
+    height: 75%;
+    padding: 10px;
+    position: absolute;
 }
 
-#search-form {
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-
-#result-field {
-    grid-row-start: 2;
-    grid-row-end: 3;
-    overflow: scroll;
+#bank-scroller {
+    height: 400px;
+    width: auto;
+    overflow: auto;
 }
 
 #rec-details{
-    grid-row-start: 3;
-    grid-row-end: row3-end;
+    width: 22%;
+    float: right;
 }
 
 .bank-rec-row {
     display: block;
     width: 100%;
-    margin: 5px;
+    margin: auto;
 }
 
 .bank-data {
@@ -48,3 +46,7 @@
 }
 
 tr:nth-child(even) {background-color: #f2f2f2;}
+
+.readonlytextinput {
+    display: block;
+}

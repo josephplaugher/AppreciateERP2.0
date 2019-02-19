@@ -185,23 +185,22 @@ class BankLedger extends FormClass {
       <>
         <div id="userNotify">{this.state.userNotify.error}</div>
         <div id="workingPane">
-        <div id="bank-grid">
-          <div id="search-form">
           <p className="formTitle">Bank Reconciliation</p>
           <form onSubmit={this.onSubmit} >
             <Input name="stmtenddate" label="Statement End Date" value={this.state.stmtenddate} onChange={this.onChange} />
             <Input name="bankname" label="Ledger Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} />
             <Input name="bankno" label="Ledger Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} />
             <Button id="search" value="Get Transactions" />        
-          </form>    
-         </div>
-          <div id="result-field">
+          </form>   
+          <div id="scroll-container">
             <EB comp="Recon table in Reconcile">
+            <div id="bank-scroller">
               <table>
                 <tbody>
                 {table} 
                 </tbody>
               </table>
+            </div>
             </EB>
           </div>
           <div id="rec-details">
@@ -212,7 +211,6 @@ class BankLedger extends FormClass {
             <Input name="stmtEndBal" label="Statement Ending Balance" value={this.state.stmtEndBal} onChange={this.onEndBalChange} />
             <ReadOnlyInput name="difference" label="Difference" value={this.state.difference} />
             <Button id="set-rec" value="Finish" onClick={this.saveRec} />
-          </div>
           </div>
 
           <div >
