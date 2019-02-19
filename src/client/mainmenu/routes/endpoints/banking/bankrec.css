@@ -1,5 +1,22 @@
-#id{
+#bank-grid {
+    grid-template-columns: auto;
+    grid-template-rows: 200px auto 200px;
+}
+
+#search-form {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#result-field {
+    grid-row-start: 2;
+    grid-row-end: 3;
     overflow: scroll;
+}
+
+#rec-details{
+    grid-row-start: 3;
+    grid-row-end: row3-end;
 }
 
 .bank-rec-row {
@@ -28,10 +45,6 @@
     width: 50px;
     color: #2665C4;
     padding: 5px;
-}
-
-#rec-details {
-    margin-top: 20px;
 }
 
 tr:nth-child(even) {background-color: #f2f2f2;}

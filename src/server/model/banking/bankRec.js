@@ -41,7 +41,6 @@ const setClearedState = (req,res) => {
     const Connection = userConn(req.headers['dbconn']); //db connection
     Connection.connect(); //activate the connection
 
-    console.log('set clear: ', req.params)
     var query;
     if(req.params.checked === 'true') {
         query = {
@@ -63,8 +62,22 @@ const setClearedState = (req,res) => {
         .catch(e => console.error('clear trans query error: ',e.stack))
 }
 
-const setRec = (req,res) => {
-
+const saveRec = (req,res) => {
+    const Connection = userConn(req.headers['dbconn']); //db connection
+    Connection.connect(); //activate the connection
+    let transids = req.body.transids;
+    let t = 0
+    for(t = 0; t < transids.length; t++) {
+        const query = {
+            "text":`UPDATE sys_gl
+                SET clr = $1
+                WHERE transid = $2`,
+            "values": [req.body.stmtenddate,transids[t]]
+        }
+        Connection.query(query)
+            .catch(e => console.error('Bank Rec query error: ',e.stack))
+    }
+    res.status(200).json({ userNotify: {success:'Reconciliation Complete'} })
 }
     
-module.exports = {bankRec,getLastRecBal,setClearedState,setRec};
+module.exports = {bankRec,getLastRecBal,setClearedState,saveRec};

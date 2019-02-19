@@ -4,6 +4,7 @@ const BankRec = require('../model/banking/bankRec');
 const bankRec = BankRec.bankRec;
 const setClearedState = BankRec.setClearedState;
 const getLastRecBal = BankRec.getLastRecBal;
+const saveRec = BankRec.saveRec;
 const enterDeposit = require('../model/banking/enterDeposit');
 
 routes.post('/trans/EnterDeposit', (req, res) => {
@@ -14,5 +15,6 @@ routes.post('/trans/bankLedger', bankLedger);
 routes.post('/trans/bankRec', bankRec);
 routes.get('/trans/getLastRecBal/:bankno', getLastRecBal);
 routes.get('/trans/setClearedState/:transid/:checked', setClearedState)
+routes.post('/trans/setRec/', saveRec)
 
 module.exports = routes;

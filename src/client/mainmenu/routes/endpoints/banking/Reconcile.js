@@ -45,8 +45,11 @@ class BankLedger extends FormClass {
       clearedWithdrawals: '',
       clearedBal: '',
       clearedList: [],
-      lastRecBal: ''
+      lastRecBal: '',
+      stmtEndBal: '',
+      difference: ''
     }
+    this.onEndBalChange = this.onEndBalChange.bind(this)
   }
 
   selectItem = (row) => {
@@ -73,6 +76,10 @@ class BankLedger extends FormClass {
       this.setState({ userNotify: { error: res.error } })
     }
     let table = res.data.table
+    this.setBankData(table)
+  }
+
+  setBankData(table) {
     this.getRecBal();
     this.clearTally(table)
     table.unshift({transid:'Trans ID',clr: null,ledgerdate: 'Ledger Date',debit:'Deposits',credit:'Withdrawals'})
@@ -93,17 +100,33 @@ class BankLedger extends FormClass {
         } else {
           this.setState({lastRecBal: 0})
         }
-  })
-}
+      })
+  } 
+
+  onEndBalChange(event) {
+    // this is in case the statement end bal is corrected
+    // after starting a reconcilliation
+    const target = event.target;
+    const value = target.value;
+    console.log(target, value)
+    var diff = parseFloat(value - this.state.clearedBal).toFixed(2)
+    this.setState({
+      stmtEndBal: value,
+      difference: diff
+    })
+  }
 
   clearTally(table) {
     let clear = ClearTally(table)
     console.log('initial clears in bank rec: ', clear.clearedList)
+    var diff = parseFloat(this.state.stmtEndBal - clear.clearedTotal).toFixed(2)
     this.setState({
       clearedDeposits: clear.clearedDepositsTotal,
       clearedWithdrawals: clear.clearedWithdrawalsTotal,
       clearedBal: clear.clearedTotal,
-      clearedList: clear.clearedList})
+      clearedList: clear.clearedList,
+      difference: diff
+    })
   }
 
   setChecked(event) {
@@ -111,19 +134,31 @@ class BankLedger extends FormClass {
     // console.log('clears before update: list, ',this.state.clearedList)
     let clear = UpdateClearTally(this.state.clearedList,this.state.clearedBal,this.state.clearedDeposits,this.state.clearedWithdrawals, rowData, event.target.checked)
     console.log('new clears in bank rec: ', clear.clearedList)
-    
+    var diff = parseFloat(this.state.stmtEndBal - clear.clearedTotal).toFixed(2)
     this.setState({
       clearedDeposits: clear.clearedDepositsTotal,
       clearedWithdrawals: clear.clearedWithdrawalsTotal,
       clearedBal: clear.clearedTotal,
-      clearedList: clear.clearedList})
+      clearedList: clear.clearedList,
+      difference: diff
+    })
     this.setCheckInDB(rowData,event.target.checked)
   }
 
   setCheckInDB(row,checked) {
     console.log('row: ', row, 'checked? ', checked)
     Ajax.get(SetUrl() + "/trans/setClearedState/" + row.transid + "/" + checked)
-      .then(res => {})
+      .then(res => {  })
+  }
+
+  saveRec() {
+    let data = {stmtenddate: this.state.stmtenddate, transids: this.state.clearedList}
+    Ajax.post(SetUrl() + "/trans/saveRec", data)
+      .then(data => {
+        this.setState({
+          bankdata: res.data.table
+        })
+      })
   }
 
   render() {
@@ -150,32 +185,35 @@ class BankLedger extends FormClass {
       <>
         <div id="userNotify">{this.state.userNotify.error}</div>
         <div id="workingPane">
+        <div id="bank-grid">
+          <div id="search-form">
           <p className="formTitle">Bank Reconciliation</p>
           <form onSubmit={this.onSubmit} >
             <Input name="stmtenddate" label="Statement End Date" value={this.state.stmtenddate} onChange={this.onChange} />
             <Input name="bankname" label="Ledger Bank Name" value={this.state.bankname} onChange={this.onChange} lsr={this.state.lsrbankname} />
             <Input name="bankno" label="Ledger Bank Number" value={this.state.bankno} onChange={this.onChange} lsr={this.state.lsrbankno} />
-            <div className="buttondiv">
-              <Button id="search" value="Get Transactions" />
-            </div>
-            <div id="rec-details">
-            <ReadOnlyInput name="clearedDeposits" label="Cleared Deposits" value={this.state.clearedDeposits} />
-            <ReadOnlyInput name="clearedWithdrawals" label="Cleared Withdrawals" value={this.state.clearedWithdrawals} />
-            <ReadOnlyInput name="clearedBal" label="Cleared Balance" value={this.state.clearedBal} />
-            <ReadOnlyInput name="lastRecBal" label="Last Reconciled Balance" value={this.state.lastRecBal} />
-            </div>
-           
-          </form><br />
-          <div id="resultField">
+            <Button id="search" value="Get Transactions" />        
+          </form>    
+         </div>
+          <div id="result-field">
             <EB comp="Recon table in Reconcile">
               <table>
                 <tbody>
-              {table} 
+                {table} 
                 </tbody>
               </table>
             </EB>
           </div>
-
+          <div id="rec-details">
+            <ReadOnlyInput name="lastRecBal" label="Last Reconciled Balance" value={this.state.lastRecBal} />
+            <ReadOnlyInput name="clearedDeposits" label="Cleared Deposits" value={this.state.clearedDeposits} />
+            <ReadOnlyInput name="clearedWithdrawals" label="Cleared Withdrawals" value={this.state.clearedWithdrawals} />
+            <ReadOnlyInput name="clearedBal" label="Cleared Balance" value={this.state.clearedBal} />
+            <Input name="stmtEndBal" label="Statement Ending Balance" value={this.state.stmtEndBal} onChange={this.onEndBalChange} />
+            <ReadOnlyInput name="difference" label="Difference" value={this.state.difference} />
+            <Button id="set-rec" value="Finish" onClick={this.saveRec} />
+          </div>
+          </div>
 
           <div >
             {this.state.dataView ? (
