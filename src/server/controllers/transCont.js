@@ -11,10 +11,6 @@ const JournalEntry = require('./../model/accounting/JournalEntry');
 const newInvoice = require('./../model/ar/NewInvoice');
 const findInvoices = require('./../model/ar/findInvoices');
 const findAPInvoices = require('./../model/ap/findAPInvoices');
-const bankLedger = require('../model/banking/bankLedger');
-const bankRec = require('../model/banking/bankRec')
-const getLastRecBal = require('../model/banking/getLastRecBal')
-const enterDeposit = require('./../model/banking/enterDeposit');
 
 //General Ledger, Chart of Accounts, Journal Entries
 routes.get('/trans/coa', getCOA);
@@ -38,20 +34,9 @@ routes.post('/trans/newInvoice', (req, res) => {
     const Invoice = new newInvoice(req,res);
     Invoice.enterNewInvoice();
 });
-
-routes.post('/trans/EnterDeposit', (req, res) => {
-    const Deposit = new enterDeposit(req, res);
-    Deposit.preprocess();
-});
-
 routes.post('/trans/FindInvoices', findInvoices);
 
 //Accounts Payable
 routes.post('/trans/FindAPInvoices', findAPInvoices);
-
-//Banking
-routes.post('/trans/bankLedger', bankLedger);
-routes.post('/trans/bankRec', bankRec);
-routes.get('/trans/getLastRecBal/:bankno', getLastRecBal);
 
 module.exports = routes;

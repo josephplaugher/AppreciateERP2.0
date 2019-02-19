@@ -1,4 +1,5 @@
 const dotenv = require('dotenv').config();
+const SetUrl = require('./util/SetUrl');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -10,6 +11,7 @@ const transCont = require('./controllers/transCont.js');
 const peopleCont = require('./controllers/peopleCont.js');
 const stmtCont = require('./controllers/stmtCont');
 const lsCont = require('./controllers/lsCont.js');
+const bankCont = require('./controllers/bankCont');
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -21,7 +23,7 @@ app.listen(port, function(){
 });
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", process.env.BASE_URL);
+  res.header("Access-Control-Allow-Origin", SetUrl());
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, authorization");
   res.set("X-Powered-By", "Appreciate Corporation");
@@ -44,6 +46,7 @@ app.get('/checkLoginState', Auth, (req, res) => {
 
 //all these routes require a valid cookie and token
 app.use('/', Auth, transCont);
+app.use('/', Auth, bankCont);
 app.use('/', Auth, peopleCont);
 app.use('/', Auth, lsCont);
 app.use('/', Auth, stmtCont);

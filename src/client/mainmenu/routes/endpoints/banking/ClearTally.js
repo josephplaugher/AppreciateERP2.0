@@ -1,6 +1,6 @@
 const ClearTally = (table) => {
     // table.shift() // remove the header object from the array
-    let clearedList = {transids:[],debits:[],credits:[]};
+    let clearedList = [];
     let deposits = []
     let withdrawals = []
     var clearedDepositsTotal = 0
@@ -10,9 +10,7 @@ const ClearTally = (table) => {
     var i;
     for(i=0; i<table.length; i++) {
         if(table[i].clr === 'true') {
-            clearedList['debits'].push(parseFloat(table[i].debit))
-            clearedList['credits'].push(parseFloat(table[i].credit))
-            clearedList['transids'].push(table[i].transid)
+            clearedList.push(table[i].transid)
             
             // build a deposits array for getting a total
             if(table[i].debit !== null) {
@@ -34,33 +32,48 @@ const ClearTally = (table) => {
         'clearedTotal': clearedTotal,
         'clearedList': clearedList
         }
-        console.log('cleared data: ', returnObj)
+         console.log('cleared data: ', returnObj)
     
     return returnObj
 }
 
-const UpdateClearTally = (clearedList,clearedBal,clearedDeposits,clearedWithdrawals, rowData) => {
-    console.log('clears', clearedBal,clearedDeposits,clearedWithdrawals)
-    var newClearedList = Object.assign({}, clearedList)
-    newClearedList['transids'].push(rowData.transid)
+const UpdateClearTally = (clearedList,clearedBal,clearedDeposits,clearedWithdrawals,rowData,checked) => {
+    // console.log('clears', clearedBal,clearedDeposits,clearedWithdrawals    
     // add or subtract the value of the checked transaction as appropriate
-    if(rowData.debit !== null) {
-        clearedDeposits += parseFloat(rowData.debit)
-        clearedBal += parseFloat(rowData.debit)
-        newClearedList['debits'].push(parseFloat(rowData.debit))
-    }
-    if(rowData.credit !== null) {
-        clearedWithdrawals -= parseFloat(rowData.credit)
-        clearedBal -= parseFloat(rowData.credit)
-        newClearedList['credits'].push(parseFloat(rowData.credit))
+    // if the checked box was checked, add that item to the tally
+    if(checked === true) {
+        clearedList.push(rowData.transid)
+        if(rowData.debit !== null) {
+            clearedDeposits += parseFloat(rowData.debit)
+            clearedBal += parseFloat(rowData.debit)
+        }
+        if(rowData.credit !== null) {
+            clearedWithdrawals -= parseFloat(rowData.credit)
+            clearedBal -= parseFloat(rowData.credit)
+        }
+    // if the checked box was not checked, remove that item from the tally
+    // and from the list of cleared transactions
+    } else {
+        var idToRemove = clearedList.indexOf(rowData.transid);
+        if (idToRemove > -1) {
+            clearedList.splice(idToRemove, 1);
+        }
+        if(rowData.debit !== null) {
+            clearedDeposits -= parseFloat(rowData.debit)
+            clearedBal -= parseFloat(rowData.debit)
+        }
+        if(rowData.credit !== null) {
+            clearedWithdrawals += parseFloat(rowData.credit)
+            clearedBal += parseFloat(rowData.credit)
+        }
     }
     var returnObj = {
         'clearedDepositsTotal': clearedDeposits,
         'clearedWithdrawalsTotal': clearedWithdrawals,
         'clearedTotal': clearedBal,
-        'clearedList': newClearedList
+        'clearedList': clearedList
         }
-        console.log('new clears in cleartally: ', returnObj)
+        // console.log('new clears in cleartally: ', returnObj)
     return returnObj
 
 }
