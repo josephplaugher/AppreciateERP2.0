@@ -135,16 +135,19 @@ class FormClass extends React.Component{
 
   onSubmit = (event) => {
     event.preventDefault();
+    console.log('submit')
     let val = new Validate(this.state.formData, this.valRules);
     let prom = val.isError();
     prom.then( (error) => {
         if(error.hasError){ 
+          console.log('error',error)
           this.setState({
             userNotify: error,
             validForm: false
           })
         }
         if(!error.hasError){
+          console.log('no error')
           this.setState({
             validForm: true
           })
@@ -154,6 +157,7 @@ class FormClass extends React.Component{
   }
 
   submitData = () => {
+    console.log('submit data')
     let bodyData;
     if(typeof this.extraData !== 'undefined') {
         bodyData = Object.assign(this.extraData, this.state.formData);

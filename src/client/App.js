@@ -1,23 +1,16 @@
-import * as ReactForm from 'reactform-appco'
 import React from 'react'
+import Login from './Login'
 import SetUrl from 'Util/SetUrl'
-import ValRules from 'Util/ValRules'
 import EB from 'Util/EB'
 import checkLoginState from 'Util/CheckLoginState'
 import Home from './mainmenu/home'
 import 'css/main.css'
 import 'css/userNotify.css'
 
-const Form = ReactForm.Form;
-const Input = ReactForm.Input;
-const Button = ReactForm.Button;
-
 class AppreciateCo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
       error: null,
       isLoggedIn: false,
       userData: {}
@@ -78,23 +71,14 @@ class AppreciateCo extends React.Component {
       <div id="logoBox"><img src={SetUrl() + '/AppreciateLogo.png'} alt="Appreciate Logo" /></div>
         <div>
           {this.state.isLoggedIn ? (
-          <EB comp="Home">
-            <Home userData={this.state.userData} />
-          </EB>
+            <EB comp="Home">
+              <Home userData={this.state.userData} />
+            </EB>
           ) : (
-              <div id="sign-in">
-                <Form formTitle="Sign In" 
-                  action={`${SetUrl()}/login`}
-                  valrules={ValRules} response={this.response} >
-                  <Input name="email" label="Email" className="textinput" labelClass="label" errorClass="input-error"/>
-                  <Input name="password" label="Password" className="textinput" labelClass="label" errorClass="input-error"/>
-                  <div className="buttondiv">
-                    <Button id="submit" value="Sign In" />
-                  </div>
-
-                </Form>
-              </div>
-            )}
+            <EB comp="Login">
+              <Login response={this.response}/>
+            </EB>
+          )}
         </div>
       </div>
     )
