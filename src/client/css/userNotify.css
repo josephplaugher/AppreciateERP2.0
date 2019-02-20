@@ -7,14 +7,3 @@
     height: 20px;
     color: red;
 }
-
-.input-error {
-    position: absolute;
-    z-index: +11;
-    text-align: left;
-    margin-top: 35px;
-    line-height: 7px;
-    font-weight: normal;
-    font-size: 10px;
-    color: red;
-}

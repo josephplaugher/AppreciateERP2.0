@@ -65,7 +65,6 @@ class GL extends FormClass {
   }
 
   response = (res) => {
-    console.log('res in res: ', res)
     this.setState({
       table: res.data.table
     });
