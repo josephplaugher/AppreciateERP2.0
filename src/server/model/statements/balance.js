@@ -1,7 +1,8 @@
-const pg = require('../../util/postgres')
-const userConn = pg.userConn;
+const db = require('./../../util/postgres');
+const userConn = db.userConn;   
 
 const Balance = (req, res) => {
+    console.log('header',req.headers['dbconn'])
     const Connection = userConn(req.headers['dbconn']); //db connection
     Connection.connect(); //activate the connection
 
