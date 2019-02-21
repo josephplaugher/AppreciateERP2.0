@@ -1,4 +1,6 @@
 {
-    "editor.tabCompletion": "on",
-    "javascript.autoClosingTags": false
+  "editor.tabCompletion": "on",
+  "javascript.autoClosingTags": false,
+  "prettier.singleQuote": true,
+  "prettier.semi": false
 }

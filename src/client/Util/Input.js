@@ -17,7 +17,7 @@ class Input extends React.Component {
         <div className="input-container">
         <p className="label">{this.props.label} </p>
         <p className='input-error'>{this.props.error} </p>
-        <input className="textinput" 
+        <input 
           type={type}
           id={this.props.name} 
           name={this.props.name} 
