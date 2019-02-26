@@ -1,69 +1,86 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-
+import React from 'react'
+import EB from 'Util/EB'
+import FormClass from 'Util/FormClass'
+import Input from 'Util/Input'
+import Select from 'Util/Select'
+import ReadOnlyInput from 'Util/ReadOnlyInput'
+import Button from 'Util/Button'
+import ValRules from 'Util/ValRules'
 import 'css/workingPane.css'
 import 'css/form.css'
 
-class JE extends Component {
+class JE extends FormClass {
   constructor(props) {
-    super(props);
+    super(props)
+    this.useLiveSearch = true
+    this.route = '/trans/je'
+    this.valRules = ValRules
     this.state = {
-      error: null,
-      isLoaded: false,
-      items: [],
-      customerId: '',
-      customerName: ''
-    };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+      userNotify: {},
+      formData: {
+        ledgerdate: '',
+        description: '',
+        acct: [],
+        dorc: [],
+        amount: []
+      },
+      ledgerdate: '',
+      description: '',
+      acct: [],
+      dorc: [],
+      amount: [],
+      lsracct: ''
+    }
+    this.response = this.response.bind(this)
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+  response = res => {
     this.setState({
-      [name]: value
-    });
-}
-
-handleSubmit(event) {
-  event.preventDefault();
-  var formData = {
-    name: this.state.name,
-    id: this.state.id}
-  axios.get('http://localhost:3004/je/' + formData.id,{responseType:'json'})
-      .then((res) => {
-              if(res.data.message){
-                  this.setState({
-                      customerName: res.data.message.name,
-                      customerId: res.data.message.id
-                  });
-              }
-              if(res.data.error){
-                  console.log('error: '+ res.data.error);
-                  };
-      })     
-}
-
-  
-
-    render() {
-      return (
-      <div id="workingPane">
-        <h2>Journal Entry</h2>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" name="id" placeholder="Customer ID" value={this.state.value} onChange={this.handleInputChange} autoComplete="off"/><br/>
-          <input type="text" name="name" placeholder="Customer Name" value={this.state.value} onChange={this.handleInputChange} autoComplete="off"/><br/>
-          <input type="submit" id="submit" value="Search" />
-          </form>
-          <div id="resultField">
-            <p>Customer Name: {this.state.customerName}</p>
-            <p>Customer ID: {this.state.customerId} </p>
-          </div>
-      </div>
-      )
+      table: res.data.table
+    })
+    if (res.error) {
+      console.error('submit error: ', res.error)
+      this.setState({ userNotify: { error: res.error } })
     }
+  }
+
+  render() {
+    const dorcOptions = ['Debit', 'Credit']
+
+    return (
+      <>
+        <div id="workingPane">
+          <p className="formTitle">Journal Entry</p>
+          <form onSubmit={this.onSubmit}>
+            {/* prettier-ignore */}
+            <>
+            <Input name="ledgerdate" label="Ledger Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
+            <Input name="description" label="Description" value={this.state.description}  onChange={this.onChange} />
+            <div className="journalEntry">
+              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
+              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
+              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
+            </div>
+            <div className="journalEntry">
+              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
+              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
+              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
+            </div>
+            <div className="journalEntry">
+              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
+              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
+              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
+            </div>
+            </>
+            <div className="buttondiv">
+              <Button id="submit" value="Submit" />
+            </div>
+            {this.state.userNotify.success}
+          </form>
+        </div>
+      </>
+    )
+  }
 }
 
-export default JE;
+export default JE
