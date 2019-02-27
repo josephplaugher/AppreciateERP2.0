@@ -20,13 +20,13 @@ class JE extends FormClass {
       formData: {
         ledgerdate: '',
         description: '',
-        acct: [],
+        accts: [{ acctname: '' }],
         dorc: [],
         amount: []
       },
       ledgerdate: '',
       description: '',
-      acct: [],
+      acct: [{ acctname: '' }],
       dorc: [],
       amount: [],
       lsracct: ''
