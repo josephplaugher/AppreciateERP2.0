@@ -1,0 +1,8 @@
+#je-rows {
+  height: 400px;
+  overflow: auto;
+}
+
+.label {
+  position: relative;
+}

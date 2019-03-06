@@ -8,6 +8,7 @@ import Button from 'Util/Button'
 import ValRules from 'Util/ValRules'
 import 'css/workingPane.css'
 import 'css/form.css'
+import './je.css'
 
 class JE extends FormClass {
   constructor(props) {
@@ -20,18 +21,35 @@ class JE extends FormClass {
       formData: {
         ledgerdate: '',
         description: '',
-        accts: [{ acctname: '' }],
+        accts: [],
         dorc: [],
         amount: []
       },
       ledgerdate: '',
       description: '',
-      acct: [{ acctname: '' }],
+      acct: [],
       dorc: [],
       amount: [],
-      lsracct: ''
+      lsracct: '',
+      jeRows: []
     }
     this.response = this.response.bind(this)
+  }
+
+  componentDidMount = () => {
+    const dorcOptions = ['Debit', 'Credit']
+    var jeRows = []
+    var i = 1
+    do {
+      /* prettier-ignore */
+      jeRows.push(<div className="">
+        <Input name={`acct${i}`} label="Account" value={this.state.acct[i]} onChange={this.onChange} lsr={this.state.lsracct[i]} />
+        <Select name={`dorc${i}`} label="Debit or Credit" options={dorcOptions} value={this.state.dorc[i]} onChange={this.onChange} multiple={false} />
+        <Input name={`amount${i}`} label="Amount" value={this.state.amount[i]} onChange={this.onChange} />
+        </div>)
+      i = i + 1
+    } while (i < 50)
+    this.setState({ jeRows: jeRows })
   }
 
   response = res => {
@@ -45,8 +63,6 @@ class JE extends FormClass {
   }
 
   render() {
-    const dorcOptions = ['Debit', 'Credit']
-
     return (
       <>
         <div id="workingPane">
@@ -56,20 +72,8 @@ class JE extends FormClass {
             <>
             <Input name="ledgerdate" label="Ledger Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
             <Input name="description" label="Description" value={this.state.description}  onChange={this.onChange} />
-            <div className="journalEntry">
-              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
-              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
-              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
-            </div>
-            <div className="journalEntry">
-              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
-              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
-              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
-            </div>
-            <div className="journalEntry">
-              <Input name="acct" label="Account" value={this.state.acct} onChange={this.onChange} lsr={this.state.lsracct} />
-              <Select name="dorc" label="Debit or Credit" options={dorcOptions} value={this.state.dorc} onChange={this.onChange} multiple={false} />
-              <Input name="amount" label="Amount" value={this.state.amount} onChange={this.onChange} />
+            <div id="je-rows">
+            {this.state.jeRows}
             </div>
             </>
             <div className="buttondiv">
