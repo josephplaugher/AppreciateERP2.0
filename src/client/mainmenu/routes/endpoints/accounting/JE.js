@@ -18,13 +18,6 @@ class JE extends FormClass {
     this.valRules = ValRules
     this.state = {
       userNotify: {},
-      formData: {
-        ledgerdate: '',
-        description: '',
-        accts: [],
-        dorc: [],
-        amount: []
-      },
       ledgerdate: '',
       description: '',
       acct: [],
@@ -37,12 +30,12 @@ class JE extends FormClass {
   }
 
   componentDidMount = () => {
-    const dorcOptions = ['Debit', 'Credit']
+    const dorcOptions = ['Choose One', 'Debit', 'Credit']
     var jeRows = []
     var i = 1
     do {
       /* prettier-ignore */
-      jeRows.push(<div className="">
+      jeRows.push(<div className="" key={i}>
         <Input name={`acct${i}`} label="Account" value={this.state.acct[i]} onChange={this.onChange} lsr={this.state.lsracct[i]} />
         <Select name={`dorc${i}`} label="Debit or Credit" options={dorcOptions} value={this.state.dorc[i]} onChange={this.onChange} multiple={false} />
         <Input name={`amount${i}`} label="Amount" value={this.state.amount[i]} onChange={this.onChange} />
@@ -70,7 +63,7 @@ class JE extends FormClass {
           <form onSubmit={this.onSubmit}>
             {/* prettier-ignore */}
             <>
-            <Input name="ledgerdate" label="Ledger Date" value={this.state.ledgerstartdate} onChange={this.onChange} />
+            <Input name="ledgerdate" label="Ledger Date" value={this.state.ledgerdate} onChange={this.onChange} />
             <Input name="description" label="Description" value={this.state.description}  onChange={this.onChange} />
             <div id="je-rows">
             {this.state.jeRows}

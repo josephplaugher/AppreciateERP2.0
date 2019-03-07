@@ -54,9 +54,6 @@ class AppreciateCo extends React.Component {
     console.log('signing out')
     sessionStorage.removeItem('AppCoUser')
     sessionStorage.removeItem('AppCoToken')
-    Ajax.get(SetUrl() + '/removeCookie').then(() => {
-      location.reload(true)
-    })
     this.setState({
       isLoggedIn: false,
       userData: {}

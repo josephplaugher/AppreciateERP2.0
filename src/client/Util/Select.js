@@ -6,11 +6,20 @@ class Select extends React.Component {
   }
 
   render() {
-    const options = this.props.options.map(option => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))
+    const options = this.props.options.map(option => {
+      // var d = ''
+      // if (option === 'Choose One') {
+      //   d = 'disabled'
+      // } else {
+      //   d = ''
+      // }
+      return (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      )
+    })
+
     var multiple
     if (this.props.multiple) {
       multiple = 'multiple'

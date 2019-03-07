@@ -42,13 +42,6 @@ app.post('/login', (req, res) => {
   Login.getUserData()
 })
 
-app.get('/removeCookie', (req, res) => {
-  console.log('remove cookie')
-  // this isn't working
-  res.clearCookie(process.env.COOKIE_NAME)
-  res.status(200)
-})
-
 app.get('/checkLoginState', Auth, (req, res) => {
   res.status(200).json({ checkLoginState: 'done' })
 })
