@@ -2,13 +2,39 @@ import Ajax from './Ajax'
 import SetUrl from './SetUrl'
 
 const checkLoginState = () => {
-    return new Promise((resolve, reject) => {
-        Ajax.get(SetUrl() + "/checkLoginState")
-            .then(res => {
-                resolve(res.headers);
+  return new Promise((resolve, reject) => {
+    const AppCoToken = sessionStorage.getItem('AppCoToken')
+    //console.log('appco token', AppCoToken)
+    if (AppCoToken !== null) {
+      Ajax.get(SetUrl() + '/checkLoginState')
+        .catch(e => {
+          reject('error checking login state: ', e)
+        })
+        .then(headers => {
+          //console.log('headers, ', headers.token)
+          //console.log('authorized: ', headers.authorized)
+          if (
+            typeof headers.token !== 'null' &&
+            headers.authorized !== 'false'
+          ) {
+            let userData = JSON.parse(sessionStorage.getItem('AppCoUser'))
+            sessionStorage.setItem('AppCoToken', headers.token)
+            resolve({
+              isLoggedIn: true,
+              userData: userData
             })
-            .catch(e => { reject('error checking login state: ', e) });
-    });
+          } else {
+            console.log('not authorized')
+            sessionStorage.removeItem('AppCoUser')
+            sessionStorage.removeItem('AppCoToken')
+            resolve({
+              isLoggedIn: false,
+              userData: {}
+            })
+          }
+        })
+    }
+  })
 }
 
-export default checkLoginState;
+export default checkLoginState

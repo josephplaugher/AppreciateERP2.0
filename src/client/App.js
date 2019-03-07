@@ -23,31 +23,20 @@ class AppreciateCo extends React.Component {
   }
 
   setLoginState = () => {
-    const AppCoToken = sessionStorage.getItem('AppCoToken')
-    //console.log('appco token', AppCoToken)
-    if (AppCoToken !== null) {
-      let auth = checkLoginState()
-      auth.then(headers => {
-        //console.log('headers, ', headers.token)
-        //console.log('authorized: ', headers.authorized)
-        if (typeof headers.token !== 'null' && headers.authorized !== 'false') {
-          let userData = JSON.parse(sessionStorage.getItem('AppCoUser'))
-          sessionStorage.setItem('AppCoToken', headers.token)
-          this.setState({
-            isLoggedIn: true,
-            userData: userData
-          })
-        } else {
-          console.log('not authorized')
-          sessionStorage.removeItem('AppCoUser')
-          sessionStorage.removeItem('AppCoToken')
-          this.setState({
-            isLoggedIn: false,
-            userData: {}
-          })
-        }
-      })
-    }
+    let auth = checkLoginState()
+    auth.then(res => {
+      if (res.isLoggedIn === true) {
+        this.setState({
+          isLoggedIn: res.isLoggedIn,
+          userData: res.userData
+        })
+      } else {
+        this.setState({
+          isLoggedIn: false,
+          userData: {}
+        })
+      }
+    })
   }
 
   signOut = () => {
