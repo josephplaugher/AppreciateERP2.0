@@ -20,7 +20,7 @@ class JE extends FormClass {
       userNotify: {},
       ledgerdate: '',
       description: '',
-      acct: [],
+      acctno: [],
       dorc: [],
       amount: [],
       lsracct: '',
@@ -36,7 +36,7 @@ class JE extends FormClass {
     do {
       /* prettier-ignore */
       jeRows.push(<div className="" key={i}>
-        <Input name={`acct${i}`} label="Account" value={this.state.acct[i]} onChange={this.onChange} lsr={this.state.lsracct[i]} />
+        <Input name={`acctno${i}`} label="Account Number" value={this.state.acctno[i]} onChange={this.onChange} />
         <Select name={`dorc${i}`} label="Debit or Credit" options={dorcOptions} value={this.state.dorc[i]} onChange={this.onChange} multiple={false} />
         <Input name={`amount${i}`} label="Amount" value={this.state.amount[i]} onChange={this.onChange} />
         </div>)

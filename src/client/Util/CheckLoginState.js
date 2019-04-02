@@ -10,15 +10,19 @@ const checkLoginState = () => {
         .catch(e => {
           reject('error checking login state: ', e)
         })
-        .then(headers => {
-          //console.log('headers, ', headers.token)
-          //console.log('authorized: ', headers.authorized)
+        .then(resp => {
+          const token = resp.headers.token
+          const authorized = resp.headers.authorized
+          console.log('headers, ', resp.headers)
+          console.log('authorized: ', authorized)
+          console.log('token', token)
           if (
-            typeof headers.token !== 'null' &&
-            headers.authorized !== 'false'
+            typeof token !== 'null' &&
+            typeof token !== 'undefined' &&
+            authorized !== 'false'
           ) {
             let userData = JSON.parse(sessionStorage.getItem('AppCoUser'))
-            sessionStorage.setItem('AppCoToken', headers.token)
+            sessionStorage.setItem('AppCoToken', token)
             resolve({
               isLoggedIn: true,
               userData: userData
