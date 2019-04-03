@@ -41,6 +41,7 @@ login.prototype.checkPassword = function(req, res, data) {
       } else if (result == true) {
         delete data.rows[0].password //ensure the pw hash isn't sent along to the client
         let userData = data.rows[0]
+        // console.log('userdata placed into initial token: ', userData)
         var token = jwt.sign({ userData: userData }, process.env.JWT_SECRET, {
           expiresIn: '1h'
         })

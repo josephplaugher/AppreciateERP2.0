@@ -6,6 +6,7 @@ const app = express()
 const cookieParser = require('cookie-parser')
 const Auth = require('./util/Auth')
 const login = require('./model/users/login')
+const logout = require('./model/users/logout')
 const userCont = require('./controllers/userCont.js')
 const transCont = require('./controllers/transCont.js')
 const peopleCont = require('./controllers/peopleCont.js')
@@ -36,22 +37,28 @@ app.use(bodyParser.urlencoded({ extended: false })) // Parse application/x-www-f
 app.use(cookieParser())
 app.use(bodyParser.json()) // Parse application/json
 
+const checkAuth = (req, res, next) => {
+  let auth = new Auth(req, res, next)
+  return auth
+}
+
 //login route does not require a cookie or token
 app.post('/login', (req, res) => {
   const Login = new login(req, res)
   Login.getUserData()
 })
+app.get('/user/logout', logout)
 
-app.get('/checkLoginState', Auth, (req, res) => {
+app.get('/checkLoginState', checkAuth, (req, res) => {
   res.status(200).json({ checkLoginState: 'done' })
 })
 
 //all these routes require a valid cookie and token
-app.use('/', Auth, transCont)
-app.use('/', Auth, bankCont)
-app.use('/', Auth, peopleCont)
-app.use('/', Auth, lsCont)
-app.use('/', Auth, stmtCont)
+app.use('/', checkAuth, transCont)
+app.use('/', checkAuth, bankCont)
+app.use('/', checkAuth, peopleCont)
+app.use('/', checkAuth, lsCont)
+app.use('/', checkAuth, stmtCont)
 //this route renders the UI. The UI will check for the cookie and token
 //and log the user out if they don't exist.
 app.all('/*', (req, res) => {

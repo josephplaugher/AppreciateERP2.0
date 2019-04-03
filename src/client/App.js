@@ -18,13 +18,20 @@ class AppreciateCo extends React.Component {
     }
     this.setLoginState = this.setLoginState.bind(this)
     this.response = this.response.bind(this)
-    this.setLoginState()
     this.signOut = this.signOut.bind(this)
+    this.setLoginState()
   }
 
   setLoginState = () => {
+    // console.log('set login state')
+    // console.log('checking false string vs bool')
+    // console.log('string: ', 'false')
+    // console.log('boolean: ', false)
+    // console.log('string: ', 'true')
+    // console.log('boolean: ', true)
     let auth = checkLoginState()
     auth.then(res => {
+      console.log('check login state resp: ', res)
       if (res.isLoggedIn === true) {
         this.setState({
           isLoggedIn: res.isLoggedIn,
@@ -41,18 +48,22 @@ class AppreciateCo extends React.Component {
 
   signOut = () => {
     console.log('signing out')
-    sessionStorage.removeItem('AppCoUser')
-    sessionStorage.removeItem('AppCoToken')
+    sessionStorage.removeItem(process.env.USER_DATA_LABEL)
+    sessionStorage.removeItem(process.env.TOKEN_NAME)
     this.setState({
       isLoggedIn: false,
       userData: {}
     })
+    Ajax.get(SetUrl() + '/user/logout')
   }
 
   response = res => {
     if (typeof res.userData !== 'undefined') {
-      sessionStorage.setItem('AppCoUser', JSON.stringify(res.userData))
-      sessionStorage.setItem('AppCoToken', res.token)
+      sessionStorage.setItem(
+        process.env.USER_DATA_LABEL,
+        JSON.stringify(res.userData)
+      )
+      sessionStorage.setItem(process.env.TOKEN_NAME, res.token)
       this.setState({
         token: res.token,
         userNotify: res.userNotify,
