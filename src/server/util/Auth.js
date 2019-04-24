@@ -53,7 +53,7 @@ Auth.prototype.compare = function() {
 
 Auth.prototype.renewLogin = function(verifiedToken, prevCookiePayload) {
 	//upon authentication, renew the token and the cookie
-	this.req.headers['stripeConn'] = verifiedToken.userData.id
+	this.req.headers['dbconn'] = verifiedToken.userData.company_id
 	//delete verifiedToken.exp
 	// console.log('userdata placed into renewed token: ', verifiedToken.userData)
 	var token = jwt.sign(
