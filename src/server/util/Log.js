@@ -1,5 +1,4 @@
-import winston from 'winston'
-import { log } from 'util'
+const winston = require('winston')
 
 const HOST = () => {
 	if (process.env.NODE_ENV === 'production') {
@@ -29,4 +28,4 @@ if (process.env.NODE_ENV !== 'production') {
 	)
 }
 
-export default Log
+module.exports = Log
