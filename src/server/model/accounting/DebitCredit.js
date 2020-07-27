@@ -23,7 +23,7 @@ DebitCredit.prototype.runDebit = function() {
 	console.log('run debit')
 	console.log('dbconn in runDebit: ', this.dbconn)
 	var i = this.inputs
-	console.log('the inputs', i)
+	//console.log('the inputs', i)
 	// prettier-ignore
 	var Debit = new Query(`INSERT INTO sys_gl 
             (journ_num, transtype, docdate, ledgerdate, time, description, 
@@ -45,7 +45,7 @@ DebitCredit.prototype.runDebit = function() {
 DebitCredit.prototype.runCredit = function() {
 	console.log('run credit')
 	var i = this.inputs
-	console.log('the inputs', i)
+	//console.log('the inputs', i)
 	// prettier-ignore
 	var Credit = new Query(`INSERT INTO sys_gl 
             (journ_num, transtype, docdate, ledgerdate, time, description, 
